@@ -1,7 +1,7 @@
 package ru.job4j;
 
 /**
- *Class Calculate Решение задачи. Часть 001, урок1.
+ *Hello World.
  *@author Mikhail Kubar.
  *@since 25.08.2017.
  */
