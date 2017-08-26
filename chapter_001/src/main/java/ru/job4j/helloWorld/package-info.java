@@ -8,4 +8,4 @@
  * @author Mikhail Kubar
  * @version 1.0
  */
-package ru.job4j;
+package ru.job4j.helloWorld;
