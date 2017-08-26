@@ -10,6 +10,7 @@ public class Max {
      * Определение максимума.
      * @param first - первое число.
      * @param second - второе.
+     * @return result
      */
     public int max(int first, int second) {
         return (first > second ? first : second);
