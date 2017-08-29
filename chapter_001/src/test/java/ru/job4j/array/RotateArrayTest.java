@@ -1,6 +1,7 @@
 package ru.job4j.array;
 
 import org.junit.Test;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -16,12 +17,14 @@ public class RotateArrayTest {
      * @see package ru.job4j.array.
      */
     private RotateArray myArray = new RotateArray();
+
     /**
      * Testing rotate with array 2x2.
+     *
      * @value target - исходный массив.
      */
     @Test
-    public void RotateArrayTestWithFourElements(){
+    public void rotateArrayTestWithFourElements() {
         int[][] target = {
                 {0, 1},
                 {2, 3}
@@ -36,12 +39,14 @@ public class RotateArrayTest {
         //Проверяем результат и ожидаемое значение.
         assertThat(result, is(expected));
     }
+
     /**
      * Testing rotate with array 3x3.
+     *
      * @value target - исходный массив.
      */
     @Test
-    public void RotateArrayTestWithNineElements(){
+    public void rotateArrayTestWithNineElements() {
         int[][] target = {
                 {0, 1, 2},
                 {3, 4, 5},
