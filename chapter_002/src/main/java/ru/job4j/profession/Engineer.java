@@ -1,23 +1,45 @@
-public class Engineer {
+package ru.job4j.profession;
 
-	private String userName;
+import ru.job4j.models.*;
 
-	private Makita toolset;
+public class Engineer extends Profession {
+    private Scheme sheme;
+    private Makita toolset;
 
-	private Car companyCar;
+    private Car companyCar;
+    private Scheme projection;
 
-	private Adress adress;
+    /**
+     * Инженер ремонтирует машину.
+     *
+     * @param mashine машина типа Mashine, имеет имя name  и состояние repair.
+     */
+    public void repairTo(Mashine mashine) {
+        System.out.println(this.getName() + "ремонтирует машину " + mashine.getName());
+        mashine.setRepair(true);
+    }
 
-	public void repairTo(Mashine mashine) {
+    /**
+     * Инженер проектирует схему по данной фигуре.
+     *
+     * @param figure - параметр со строковым значением value.
+     * @return Sheme.
+     */
+    public Scheme projection(Figure figure) {
+        this.projection.setParameter(figure.getValue());
+        return this.projection;
+    }
 
-	}
-
-	public Scheme projection(Figure figure) {
-		return null;
-	}
-
-	public Diagnose checkHeal(Doctor doctor) {
-		return null;
-	}
+    /**
+     * Инженер проверяется у доктора, получает диагноз.
+     *
+     * @param doctor - doctor.
+     * @return String возвращает то, что написал доктор при лечении.
+     */
+    public String checkHeal(Doctor doctor) {
+        doctor.healTo(this);
+        System.out.println(doctor.getName() + " поставил диагноз.");
+        return doctor.diagnose.getDisease();
+    }
 
 }
