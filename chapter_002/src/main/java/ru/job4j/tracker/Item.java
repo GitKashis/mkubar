@@ -6,10 +6,8 @@ public class Item {
     public String name;
     public String description;
     public long create;
-
-
-
     public Comment comment;
+
     public Item(){
     }
 

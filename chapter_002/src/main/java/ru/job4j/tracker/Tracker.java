@@ -13,14 +13,13 @@ public class Tracker {
         this.items[position++] = item;
         return item;
     }
-    public Item add(Comment comment) {
-
-        Item result = this.items[1].setComment(comment);
-
+    public Item add(Item item, Comment comment) {
+        Item result = findById(item.getId());
+        result.setComment(comment);
         return result;
     }
 
-    protected Item findById (String id){
+    protected Item findById(String id){
         Item result = null;
         for (Item item: items) {
             if(item != null && item.getId().equals(id))
@@ -29,16 +28,15 @@ public class Tracker {
         }
         return result;
     }
-    protected Item findByName (String id){
+    protected Item findByName(String name){
         Item result = null;
         for (Item item: items) {
-            if(item != null && item.getName().equals(id))
+            if(item != null && item.getName().equals(name))
                 result = item;
             break;
         }
         return result;
     }
-
 
     String generateId() {
         return String.valueOf(rn.nextInt());
