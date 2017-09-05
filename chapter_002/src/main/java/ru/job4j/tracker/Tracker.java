@@ -94,10 +94,16 @@ public class Tracker {
      */
     protected Item findById(String id) {
         Item result = null;
-        for (Item item : items) {
-            if (item != null && item.getId().equals(id))
-                result = item;
-            break;
+//        for (Item item : items) {
+//            if (item != null && item.getId().equals(id))
+//                result = item;
+//            break;
+//        }
+        for (int i = 0; i < this.items.length; i++) {
+            if (this.items[i].getId().equals(id)) {
+                result = this.items[i];
+                break;
+            }
         }
         return result;
     }
@@ -109,12 +115,17 @@ public class Tracker {
      */
     protected Item findByName(String name) {
         Item result = null;
-
-        for (Item item : items) {
-            if (item != null && item.getName().equals(name)) {
-                result = item;
+//        for (Item item : items) {
+//            if (item != null && item.getName().equals(name)) {
+//                result = item;
+//            }
+//            break;
+//        }
+        for (int i = 0; i < this.items.length; i++) {
+            if (this.items[i].getName().equals(name)) {
+                result = this.items[i];
+                break;
             }
-            break;
         }
         return result;
     }
@@ -131,7 +142,10 @@ public class Tracker {
         }
         return result;
     }
-
+    //служебный метод для проверки содержимого массива.
+    public Item checkItem(int i) {
+        return this.items[i];
+    }
     // вспомогательный метод для генерации уникального ключа Id.
     private String generateId() {
         return String.valueOf(rn.nextInt());

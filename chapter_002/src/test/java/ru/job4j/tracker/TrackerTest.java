@@ -17,8 +17,8 @@ public class TrackerTest {
 
     /**
      * Тест метода Add(Item).
-     * Создаем объект типа трекер, добавляем 2 объекта,
-     * методом findById находим Item и сравниваем с ожидаемым значением.
+     * Создаем трекер, добавляем 2 объекта,
+     * методом checkItem(int) находим Item и сравниваем с ожидаемым значением.
      */
     @Test
     public void testAdd() {
@@ -31,8 +31,10 @@ public class TrackerTest {
         tracker.add(item1);
         tracker.add(item2);
 
-        // Сравниваем два объекта - то, что записано и найдено поиском с тем, что добавили.
-        assertThat(tracker.findByName(item2.getName()), is(item2));
+        // Сравниваем два объекта - то, что записано и найдено
+        // прямым обращением по индексу (метод checkItem(int) с тем, что добавляли.
+        assertThat(tracker.checkItem(0), is(item1));
+        assertThat(tracker.checkItem(1), is(item2));
     }
 
     @Test
@@ -56,23 +58,42 @@ public class TrackerTest {
         assertNotEquals(previous, next);
     }
 
+    /**
+     * Тест поиска по ключу.
+     * Метод findById возвращает результат поиска,
+     * который сравниваем с тем, что добавляли.
+     */
     @Test
-    public void findById() throws Exception {
+    public void testFindById() throws Exception {
         Tracker tracker = new Tracker();
         Item item1 = new Item("test1","testDescription",123L, "comment");
         Item item2 = new Item("test2","testDescription",223L, "comment");
 
-        // Добавляем заявки в трекер. Теперь в трекере должно быть два объекта Шеуь .
+        // Добавляем заявки в трекер. Теперь в трекере должно быть два объекта Item .
         tracker.add(item1);
         tracker.add(item2);
 
-        // Проверяем, что заявка с таким id имеет новые имя test2.
-        assertThat(tracker.findById(item2.getName()), is(item2.getId()));
+        // Проверяем, что заявка с таким id существует и равна искомому значению.
+        assertThat(tracker.findById(item2.getId()), is(item2));
     }
 
+    /**
+     * Тест поиска по имени.
+     * Метод findByName возвращает соответствующую запись,
+     * которую сравниваем с именем того, что добавляли.
+     */
     @Test
     public void findByName() throws Exception {
+        Tracker tracker = new Tracker();
+        Item item1 = new Item("test1","testDescription",123L, "comment");
+        Item item2 = new Item("test2","testDescription",223L, "comment");
 
+        // Добавляем заявки в трекер. Теперь в трекере должно быть два объекта Item .
+        tracker.add(item1);
+        tracker.add(item2);
+
+        // Проверяем, что заявка с таким именем существует и равна искомому значению.
+        assertThat(tracker.findByName("test2").getName(), is("test2"));
     }
 
     @Test
