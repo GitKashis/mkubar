@@ -21,18 +21,19 @@ public class Item {
 
 
     /**
-     * дефолтный конструктор.
+     * конструктор по умолчанию.
      */
-    public Item(){
+    public Item() {
     }
 
     /**
      * конструктор с параметрами.
-     * @param name name
+     *
+     * @param name        name
      * @param description desc
-     * @param create create
+     * @param create      create
      */
-    public Item(String name, String description, long create, String comment){
+    public Item(String name, String description, long create, String comment) {
         this.name = name;
         this.description = description;
         this.create = create;

@@ -36,7 +36,7 @@ public class Tracker {
      * @param comment     - коментарий.
      * @return item.
      */
-    public Item add(Item commentItem, String comment) {
+    public Item addComment(Item commentItem, String comment) {
         //находим в массиве заявку, для которой надо добавить коментарий.
         Item item = findById(commentItem.getId());
         if (item != null) {
@@ -51,10 +51,6 @@ public class Tracker {
      * @param newItem - измененный элемент.
      */
     public void update(Item newItem) {
-//        // получаем ссылку на искомый элемент массива,
-//        // перекидываем эту ссылку на другой объект.
-//        Item item = findById(newItem.getId());
-//        item = newItem;
 
         for (int i = 0; i < this.position; i++) {
             if (this.items[i].getId().equals(newItem.getId())) {
@@ -66,24 +62,24 @@ public class Tracker {
 
     /**
      * Метод создает новый массив на 1 элемент меньше,
-     * находит элемент с соответствующим Id,
+     * находит элемент.
      * копирует в новый массив все элементы кроме найденного с индексом i.
      *
      * @param delItem - удаляемый элемент.
      */
     public void delete(Item delItem) {
-        int i;
+        //новый массив меньше на 1.
         Item[] result = new Item[this.items.length - 1];
-        for (i = 0; i < this.items.length; i++) {
-            if (this.items[i].getId().equals(delItem.getId()))
-                break;
-        }
+        //находим индекс удаляемого элемента.
+        int i = findIndex(delItem);
         // индекс найден. Копируем левую часть.
         System.arraycopy(items, 0, result, 0, i - 1);
         //копируем оставшуюся правую часть.
         System.arraycopy(items, i + 1, result, i, items.length - i - 1);
         //именьшаем текущую позицию в массиве
         position--;
+        //переопределяем исходный массив.
+        items = result;
     }
 
     /**
@@ -100,7 +96,7 @@ public class Tracker {
 //            break;
 //        }
         for (int i = 0; i < this.items.length; i++) {
-            if (this.items[i].getId().equals(id)) {
+            if (items[i] != null && items[i].getId().equals(id)) {
                 result = this.items[i];
                 break;
             }
@@ -110,6 +106,7 @@ public class Tracker {
 
     /**
      * Метод ищет элемент по заданному имени.
+     *
      * @param name - имя в заявке
      * @return item - элемент массива.
      */
@@ -122,7 +119,7 @@ public class Tracker {
 //            break;
 //        }
         for (int i = 0; i < this.items.length; i++) {
-            if (this.items[i].getName().equals(name)) {
+            if (items[i] != null && this.items[i].getName().equals(name)) {
                 result = this.items[i];
                 break;
             }
@@ -130,9 +127,9 @@ public class Tracker {
         return result;
     }
 
-
     /**
      * Метод возвращает копию массива this.items без null элементов.
+     *
      * @return Item[]
      */
     public Item[] getAll() {
@@ -142,12 +139,21 @@ public class Tracker {
         }
         return result;
     }
-    //служебный метод для проверки содержимого массива.
-    public Item checkItem(int i) {
-        return this.items[i];
-    }
+
     // вспомогательный метод для генерации уникального ключа Id.
     private String generateId() {
         return String.valueOf(rn.nextInt());
+    }
+
+    //вспомогательный метод, возвращает индекс i элемента Item в массиве items[].
+    public int findIndex(Item item) {
+        int index = -1;
+        for (int i = 0; i < this.items.length; i++) {
+            if (items[i] != null && this.items[i].equals(item)) {
+                index = i;
+                break;
+            }
+        }
+        return index;
     }
 }

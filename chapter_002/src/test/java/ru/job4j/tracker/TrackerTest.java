@@ -3,17 +3,21 @@ package ru.job4j.tracker;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 /**
- * Class BubbleSort. Решение задачи. Часть 001, урок 3.1
+ * Class TrackerTest. Тестирование методов класса Tracker;
+ * {@link ru.job4j.tracker.Tracker}
+ *
  * @author Mikhail Kubar
- * @since 28.08.2017
+ * @since 05.09.2017
  */
 public class TrackerTest {
 
+    // создаем трекер и 2 заявки.
+    Tracker tracker = new Tracker();
+    Item item1 = new Item("test1", "testDescription", 123L, "comment");
+    Item item2 = new Item("test2", "testDescription", 223L, "comment");
 
     /**
      * Тест метода Add(Item).
@@ -22,40 +26,54 @@ public class TrackerTest {
      */
     @Test
     public void testAdd() {
-        // создаем трекер и 2 заявки.
-        Tracker tracker = new Tracker();
-        Item item1 = new Item("test1","testDescription",123L, "comment");
-        Item item2 = new Item("test2","testDescription",223L, "comment");
-
         // Добавляем заявку в трекер. Теперь в объекте проинициализирован id.
         tracker.add(item1);
         tracker.add(item2);
 
         // Сравниваем два объекта - то, что записано и найдено
         // прямым обращением по индексу (метод checkItem(int) с тем, что добавляли.
-        assertThat(tracker.checkItem(0), is(item1));
-        assertThat(tracker.checkItem(1), is(item2));
+        assertThat(tracker.getAll()[0], is(item1));
+        assertThat(tracker.getAll()[1], is(item2));
     }
 
+    /**
+     * Тестирование добавления коментария.
+     * Добавляем объект без коментария, далее к нему же дописываем коммент,
+     * проверяем, что получилось. Сравниваем с ожидаемым значением.
+     */
     @Test
     public void addComment() throws Exception {
-
+        //создаем заявку с пустым комментом, добавляем в трекер.
+        Item item = new Item("test", "testDescription", 123L, "");
+        tracker.add(item);
+        String testComment = "newComment";
+        //для объекта item записываем testComment.
+        tracker.addComment(item, testComment);
+        //находим объект, проверяем, что содержит item в поле comment,
+        //сравниваем  с ожидаемым значением.
+        String result = tracker.findById(item.getId()).getComment();
+        assertEquals(result, testComment);
     }
 
+    /**
+     * Тестирование удаления элемента из массива.
+     * Проверяем по количеству элементов до и после,
+     * а так же поиском по Id.
+     */
     @Test
     public void delete() throws Exception {
-        Tracker previous = new Tracker();
-        Tracker next = new Tracker();
 
-        //добавляем 2 заявки в трекер. Id инициализирован.
-        Item item1 = new Item("test1","testDescription",123L, "comment");
-        Item item2 = new Item("test2","testDescription",223L, "comment");
-
-        next.add(item1);
-        next.add(item2);
-
-        // Проверяем,
-        assertNotEquals(previous, next);
+        tracker.add(item1);
+        tracker.add(item2);
+        //previous next - количество элементов массива.
+        int previous = tracker.getAll().length;
+        //удаляем.
+        tracker.delete(item2);
+        int next = tracker.getAll().length;
+        //Проверяем количеством.
+        assertThat(next, is(previous - 1));
+        //проверяем поиском по id.
+        assertNull(tracker.findById(item2.getId()));
     }
 
     /**
@@ -65,9 +83,6 @@ public class TrackerTest {
      */
     @Test
     public void testFindById() throws Exception {
-        Tracker tracker = new Tracker();
-        Item item1 = new Item("test1","testDescription",123L, "comment");
-        Item item2 = new Item("test2","testDescription",223L, "comment");
 
         // Добавляем заявки в трекер. Теперь в трекере должно быть два объекта Item .
         tracker.add(item1);
@@ -84,36 +99,39 @@ public class TrackerTest {
      */
     @Test
     public void findByName() throws Exception {
-        Tracker tracker = new Tracker();
-        Item item1 = new Item("test1","testDescription",123L, "comment");
-        Item item2 = new Item("test2","testDescription",223L, "comment");
-
         // Добавляем заявки в трекер. Теперь в трекере должно быть два объекта Item .
         tracker.add(item1);
         tracker.add(item2);
-
         // Проверяем, что заявка с таким именем существует и равна искомому значению.
         assertThat(tracker.findByName("test2").getName(), is("test2"));
     }
 
+    /**
+     * Тестирование по количеству возвращаемых элементов.
+     * Проверяется на соответствие с ожидаемым значениемэ
+     */
     @Test
     public void getAll() throws Exception {
-
+        tracker.add(item1);
+        tracker.add(item2);
+        //ожидается 2 элемента.
+        int result = tracker.getAll().length;
+        assertThat(result, is(2));
     }
 
     /**
-     *  Тест метода update(Item newItem).
-     *
-     * {@link ru.job4j.tracker.Tracker}
+     * Тест метода update(Item).
+     * Создаем объект, записываем в трекер.
+     * Далее создаем второй объект, задаем новые параметры,
+     * перезаписываем по тому же Id и сравниваем с ожидаемым значением.
      */
     @Test
     public void whenUpdateNameThenReturnNewName() {
-        Tracker tracker = new Tracker();
-        Item previous = new Item("test1","testDescription",123L, "comment");
+        Item previous = new Item("test1", "testDescription", 123L, "comment");
         // Добавляем заявку в трекер. Теперь в объекте проинициализирован id.
         tracker.add(previous);
         // Создаем новую заявку.
-        Item next = new Item("test2","testDescription2",1234L, "new comment");
+        Item next = new Item("test2", "testDescription2", 1234L, "new comment");
         // Проставляем старый id из previous, который был сгенерирован выше.
         next.setId(previous.getId());
         // Обновляем заявку в трекере.
@@ -122,4 +140,11 @@ public class TrackerTest {
         assertThat(tracker.findById(previous.getId()).getName(), is("test2"));
     }
 
+    @Test
+    public void findIndex() throws Exception {
+        tracker.add(item1);
+        tracker.add(item2);
+
+        assertThat(tracker.getAll()[1], is(item2));
+    }
 }
