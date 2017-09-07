@@ -142,7 +142,7 @@ public class Tracker {
 
     // вспомогательный метод для генерации уникального ключа Id.
     private String generateId() {
-        return String.valueOf(rn.nextInt());
+        return String.valueOf(rn.nextInt(100));
     }
 
     //вспомогательный метод, возвращает индекс i элемента Item в массиве items[].

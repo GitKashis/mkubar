@@ -11,19 +11,24 @@ public class Item {
     // уникальный id, служит для идентивикации записи в массиве.
     private String Id;
     // имя заявки.
-    public String name;
-    // описание.
-    public String description;
-    // время создания.
-    public long create;
-    // коментарий.
-    public String comment;
+    private String name;
 
+
+    // описание.
+    private String description;
+    // время создания.
+    private long create;
+    // коментарий.
+    private String comment;
 
     /**
      * конструктор по умолчанию.
      */
     public Item() {
+    }
+
+    public Item(String name) {
+        this.name = name;
     }
 
     /**
@@ -40,6 +45,12 @@ public class Item {
         this.comment = comment;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
     public String getName() {
         return this.name;
     }
@@ -66,5 +77,8 @@ public class Item {
 
     public String getComment() {
         return this.comment;
+    }
+    public void setCreate(long create) {
+        this.create = create;
     }
 }
