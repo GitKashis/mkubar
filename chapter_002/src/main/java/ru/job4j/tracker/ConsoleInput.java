@@ -15,18 +15,17 @@ public class ConsoleInput implements  Input {
     }
 
     public void print(String[] menu) {
-        for(int i = 0; i < menu.length; i++) {
-            System.out.println(menu[i]);
-        }
+        for(String i : menu)
+            System.out.println(i);
     }
 
     public void print(Item[] items) {
         for(Item item : items )
-            System.out.println("Id: " + item.getId() + "; Name: " + item.getName() + "; Description: " + item.getDescription() +
-                    "; Create: " + item.getCreate() + "; Comment: " + item.getComment());
+            print(item);
     }
     public void print(Item item) {
-        System.out.println("Id: " + item.getId() + "; Name: " + item.getName() + "; Description: " + item.getDescription() +
+        if (item != null)
+            System.out.println("Id: " + item.getId() + "; Name: " + item.getName() + "; Description: " + item.getDescription() +
                 "; Create: " + item.getCreate() + "; Comment: " + item.getComment());
     }
 }

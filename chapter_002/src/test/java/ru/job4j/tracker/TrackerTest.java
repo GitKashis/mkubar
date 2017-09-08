@@ -16,8 +16,8 @@ public class TrackerTest {
 
     // создаем трекер и 2 заявки.
     Tracker tracker = new Tracker();
-    Item item1 = new Item("test1", "testDescription", 123L, "comment");
-    Item item2 = new Item("test2", "testDescription", 223L, "comment");
+    Item item1 = new Item("test1", "testDescription",  "comment");
+    Item item2 = new Item("test2", "testDescription",  "comment");
 
     /**
      * Тест метода Add(Item).
@@ -44,7 +44,7 @@ public class TrackerTest {
     @Test
     public void addComment() throws Exception {
         //создаем заявку с пустым комментом, добавляем в трекер.
-        Item item = new Item("test", "testDescription", 123L, "");
+        Item item = new Item("test", "testDescription",  "");
         tracker.add(item);
         String testComment = "newComment";
         //для объекта item записываем testComment.
@@ -127,11 +127,11 @@ public class TrackerTest {
      */
     @Test
     public void whenUpdateNameThenReturnNewName() {
-        Item previous = new Item("test1", "testDescription", 123L, "comment");
+        Item previous = new Item("test1", "testDescription",  "comment");
         // Добавляем заявку в трекер. Теперь в объекте проинициализирован id.
         tracker.add(previous);
         // Создаем новую заявку.
-        Item next = new Item("test2", "testDescription2", 1234L, "new comment");
+        Item next = new Item("test2", "testDescription2", "new comment");
         // Проставляем старый id из previous, который был сгенерирован выше.
         next.setId(previous.getId());
         // Обновляем заявку в трекере.

@@ -12,12 +12,10 @@ public class Item {
     private String Id;
     // имя заявки.
     private String name;
-
-
     // описание.
     private String description;
     // время создания.
-    private long create;
+    private String create;
     // коментарий.
     private String comment;
 
@@ -36,9 +34,8 @@ public class Item {
      *
      * @param name        name
      * @param description desc
-     * @param create      create
      */
-    public Item(String name, String description, long create, String comment) {
+    public Item(String name, String description, String comment) {
         this.name = name;
         this.description = description;
         this.create = create;
@@ -48,9 +45,11 @@ public class Item {
     public void setName(String name) {
         this.name = name;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
+
     public String getName() {
         return this.name;
     }
@@ -59,7 +58,7 @@ public class Item {
         return this.description;
     }
 
-    public long getCreate() {
+    public String getCreate() {
         return this.create;
     }
 
@@ -78,7 +77,8 @@ public class Item {
     public String getComment() {
         return this.comment;
     }
-    public void setCreate(long create) {
+
+    public void setCreate(String create) {
         this.create = create;
     }
 }

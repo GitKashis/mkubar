@@ -1,5 +1,7 @@
 package ru.job4j.tracker;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -25,6 +27,7 @@ public class Tracker {
      */
     public Item add(Item item) {
         item.setId(this.generateId());
+        item.setCreate(createTime());
         this.items[position++] = item;
         return item;
     }
@@ -69,17 +72,17 @@ public class Tracker {
      */
     public void delete(Item delItem) {
         //новый массив меньше на 1.
-        Item[] result = new Item[this.items.length - 1];
         //находим индекс удаляемого элемента.
-        int i = findIndex(delItem);
-        // индекс найден. Копируем левую часть.
-        System.arraycopy(items, 0, result, 0, i - 1);
-        //копируем оставшуюся правую часть.
-        System.arraycopy(items, i + 1, result, i, items.length - i - 1);
-        //именьшаем текущую позицию в массиве
-        position--;
-        //переопределяем исходный массив.
-        items = result;
+        int index = findIndex(delItem);
+
+        if (index >= 0 && index < items.length)
+        {
+            Item[] copy = new Item[items.length-1];
+            System.arraycopy(items, 0, copy, 0, index);
+            System.arraycopy(items, index+1, copy, index, items.length-index-1);
+            items = copy;
+            position--;
+        }
     }
 
     /**
@@ -90,16 +93,10 @@ public class Tracker {
      */
     protected Item findById(String id) {
         Item result = null;
-//        for (Item item : items) {
-//            if (item != null && item.getId().equals(id))
-//                result = item;
-//            break;
-//        }
-        for (int i = 0; i < this.items.length; i++) {
-            if (items[i] != null && items[i].getId().equals(id)) {
-                result = this.items[i];
-                break;
-            }
+        for (Item item : items) {
+            if (item != null && item.getId().equals(id))
+                result = item;
+            break;
         }
         return result;
     }
@@ -112,19 +109,19 @@ public class Tracker {
      */
     protected Item findByName(String name) {
         Item result = null;
-//        for (Item item : items) {
-//            if (item != null && item.getName().equals(name)) {
-//                result = item;
-//            }
-//            break;
-//        }
-        for (int i = 0; i < this.items.length; i++) {
-            if (items[i] != null && this.items[i].getName().equals(name)) {
-                result = this.items[i];
-                break;
+        for (Item item : items) {
+            if (item != null && item.getName().equals(name)) {
+                result = item;
             }
+            break;
         }
         return result;
+    }
+    protected String createTime (){
+        // Для получения текущего системного времени достаточно выполнить:
+        long curTime = System.currentTimeMillis();
+        // Хотите строку в формате, удобном Вам?
+        return new SimpleDateFormat("dd.MM.yyyy").format(curTime);
     }
 
     /**
@@ -135,7 +132,8 @@ public class Tracker {
     public Item[] getAll() {
         Item result[] = new Item[position];
         for (int i = 0; i != this.position; i++) {
-            result[i] = this.items[i];
+            if (items[i] != null)
+                result[i] = this.items[i];
         }
         return result;
     }
@@ -146,7 +144,7 @@ public class Tracker {
     }
 
     //вспомогательный метод, возвращает индекс i элемента Item в массиве items[].
-    public int findIndex(Item item) {
+    protected int findIndex(Item item) {
         int index = -1;
         for (int i = 0; i < this.items.length; i++) {
             if (items[i] != null && this.items[i].equals(item)) {
@@ -156,4 +154,5 @@ public class Tracker {
         }
         return index;
     }
+
 }

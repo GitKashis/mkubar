@@ -9,52 +9,56 @@ public class StartUI {
     private String choise = "";
     private String[] menu = {"\n0. Add new Item", "1. Show all items", "2. Edit item", "3. Delete item",
             "4. Find item by Id", "5. Find items by name", "6. Exit Program"};
+
     public StartUI(Input input){
         this.input = input;
     }
 
     public  void init(){
         Tracker tracker = new Tracker();
-        Item item = new Item();
 
         while (!isExit(choise)) {
             input.print(menu);
             choise = input.ask("Select: ");
-            switch (choise) {
-                case "0":   item.setName(input.ask("Input Task name: "));
-                            item.setDescription(input.ask("Input Task description: "));
-                            item.setComment(input.ask("Input Task comment: "));
-                            item.setCreate(123);
 
-                            tracker.add(item);
+            switch (choise) {
+
+                case "0":   this.createItem(input, tracker);
                             break;
 
                 case "1":   input.print(tracker.getAll());
                             break;
-                case "2":   item = tracker.findById(input.ask("Input Task Id to update: "));
-                            item.setName(input.ask("Input Task name: "));
-                            tracker.update(item);
+
+                case "2":   this.updateItem (input, tracker);
                             break;
 
-                case "3":   item = tracker.findById(input.ask("Input Task Id to delete: "));
-                            tracker.delete(item);
-                            System.out.println("Item Id " + item.getId() + " is deleted");
+                case "3":   tracker.delete(tracker.findById(input.ask("Input Task Id to delete: ")));
                             break;
 
-                case "4":   item = tracker.findById(input.ask("Input Task Id"));
-                            input.print(item);
-                    break;
-                case "5":
-                    break;
-                case "6":
-                    break;
+                case "4":   input.print(tracker.findById(input.ask("Input Task Id: ")));
+                            break;
+
+                case "5":   input.print(tracker.findByName(input.ask("Input Task name: ")));
+                            break;
             }
         }
     }
-    public void run(){
-        input.print(menu);
+    public void setItem(Input input, Item item){
+        item.setName(input.ask("Input Task name: "));
+        item.setDescription(input.ask("Input Task description: "));
+        item.setComment(input.ask("Input Task comment: "));
+    }
 
+    public void createItem(Input input, Tracker tracker){
+        Item item = new Item();
+        setItem(input, item);
+        tracker.add(item);
+    }
 
+    public void updateItem (Input input, Tracker tracker){
+        item = tracker.findById(input.ask("Input Task Id to update: "));
+        setItem(input, item);
+        tracker.update(item);
     }
 
     private static boolean isExit(String choise){
@@ -62,8 +66,8 @@ public class StartUI {
     }
 
     public static void main(String[] args) {
-        Input input = new ConsoleInput();
-        StartUI stage = new StartUI(input);
+
+        StartUI stage = new StartUI(new ConsoleInput());
         stage.init();
     }
 }
