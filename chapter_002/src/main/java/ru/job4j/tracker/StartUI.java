@@ -1,72 +1,117 @@
 package ru.job4j.tracker;
 
 /**
- * Created by Kubar on 06.09.2017.
+ * Класс StartUi точка входа в программу.
+ * Обеспечивает полноценную работу всего приложения (трекера);
+ *
+ * @author Mikhail Kubar
+ * @version 1.0
+ * @since 09.09.17
  */
 public class StartUI {
+    //интерфейс ввода.
     private Input input;
-    private Item item;
-    private String choise = "";
+    //ключ завершения цикла.
+    private static final String EXIT = "6";
+    //выбор пункта меню.
+    private static String choise = "";
+    //меню.
     private String[] menu = {"\n0. Add new Item", "1. Show all items", "2. Edit item", "3. Delete item",
             "4. Find item by Id", "5. Find items by name", "6. Exit Program"};
 
-    public StartUI(Input input){
+    //конструктор.
+    private StartUI(Input input) {
         this.input = input;
     }
 
-    public  void init(){
+    /**
+     *
+     */
+    private void init() {
         Tracker tracker = new Tracker();
 
-        while (!isExit(choise)) {
+        while (!isExit()) {
             input.print(menu);
             choise = input.ask("Select: ");
 
             switch (choise) {
-
-                case "0":   this.createItem(input, tracker);
-                            break;
-
-                case "1":   input.print(tracker.getAll());
-                            break;
-
-                case "2":   this.updateItem (input, tracker);
-                            break;
-
-                case "3":   tracker.delete(tracker.findById(input.ask("Input Task Id to delete: ")));
-                            break;
-
-                case "4":   input.print(tracker.findById(input.ask("Input Task Id: ")));
-                            break;
-
-                case "5":   input.print(tracker.findByName(input.ask("Input Task name: ")));
-                            break;
+                //Add new Item.
+                case "0":
+                    this.createItem(input, tracker);
+                    break;
+                //Show all items.
+                case "1":
+                    input.print(tracker.getAll());
+                    break;
+                //Edit item.
+                case "2":
+                    this.updateItem(input, tracker);
+                    break;
+                //Delete item.
+                case "3":
+                    tracker.delete(tracker.findById(input.ask("Input Task Id to delete: ")));
+                    break;
+                //Find item by Id.
+                case "4":
+                    input.print(tracker.findById(input.ask("Input Task Id: ")));
+                    break;
+                //Find items by name.
+                case "5":
+                    input.print(tracker.findByName(input.ask("Input Task name: ")));
+                    break;
             }
         }
     }
-    public void setItem(Input input, Item item){
+
+    /**
+     * Метод считывает и заносит данные в заявку Item.
+     *
+     * @param input - интерфейс ввода.
+     * @param item  - текущая заявка Item.
+     */
+    private void setItem(Input input, Item item) {
         item.setName(input.ask("Input Task name: "));
         item.setDescription(input.ask("Input Task description: "));
         item.setComment(input.ask("Input Task comment: "));
     }
 
-    public void createItem(Input input, Tracker tracker){
+    /**
+     * Метод создания и добавления заявки в трекер.
+     *
+     * @param input   - интерфейс ввода.
+     * @param tracker - "хранилище" заявок.
+     */
+    private void createItem(Input input, Tracker tracker) {
         Item item = new Item();
         setItem(input, item);
         tracker.add(item);
     }
 
-    public void updateItem (Input input, Tracker tracker){
-        item = tracker.findById(input.ask("Input Task Id to update: "));
+    /**
+     * Перезапись заявки.
+     *
+     * @param input   - интерфейс ввода.
+     * @param tracker - "хранилище" заявок.
+     */
+    private void updateItem(Input input, Tracker tracker) {
+        //Находим редактируемую заявку по Id.
+        Item item = tracker.findById(input.ask("Input Task Id to update: "));
+        //Перезаписываем поля записи.
         setItem(input, item);
+        //обновляем.
         tracker.update(item);
     }
 
-    private static boolean isExit(String choise){
-        return  (choise.equals("6") ? true : false);
+    /**
+     * Метод завершения программы.
+     *
+     * @return isExit?
+     */
+    private static boolean isExit() {
+        return (choise.equals(EXIT));
     }
 
     public static void main(String[] args) {
-
         StartUI stage = new StartUI(new ConsoleInput());
         stage.init();
     }

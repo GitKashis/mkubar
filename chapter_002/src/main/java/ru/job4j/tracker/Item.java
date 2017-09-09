@@ -9,7 +9,7 @@ package ru.job4j.tracker;
  */
 public class Item {
     // уникальный id, служит для идентивикации записи в массиве.
-    private String Id;
+    private String id;
     // имя заявки.
     private String name;
     // описание.
@@ -34,6 +34,8 @@ public class Item {
      *
      * @param name        name
      * @param description desc
+     * @param comment comment
+     * @value create is Date
      */
     public Item(String name, String description, String comment) {
         this.name = name;
@@ -63,11 +65,11 @@ public class Item {
     }
 
     public String getId() {
-        return this.Id;
+        return this.id;
     }
 
     public void setId(String id) {
-        this.Id = id;
+        this.id = id;
     }
 
     public void setComment(String comment) {
