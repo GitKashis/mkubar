@@ -5,13 +5,11 @@ package ru.job4j.tracker;
  * Содержит методы печати и диалога с пользователем.
  * Created by Kubar on 06.09.2017.
  */
-public interface Input {
+interface Input {
 
     String ask(String question);
 
-    void print(String[] menu);
+//    String toString(Item item);
 
-    void print(Item[] items);
-
-    void print(Item item);
+    void print(Object[] objects);
 }

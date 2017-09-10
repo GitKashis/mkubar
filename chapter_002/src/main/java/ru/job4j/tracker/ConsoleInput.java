@@ -7,7 +7,7 @@ import java.util.Scanner;
  * Расширен от интерфейсного класса Input.
  * {@link ru.job4j.tracker.Input}
  */
-public class ConsoleInput implements Input {
+class ConsoleInput implements Input {
     //считывание ввода.
     private Scanner scanner = new Scanner(System.in);
 
@@ -22,37 +22,11 @@ public class ConsoleInput implements Input {
         return scanner.next();
     }
 
-    /**
-     * Печать меню на экран.
-     *
-     * @param menu - список действий.
-     */
-    public void print(String[] menu) {
-        for (String i : menu) {
-            System.out.println(i);
-        }
-    }
-
-    /**
-     * Вывод на экран всех текущих заявок.
-     *
-     * @param items - массив заявок.
-     */
-    public void print(Item[] items) {
-        for (Item item : items) {
-            print(item);
-        }
-    }
-
-    /**
-     * Печать одной заявки.
-     *
-     * @param item - заявка для вывода на экран.
-     */
-    public void print(Item item) {
-        if (item != null) {
-            System.out.println("Id: " + item.getId() + "; Name: " + item.getName() + "; Description: " + item.getDescription()
-                    + "; Create: " + item.getCreate() + "; Comment: " + item.getComment());
+    public void print(Object[] objects) {
+        for(Object obj : objects) {
+            if (obj != null) {
+                System.out.println(obj.toString());
+            }
         }
     }
 }

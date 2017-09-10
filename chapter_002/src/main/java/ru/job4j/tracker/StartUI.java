@@ -12,6 +12,12 @@ public class StartUI {
     //интерфейс ввода.
     private Input input;
     //ключ завершения цикла.
+    private static final String ADD = "0";
+    private static final String SHOW = "1";
+    private static final String EDIT = "2";
+    private static final String DEL = "3";
+    private static final String FIND_ID = "4";
+    private static final String FIND_NAME = "5";
     private static final String EXIT = "6";
     //выбор пункта меню.
     private static String choise = "";
@@ -30,34 +36,34 @@ public class StartUI {
     private void init() {
         Tracker tracker = new Tracker();
 
-        while (!isExit()) {
+        while (!choise.equals(EXIT)) {
             input.print(menu);
             choise = input.ask("Select: ");
 
             switch (choise) {
                 //Add new Item.
-                case "0":
+                case ADD:
                     this.createItem(input, tracker);
                     break;
                 //Show all items.
-                case "1":
+                case SHOW:
                     input.print(tracker.getAll());
                     break;
                 //Edit item.
-                case "2":
+                case EDIT:
                     this.updateItem(input, tracker);
                     break;
                 //Delete item.
-                case "3":
+                case DEL:
                     tracker.delete(tracker.findById(input.ask("Input Task Id to delete: ")));
                     break;
                 //Find item by Id.
-                case "4":
-                    input.print(tracker.findById(input.ask("Input Task Id: ")));
+                case FIND_ID:
+                    System.out.println(tracker.findById(input.ask("Input Task Id: ")));
                     break;
                 //Find items by name.
-                case "5":
-                    input.print(tracker.findByName(input.ask("Input Task name: ")));
+                case FIND_NAME:
+                    System.out.println(tracker.findByName(input.ask("Input Task name: ")));
                     break;
             }
         }
@@ -83,7 +89,7 @@ public class StartUI {
      */
     private void createItem(Input input, Tracker tracker) {
         Item item = new Item();
-        setItem(input, item);
+        this.setItem(input, item);
         tracker.add(item);
     }
 
@@ -97,19 +103,11 @@ public class StartUI {
         //Находим редактируемую заявку по Id.
         Item item = tracker.findById(input.ask("Input Task Id to update: "));
         //Перезаписываем поля записи.
-        setItem(input, item);
+        this.setItem(input, item);
         //обновляем.
         tracker.update(item);
     }
 
-    /**
-     * Метод завершения программы.
-     *
-     * @return isExit?
-     */
-    private static boolean isExit() {
-        return (choise.equals(EXIT));
-    }
 
     public static void main(String[] args) {
         StartUI stage = new StartUI(new ConsoleInput());

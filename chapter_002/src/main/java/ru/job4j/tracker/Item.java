@@ -7,7 +7,7 @@ package ru.job4j.tracker;
  * @version 1.0
  * @since 04.09.17
  */
-public class Item {
+class Item {
     // уникальный id, служит для идентивикации записи в массиве.
     private String id;
     // имя заявки.
@@ -19,16 +19,9 @@ public class Item {
     // коментарий.
     private String comment;
 
-    /**
-     * конструктор по умолчанию.
-     */
-    public Item() {
+    //конструктор.
+    Item() {
     }
-
-    public Item(String name) {
-        this.name = name;
-    }
-
     /**
      * конструктор с параметрами.
      *
@@ -37,50 +30,59 @@ public class Item {
      * @param comment comment
      * @value create is Date
      */
-    public Item(String name, String description, String comment) {
+
+    Item(String name, String description, String comment) {
         this.name = name;
         this.description = description;
-        this.create = create;
         this.comment = comment;
     }
 
-    public void setName(String name) {
+    /**
+     * Override toString.
+     * @return String
+     */
+    public String toString() {
+        return ("Id: " + this.getId() + "; Name: " + this.getName() + "; Description: " + this.getDescription()
+                + "; Create: " + this.getCreate() + "; Comment: " + this.getComment());
+    }
+
+    void setName(String name) {
         this.name = name;
     }
 
-    public void setDescription(String description) {
+    void setDescription(String description) {
         this.description = description;
     }
 
-    public String getName() {
+    String getName() {
         return this.name;
     }
 
-    public String getDescription() {
+    private String getDescription() {
         return this.description;
     }
 
-    public String getCreate() {
+    private String getCreate() {
         return this.create;
     }
 
-    public String getId() {
+    String getId() {
         return this.id;
     }
 
-    public void setId(String id) {
+    void setId(String id) {
         this.id = id;
     }
 
-    public void setComment(String comment) {
+    void setComment(String comment) {
         this.comment = comment;
     }
 
-    public String getComment() {
+    String getComment() {
         return this.comment;
     }
 
-    public void setCreate(String create) {
+    void setCreate(String create) {
         this.create = create;
     }
 }
