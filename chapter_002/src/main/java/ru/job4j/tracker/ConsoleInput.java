@@ -24,9 +24,7 @@ class ConsoleInput implements Input {
 
     public void print(Object[] objects) {
         for(Object obj : objects) {
-            if (obj != null) {
-                System.out.println(obj.toString());
-            }
+                System.out.println(obj);
         }
     }
 }
