@@ -10,7 +10,7 @@ import java.util.Random;
  * @version 1.0
  * @since 04.09.17
  */
-public class Tracker {
+class Tracker {
     //выделяем память для массива заявок Item на 100 элементов.
     private Item[] items = new Item[100];
     //индекс массива Items[].
@@ -24,7 +24,7 @@ public class Tracker {
      * @param item - новая заявка.
      * @return Item item.
      */
-    protected Item add(Item item) {
+    Item add(Item item) {
         item.setId(this.generateId());
         item.setCreate(createTime());
         this.items[position++] = item;
@@ -38,7 +38,7 @@ public class Tracker {
      * @param comment     - коментарий.
      * @return item.
      */
-    protected Item addComment(Item commentItem, String comment) {
+    Item addComment(Item commentItem, String comment) {
         //находим в массиве заявку, для которой надо добавить коментарий.
         Item item = findById(commentItem.getId());
         if (item != null) {
@@ -52,13 +52,13 @@ public class Tracker {
      *
      * @param newItem - измененный элемент.
      */
-    protected void update(Item newItem) {
+    void update(Item newItem) {
 
         for (int i = 0; i < this.position; i++) {
             if (this.items[i].getId().equals(newItem.getId())) {
                 this.items[i] = newItem;
+                break;
             }
-            break;
         }
     }
 
@@ -69,16 +69,17 @@ public class Tracker {
      *
      * @param delItem - удаляемый элемент.
      */
-    protected void delete(Item delItem) {
+    void delete(Item delItem) {
         //новый массив меньше на 1.
         //находим индекс удаляемого элемента.
-        int index = findIndex(delItem);
+        int index = this.findIndex(delItem);
 
         if (index >= 0 && index < items.length) {
+
             Item[] copy = new Item[items.length - 1];
             System.arraycopy(items, 0, copy, 0, index);
             System.arraycopy(items, index + 1, copy, index, items.length - index - 1);
-            items = copy;
+            this.items = copy;
             position--;
         }
     }
@@ -89,13 +90,13 @@ public class Tracker {
      * @param id уникальный ключ для элементов массива.
      * @return item - элемент массива.
      */
-    protected Item findById(String id) {
+    Item findById(String id) {
         Item result = null;
-        for (Item item : items) {
+        for (Item item : this.getAll()) {
             if (item != null && item.getId().equals(id)) {
                 result = item;
+                break;
             }
-            break;
         }
         return result;
     }
@@ -106,18 +107,18 @@ public class Tracker {
      * @param name - имя в заявке
      * @return item - элемент массива.
      */
-    protected Item findByName(String name) {
+    Item findByName(String name) {
         Item result = null;
-        for (Item item : items) {
+        for (Item item : this.getAll()) {
             if (item != null && item.getName().equals(name)) {
                 result = item;
+                break;
             }
-            break;
         }
         return result;
     }
 
-    protected String createTime() {
+    private String createTime() {
         // Для получения текущего системного времени достаточно выполнить:
         long curTime = System.currentTimeMillis();
         // Хотите строку в формате, удобном Вам?
@@ -129,7 +130,7 @@ public class Tracker {
      *
      * @return Item[]
      */
-    protected Item[] getAll() {
+    Item[] getAll() {
         Item result[] = new Item[position];
         for (int i = 0; i != this.position; i++) {
             if (items[i] != null)

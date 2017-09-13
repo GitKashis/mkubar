@@ -13,8 +13,7 @@ public class StartUI {
     private Input input;
     //ключ завершения цикла.
     private static final String EXIT = "6";
-    //выбор пункта меню.
-    private static String key = "";
+
     //конструктор.
     private StartUI(Input input) {
         this.input = input;
@@ -24,16 +23,23 @@ public class StartUI {
      *
      */
     private void init() {
+        // инициализируем хранение и методы ввода.
         Tracker tracker = new Tracker();
         MenuTracker menu = new MenuTracker(input, tracker);
+
+        // что будем делать с заявками?
         menu.fillAction();
 
-        while (!key.equals(EXIT)) {
+        // выбираем до тех пор, пока не будет выбрано действие Exit Programm
+        // нажатием клавиши '6'.
+        String key;
+
+        do {
             menu.show();
             key = input.ask("Select: ");
             menu.select(Integer.valueOf(key));
-
         }
+        while (!key.equals(EXIT));
     }
 
     public static void main(String[] args) {

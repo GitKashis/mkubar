@@ -9,7 +9,5 @@ interface Input {
 
     String ask(String question);
 
-//    String toString(Item item);
-
     void print(Object[] objects);
 }
