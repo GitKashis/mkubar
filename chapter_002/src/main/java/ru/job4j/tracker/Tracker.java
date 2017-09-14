@@ -147,6 +147,7 @@ class Tracker {
     //вспомогательный метод, возвращает индекс i элемента Item в массиве items[].
     private int findIndex(Item item) {
         int index = -1;
+        
         for (int i = 0; i < this.items.length; i++) {
             if (items[i] != null && this.items[i].equals(item)) {
                 index = i;

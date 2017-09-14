@@ -31,6 +31,10 @@ class MenuTracker {
         this.actions[6] = new MenuTracker.ExitProgam();
     }
 
+    int[] getLenght(){
+        return new int[this.actions.length];
+    }
+
     /**
      * Выбор пользователем действия из списка меню.
      *

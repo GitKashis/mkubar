@@ -12,7 +12,7 @@ public class StartUI {
     //интерфейс ввода.
     private Input input;
     //ключ завершения цикла.
-    private static final String EXIT = "6";
+    private static final String EXIT = "y";
 
     //конструктор.
     private StartUI(Input input) {
@@ -32,18 +32,16 @@ public class StartUI {
 
         // выбираем до тех пор, пока не будет выбрано действие Exit Programm
         // нажатием клавиши '6'.
-        String key;
-
         do {
             menu.show();
-            key = input.ask("Select: ");
-            menu.select(Integer.valueOf(key));
+
+            menu.select(input.ask("Select: ", menu.getLenght()));
         }
-        while (!key.equals(EXIT));
+        while (!EXIT.equals(input.ask("Exit?: ")));
     }
 
     public static void main(String[] args) {
-        StartUI stage = new StartUI(new ConsoleInput());
+        StartUI stage = new StartUI(new ValidateInput());
         stage.init();
     }
 }
