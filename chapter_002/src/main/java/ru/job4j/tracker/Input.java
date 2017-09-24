@@ -9,6 +9,7 @@ interface Input {
 
     String ask(String question);
 
+    // перегруженный метод ask.
     int ask(String question, int[] range);
 
     void print(Object[] objects);

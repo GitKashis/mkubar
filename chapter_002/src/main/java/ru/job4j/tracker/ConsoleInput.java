@@ -22,6 +22,14 @@ class ConsoleInput implements Input {
         return scanner.next();
     }
 
+    /**
+     * Перегруженный метод ask проверяет ответ пользователя на наличие пункта в меню.
+     *
+     * @param question
+     * @param range - длина массива = область значений.
+     * @return если выбор верный, возвращает номер действия,
+     * если нет - возбуждается ошибка MenuOutException с сообщением msg.
+     */
     @Override
     public int ask(String question, int[] range) {
         int key = Integer.valueOf(this.ask(question));

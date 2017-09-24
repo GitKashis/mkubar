@@ -19,9 +19,6 @@ public class StartUI {
         this.input = input;
     }
 
-    /**
-     *
-     */
     private void init() {
         // инициализируем хранение и методы ввода.
         Tracker tracker = new Tracker();
@@ -34,13 +31,14 @@ public class StartUI {
         // нажатием клавиши '6'.
         do {
             menu.show();
-
             menu.select(input.ask("Select: ", menu.getLenght()));
         }
         while (!EXIT.equals(input.ask("Exit?: ")));
     }
 
     public static void main(String[] args) {
+        // вместо интерфейса ConsoleInput использован ValidateInput, в котором добавлен
+        // контроль данных, вводимых пользоваелем.
         StartUI stage = new StartUI(new ValidateInput());
         stage.init();
     }
