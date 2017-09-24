@@ -3,6 +3,7 @@ package ru.job4j.tracker;
 class MenuTracker {
     private Input input;
     private Tracker tracker;
+    private int position = 0;
     private UserAction[] actions = new UserAction[7];
 
     /**
@@ -20,18 +21,21 @@ class MenuTracker {
      * Метод назначает для интерфейсу соответствующий объект.
      * т.к. для разных объектов интерфейс одинаков, то все эти объекты
      * будут содержать методы key(), execute(), show().
+     *
+     * Название операции и её ключ перенесены в конструктор,
+     * реализованы в общем абстрактном классе BaseAction.
      */
     void fillAction() {
-        this.actions[0] = new AddItem();
-        this.actions[1] = new MenuTracker.ShowItem();
-        this.actions[2] = new UpdateItem();
-        this.actions[3] = new DeleteItem();
-        this.actions[4] = new FindById();
-        this.actions[5] = new FindByName();
-        this.actions[6] = new MenuTracker.ExitProgam();
+        this.actions[position++] = new AddItem("Add new Item", 0);
+        this.actions[position++] = new MenuTracker.ShowItem("Show all items", 1);
+        this.actions[position++] = new UpdateItem("Update Item", 2);
+        this.actions[position++] = new DeleteItem("Delete item by id", 3);
+        this.actions[position++] = new FindById("Find item by Id", 4);
+        this.actions[position++] = new FindByName("Find item by name.", 5);
+        this.actions[position++] = new MenuTracker.ExitProgam("Exit Program", 6);
     }
 
-    int[] getLenght(){
+    int[] getLenght() {
         return new int[this.actions.length];
     }
 
@@ -71,9 +75,9 @@ class MenuTracker {
     /**
      * Внутренний класс Add().
      */
-    private class AddItem implements UserAction {
-        public int key() {
-            return 0;
+    private class AddItem extends BaseAction {
+        AddItem(String name, int key) {
+            super(name, key);
         }
 
         public void execute(Input input, Tracker tracker) {
@@ -81,35 +85,30 @@ class MenuTracker {
             setItem(input, item);
             tracker.add(item);
         }
-
-        public String info() {
-            return String.format("%s. %s", this.key(), "Add new Item");
-        }
     }
 
     /**
      * Внутренний статический класс Show.
      */
-    private static class ShowItem implements UserAction {
-        public int key() {
-            return 1;
+    private static class ShowItem extends BaseAction {
+
+        ShowItem(String name, int key) {
+            super(name, key);
         }
 
         public void execute(Input input, Tracker tracker) {
             input.print(tracker.getAll());
         }
 
-        public String info() {
-            return String.format("%s. %s", this.key(), "Show all items");
-        }
     }
 
     /**
      * Внутренний класс Update.
      */
-    private class UpdateItem implements UserAction {
-        public int key() {
-            return 2;
+    private class UpdateItem extends BaseAction {
+
+        UpdateItem(String name, int key) {
+            super(name, key);
         }
 
         public void execute(Input input, Tracker tracker) {
@@ -120,37 +119,29 @@ class MenuTracker {
             //обновляем.
             tracker.update(editItem);
         }
-
-        public String info() {
-            return String.format("%s. %s", this.key(), "Update Item");
-        }
     }
 
     /**
      * Внутренний класс Delete.
      */
-    private class DeleteItem implements UserAction {
-        public int key() {
-            return 3;
+    private class DeleteItem extends BaseAction {
+
+        DeleteItem(String name, int key) {
+            super(name, key);
         }
 
         public void execute(Input input, Tracker tracker) {
             Item item = tracker.findById(input.ask("Input Task Id to delete: "));
             tracker.delete(item);
         }
-
-        public String info() {
-            return String.format("%s. %s", this.key(), "Delete item by id");
-        }
     }
 
     /**
      * Внутренний класс FindByName.
      */
-    private class FindByName implements UserAction {
-        @Override
-        public int key() {
-            return 5;
+    private class FindByName extends BaseAction {
+        FindByName(String name, int key) {
+            super(name, key);
         }
 
         @Override
@@ -158,30 +149,19 @@ class MenuTracker {
             Item item = tracker.findByName(input.ask("Input Task name: "));
             System.out.println(item != null ? "Found " + item : "Not found.");
         }
-
-        @Override
-        public String info() {
-            return String.format("%s. %s", this.key(), "Find item by name.");
-        }
     }
 
     /**
      * Внутренний статический класс ExitProgam.
      */
-    private class ExitProgam implements UserAction {
-        @Override
-        public int key() {
-            return 6;
+    private class ExitProgam extends BaseAction {
+        ExitProgam(String name, int key) {
+            super(name, key);
         }
 
         @Override
         public void execute(Input input, Tracker tracker) {
             System.out.println("Program closes...");
-        }
-
-        @Override
-        public String info() {
-            return String.format("%s. %s", this.key(), "Exit Program");
         }
     }
 }
@@ -189,21 +169,16 @@ class MenuTracker {
 /**
  * Внешний вложенный класс FindById.
  */
-class FindById implements UserAction {
-    @Override
-    public int key() {
-        return 4;
+class FindById extends BaseAction {
+
+    FindById(String name, int key) {
+        super(name, key);
     }
 
     @Override
     public void execute(Input input, Tracker tracker) {
         Item item = tracker.findById(input.ask("Input Task Id: "));
         System.out.println(item != null ? "Found " + item : "Not found.");
-    }
-
-    @Override
-    public String info() {
-        return String.format("%s. %s", this.key(), "Find item by Id");
     }
 }
 
