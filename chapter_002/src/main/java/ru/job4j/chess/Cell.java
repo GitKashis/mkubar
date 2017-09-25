@@ -4,9 +4,10 @@ package ru.job4j.chess;
  * Класс описывает координаты и состояние ячейки.
  * Created by Kubar on 24.09.2017.
  */
- public class Cell {
-    private char horisontal;
+ class Cell {
+    private int horisontal;
     private int vertical;
+    private boolean isBusy;
 
     public boolean isBusy() {
         return isBusy;
@@ -16,17 +17,15 @@ package ru.job4j.chess;
         isBusy = busy;
     }
 
-    private boolean isBusy;
-
-    public char getHorisontal() {
+    int getHorisontal() {
         return horisontal;
     }
 
-    public int getVertical() {
+    int getVertical() {
         return vertical;
     }
 
-    Cell(char horisontal, int vertical) {
+    Cell(int horisontal, int vertical) {
         this.horisontal = horisontal;
         this.vertical = vertical;
     }
@@ -34,5 +33,13 @@ package ru.job4j.chess;
     @Override
     public String toString() {
         return "Cell{" + horisontal + "" + vertical +   ", isBusy=" + isBusy +'}';
+    }
+
+    public void setHorisontal(int horisontal) {
+        this.horisontal = horisontal;
+    }
+
+    public void setVertical(int vertical) {
+        this.vertical = vertical;
     }
 }
