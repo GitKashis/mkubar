@@ -1,19 +1,21 @@
 package ru.job4j.chess;
 
+import ru.job4j.chess.MoveExceptions.*;
+
 /**
- * Класс Board содержит массив ячеек и набор фигур.
+ * Класс Board содержит массив ячеек, набор фигур и реализацию их ходов.
  * Created by Kubar on 24.09.2017.
  */
 public class Board {
-
-    private Cell[][] cells = new Cell[8][8];
+    //  двумерный массив-поле.
+    private final Cell[][] cells = new Cell[8][8];
     private Figure[] figures = new Figure[1];
 
     /**
      * Добавляем на поле фигуры с именем и начальной позицией.
      */
-    private void fillFigure(){
-        this.figures[0] = new Bishop("Bishop", cells[3][3]);
+    private void fillFigure() {
+        this.figures[0] = new Bishop("Bishop", cells[0][2]);
     }
 
     /**
@@ -22,7 +24,6 @@ public class Board {
     private class Bishop extends Figure {
         Bishop(String name, Cell position) {
             super(name, position);
-            System.out.println("Создание " + this.info());
         }
 
         /**
@@ -32,57 +33,41 @@ public class Board {
          *
          * @param dist - задают ячейку куда следует пойти.
          */
-
-        public Cell[] way(Cell dist) {
-
+        public Cell[] way(Cell dist) throws ImposibleMoveException {
             int x0 = this.position.getHorisontal();
             int y0 = this.position.getVertical();
             int x1 = dist.getHorisontal();
             int y1 = dist.getVertical();
+            Cell[] result = new Cell[Math.abs(x0 - x1)];
 
-            // вправо-вверх
-            if ((x1 > x0)&&(y1 > y0)){
-                //сделать шаг
-                x0++;
-                y0++;
-                System.out.println("x0 = " + x0 + "; y0 = " + y0 + ";");
-            }
+            // проверяем, находится ли фигура на линии движения.
+            if (Math.abs(x0 - x1) == Math.abs(y0 - y1)) {
+                int diagonalX, diagonalY;
+                int i = 1;
 
-            // вправо-вниз
-            if ((x1 > x0)&&(y1 < y0)){
-                x0++;
-                y0--;
-                System.out.println("x0 = " + x0 + "; y0 = " + y0 + ";");
-            }
+                do {
+                    diagonalX = Math.max(x0, x1) - i;
+                    diagonalY = Math.max(y0, y1) - i;
+                    result[i - 1] = cells[diagonalX][diagonalY];
+                    i++;
+                }
+                while (diagonalX > Math.min(x0, x1));
 
-            //влево-вверх
-            if ((x1 < x0)&&(y1 > y0)){
-                x0--;
-                y0++;
-                System.out.println("x0 = " + x0 + "; y0 = " + y0 + ";");
-            }
+            } // если на указанную клетку нельзя пройти, выбрасываем исключение.
+            else throw new ImposibleMoveException("Сюда НЕЛЬЗЯ ходить");
 
-            //влево-вниз
-            if ((x1 < x0)&&(y1 < y0)){
-                x0--;
-                y0--;
-                System.out.println("x0 = " + x0 + "; y0 = " + y0 + ";");
-            }
-
-            return new Cell[]{new Cell(x0, y0)};
+            return result;
         }
-
     }
 
     /**
-     * Метод заполняет доску ячейками, присваивая каждой координаты [char][int].
+     * Метод заполняет доску ячейками, присваивая каждой координаты [int][int].
      */
-    public void fillBoard(){
+    private void fillBoard() {
 
-        for (int j = 0; j < 8; j++){
-            for (int i = 0; i < 8; i++){
+        for (int j = 0; j < 8; j++) {
+            for (int i = 0; i < 8; i++) {
                 this.cells[i][j] = new Cell(i, j);
-                System.out.println(this.cells[i][j]);
             }
         }
     }
@@ -91,25 +76,41 @@ public class Board {
      * Метод должен должен проверить:
      *
      * @param source - ячейка первоначального положения.
-     * @param dist - ячейка назначения.
+     * @param dist   - ячейка назначения.
      * @return - Если все отлично. Записать в ячейку новое новое положение Figure figure.clone(Cell dist)
-//     * @throws ImpossibleMoveException - Если фигура есть. Проверить может ли она так двигаться. Если нет то упадет исключение
-//     * @throws OccupiedWayException - Проверить что полученный путь. не занят фигурами. Если занят выкинуть исключение
-//     * @throws FigureNotFoundException - Что в заданной ячейки есть фигура. если нет. то выкинуть исключение
+     * @throws ImpossibleMoveException - Если фигура есть. Проверить может ли она так двигаться. Если нет то упадет исключение
+     * @throws OccupiedWayException    - Проверить что полученный путь. не занят фигурами. Если занят выкинуть исключение
+     * @throws FigureNotFoundException - Что в заданной ячейки есть фигура. если нет. то выкинуть исключение
      */
-    public void move(Cell source, Cell dist) {
+    private boolean move(Cell source, Cell dist) throws ImposibleMoveException, OccupiedWayException, FigureNotFoundException {
+        // проверим существование фигуры в клетке source.
+        if (!source.isBusy()) {
+            throw new FigureNotFoundException("Фигура не найдена");
+        }
 
-        figures[0].clone(dist);
-        //return true;
+        // получим путь фигуры
+        Cell[] arrayOfWay = figures[0].way(dist);
+
+        //проверим, не заняты ли они.
+        for (Cell cell : arrayOfWay) {
+            if (cells[cell.getHorisontal()][cell.getVertical()].isBusy()) {
+                throw new OccupiedWayException("Путь занят фигурами");
+            }
+        }
+        //если исключений не произошло, переставляем фигуру.
+        figures[0].clone(dist);;
+        return true;
     }
 
-    public static void main(String[] args) {
-        Board board = new Board();
-        board.fillBoard();
-        board.fillFigure();
-        board.figures[0].way(board.cells[2][2]);
-        System.out.println(board.figures[0].info());
-        board.move(board.cells[3][3] , board.cells[2][2]);
-        System.out.println(board.figures[0].info());
-    }
+//    public static void main(String[] args) throws ImposibleMoveException, OccupiedWayException, FigureNotFoundException {
+//        Board board = new Board();
+//        board.fillBoard();
+//        board.fillFigure();
+//    try {
+//        board.move(board.cells[0][2], board.cells[2][0]);
+//        }
+//    catch (ImposibleMoveException | OccupiedWayException | FigureNotFoundException e) {
+//        System.out.println(e.getMessage());
+//        }
+//    }
 }

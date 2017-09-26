@@ -9,12 +9,12 @@ package ru.job4j.chess;
     private int vertical;
     private boolean isBusy;
 
-    public boolean isBusy() {
-        return isBusy;
+    boolean isBusy() {
+        return this.isBusy;
     }
 
-    public void setBusy(boolean busy) {
-        isBusy = busy;
+    void setBusy(boolean busy) {
+        this.isBusy = busy;
     }
 
     int getHorisontal() {
@@ -28,6 +28,7 @@ package ru.job4j.chess;
     Cell(int horisontal, int vertical) {
         this.horisontal = horisontal;
         this.vertical = vertical;
+        this.isBusy = false;
     }
 
     @Override
@@ -35,11 +36,11 @@ package ru.job4j.chess;
         return "Cell{" + horisontal + "" + vertical +   ", isBusy=" + isBusy +'}';
     }
 
-    public void setHorisontal(int horisontal) {
+    void setHorisontal(int horisontal) {
         this.horisontal = horisontal;
     }
 
-    public void setVertical(int vertical) {
+    void setVertical(int vertical) {
         this.vertical = vertical;
     }
 }
