@@ -8,20 +8,20 @@ import ru.job4j.chess.MoveExceptions.*;
  */
 public class Board {
     //  двумерный массив-поле.
-    private final Cell[][] cells = new Cell[8][8];
-    private Figure[] figures = new Figure[1];
+    public final Cell[][] cells = new Cell[8][8];
+    public Figure[] figures = new Figure[1];
 
     /**
      * Добавляем на поле фигуры с именем и начальной позицией.
      */
-    private void fillFigure() {
-        this.figures[0] = new Bishop("Bishop", cells[0][2]);
+    public void fillFigure() {
+        this.figures[0] = new Bishop("Bishop", cells[2][2]);
     }
 
     /**
      * Фигура 'Слон'
      */
-    private class Bishop extends Figure {
+    public class Bishop extends Figure {
         Bishop(String name, Cell position) {
             super(name, position);
         }
@@ -38,12 +38,12 @@ public class Board {
             int y0 = this.position.getVertical();
             int x1 = dist.getHorisontal();
             int y1 = dist.getVertical();
-            Cell[] result = new Cell[Math.abs(x0 - x1)];
+            Cell[] result = new Cell[Math.abs(x0 - x1) + 1];
 
             // проверяем, находится ли фигура на линии движения.
             if (Math.abs(x0 - x1) == Math.abs(y0 - y1)) {
                 int diagonalX, diagonalY;
-                int i = 1;
+                int i = 0;
 
                 do {
                     diagonalX = Math.max(x0, x1) - i;
@@ -51,7 +51,7 @@ public class Board {
                     result[i - 1] = cells[diagonalX][diagonalY];
                     i++;
                 }
-                while (diagonalX > Math.min(x0, x1));
+                while ((diagonalX > Math.min(x0, x1))||(diagonalY > Math.min(y0, y1)));
 
             } // если на указанную клетку нельзя пройти, выбрасываем исключение.
             else throw new ImposibleMoveException("Сюда НЕЛЬЗЯ ходить");
@@ -63,7 +63,7 @@ public class Board {
     /**
      * Метод заполняет доску ячейками, присваивая каждой координаты [int][int].
      */
-    private void fillBoard() {
+    public void fillBoard() {
 
         for (int j = 0; j < 8; j++) {
             for (int i = 0; i < 8; i++) {
@@ -78,7 +78,7 @@ public class Board {
      * @param source - ячейка первоначального положения.
      * @param dist   - ячейка назначения.
      * @return - Если все отлично. Записать в ячейку новое новое положение Figure figure.clone(Cell dist)
-     * @throws ImpossibleMoveException - Если фигура есть. Проверить может ли она так двигаться. Если нет то упадет исключение
+     * ImpossibleMoveException - Если фигура есть. Проверить может ли она так двигаться. Если нет то упадет исключение
      * @throws OccupiedWayException    - Проверить что полученный путь. не занят фигурами. Если занят выкинуть исключение
      * @throws FigureNotFoundException - Что в заданной ячейки есть фигура. если нет. то выкинуть исключение
      */

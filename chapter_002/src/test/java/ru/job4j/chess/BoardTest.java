@@ -10,9 +10,25 @@ import static org.junit.Assert.*;
  */
 public class BoardTest {
 
+    /**
+     *
+     */
     @Test
-    public void testWay(){
+    public void testWay() throws MoveExceptions.ImposibleMoveException {
+        // инициализация
+        Board board = new Board();
+        // рисуем клетки
+        board.fillBoard();
+        // расставляем фигуры
+        board.fillFigure();
 
+
+        // полученный результат
+        Cell[] resultArray = board.figures[0].way(board.cells[1][3]);
+        // ожидаемый результат
+        Cell[] expectArray = new Cell[]{board.cells[1][3]};
+        // сравниваем
+        assertThat(resultArray, is(expectArray));
     }
 
 }
