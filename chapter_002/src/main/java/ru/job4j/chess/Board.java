@@ -6,22 +6,22 @@ import ru.job4j.chess.MoveExceptions.*;
  * Класс Board содержит массив ячеек, набор фигур и реализацию их ходов.
  * Created by Kubar on 24.09.2017.
  */
-public class Board {
+class Board {
     //  двумерный массив-поле.
-    public final Cell[][] cells = new Cell[8][8];
-    public Figure[] figures = new Figure[1];
+    final Cell[][] cells = new Cell[8][8];
+    Figure[] figures = new Figure[1];
 
     /**
      * Добавляем на поле фигуры с именем и начальной позицией.
      */
-    public void fillFigure() {
-        this.figures[0] = new Bishop("Bishop", cells[2][2]);
+    void fillFigure() {
+        this.figures[0] = new Bishop("Bishop", cells[0][0]);
     }
 
     /**
-     * Фигура 'Слон'
+     * Фигура 'Слон'.
      */
-    public class Bishop extends Figure {
+    private class Bishop extends Figure {
         Bishop(String name, Cell position) {
             super(name, position);
         }
@@ -45,13 +45,23 @@ public class Board {
                 int diagonalX, diagonalY;
                 int i = 0;
 
-                do {
-                    diagonalX = Math.max(x0, x1) - i;
-                    diagonalY = Math.max(y0, y1) - i;
-                    result[i - 1] = cells[diagonalX][diagonalY];
-                    i++;
+                if ((x0 < x1) && (y0 < y1) || (x0 > x1) && (y0 > y1))
+                    do {
+                        diagonalX = Math.max(x0, x1) - i;
+                        diagonalY = Math.max(y0, y1) - i;
+                        result[i++] = cells[diagonalX][diagonalY];
+                    }
+                    while ((diagonalX > Math.min(x0, x1)));
+
+                else {
+                    do {
+                        diagonalX = Math.max(x0, x1) - i;
+                        //меняется направление по вертикали.
+                        diagonalY = Math.min(y0, y1) + i;
+                        result[i++] = cells[diagonalX][diagonalY];
+                    }
+                    while ((diagonalX > Math.min(x0, x1)));
                 }
-                while ((diagonalX > Math.min(x0, x1))||(diagonalY > Math.min(y0, y1)));
 
             } // если на указанную клетку нельзя пройти, выбрасываем исключение.
             else throw new ImposibleMoveException("Сюда НЕЛЬЗЯ ходить");
@@ -63,7 +73,7 @@ public class Board {
     /**
      * Метод заполняет доску ячейками, присваивая каждой координаты [int][int].
      */
-    public void fillBoard() {
+    void fillBoard() {
 
         for (int j = 0; j < 8; j++) {
             for (int i = 0; i < 8; i++) {
@@ -82,7 +92,7 @@ public class Board {
      * @throws OccupiedWayException    - Проверить что полученный путь. не занят фигурами. Если занят выкинуть исключение
      * @throws FigureNotFoundException - Что в заданной ячейки есть фигура. если нет. то выкинуть исключение
      */
-    private boolean move(Cell source, Cell dist) throws ImposibleMoveException, OccupiedWayException, FigureNotFoundException {
+    boolean move(Cell source, Cell dist) throws ImposibleMoveException, OccupiedWayException, FigureNotFoundException {
         // проверим существование фигуры в клетке source.
         if (!source.isBusy()) {
             throw new FigureNotFoundException("Фигура не найдена");
@@ -93,12 +103,18 @@ public class Board {
 
         //проверим, не заняты ли они.
         for (Cell cell : arrayOfWay) {
-            if (cells[cell.getHorisontal()][cell.getVertical()].isBusy()) {
+            // не учитываем занятой собственную позицию.
+            if (cell.equals(figures[0].position)) {
+                continue;
+            }
+            else if (cells[cell.getHorisontal()][cell.getVertical()].isBusy()) {
                 throw new OccupiedWayException("Путь занят фигурами");
             }
         }
         //если исключений не произошло, переставляем фигуру.
-        figures[0].clone(dist);;
+        source.setBusy(false);
+        figures[0].clone(dist);
+        dist.setBusy(true);
         return true;
     }
 
@@ -106,11 +122,11 @@ public class Board {
 //        Board board = new Board();
 //        board.fillBoard();
 //        board.fillFigure();
-//    try {
-//        board.move(board.cells[0][2], board.cells[2][0]);
-//        }
-//    catch (ImposibleMoveException | OccupiedWayException | FigureNotFoundException e) {
-//        System.out.println(e.getMessage());
+//        try {
+//            // board.cells[1][1].setBusy(true);
+//            board.move(board.cells[0][0], board.cells[2][2]);
+//        } catch (ImposibleMoveException | OccupiedWayException | FigureNotFoundException e) {
+//            System.out.println(e.getMessage());
 //        }
 //    }
 }

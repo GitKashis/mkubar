@@ -7,7 +7,7 @@ import ru.job4j.chess.MoveExceptions.*;
  */
 abstract class Figure {
     final Cell position;
-    private final String name;
+    private String name;
 
     /**
      * Конструктор создает фигуру на указанной позиции.
