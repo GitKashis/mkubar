@@ -1,4 +1,4 @@
-package ru.job4j.tracker;
+package ru.job4j.VendingMashine;
 
 import java.text.SimpleDateFormat;
 import java.util.Random;
@@ -12,7 +12,7 @@ import java.util.Random;
  */
 class Tracker {
     //выделяем память для массива заявок Backe на 100 элементов.
-    private Item[] items = new Item[100];
+    private Backe[] items = new Backe[100];
     //индекс массива Items[].
     private int position = 0;
     //случайное число для присвоения Id.
@@ -24,9 +24,8 @@ class Tracker {
      * @param item - новая заявка.
      * @return Backe item.
      */
-    Item add(Item item) {
+    ru.job4j.tracker.Item add(ru.job4j.tracker.Item item) {
         item.setId(this.generateId());
-        item.setCreate(createTime());
         this.items[position++] = item;
         return item;
     }
@@ -48,14 +47,14 @@ class Tracker {
      *
      * @param delItem - удаляемый элемент.
      */
-    void delete(Item delItem) {
+    void delete(ru.job4j.tracker.Item delItem) {
         //новый массив меньше на 1.
         //находим индекс удаляемого элемента.
         int index = this.findIndex(delItem);
 
         if (index >= 0 && index < items.length) {
 
-            Item[] copy = new Item[items.length - 1];
+            ru.job4j.tracker.Item[] copy = new ru.job4j.tracker.Item[items.length - 1];
             System.arraycopy(items, 0, copy, 0, index);
             System.arraycopy(items, index + 1, copy, index, items.length - index - 1);
             this.items = copy;
@@ -69,9 +68,9 @@ class Tracker {
      * @param id уникальный ключ для элементов массива.
      * @return item - элемент массива.
      */
-    Item findById(String id) {
-        Item result = null;
-        for (Item item : this.getAll()) {
+    ru.job4j.tracker.Item findById(String id) {
+        ru.job4j.tracker.Item result = null;
+        for (ru.job4j.tracker.Item item : this.getAll()) {
             if (item != null && item.getId().equals(id)) {
                 result = item;
                 break;
@@ -81,36 +80,12 @@ class Tracker {
     }
 
     /**
-     * Метод ищет элемент по заданному имени.
-     *
-     * @param name - имя в заявке
-     * @return item - элемент массива.
-     */
-    Item findByName(String name) {
-        Item result = null;
-        for (Item item : this.getAll()) {
-            if (item != null && item.getName().equals(name)) {
-                result = item;
-                break;
-            }
-        }
-        return result;
-    }
-
-    private String createTime() {
-        // Для получения текущего системного времени достаточно выполнить:
-        long curTime = System.currentTimeMillis();
-        // Хотите строку в формате, удобном Вам?
-        return new SimpleDateFormat("dd.MM.yyyy").format(curTime);
-    }
-
-    /**
      * Метод возвращает копию массива this.items без null элементов.
      *
      * @return Backe[]
      */
-    Item[] getAll() {
-        Item result[] = new Item[position];
+    ru.job4j.tracker.Item[] getAll() {
+        ru.job4j.tracker.Item result[] = new ru.job4j.tracker.Item[position];
         for (int i = 0; i != this.position; i++) {
             if (items[i] != null)
                 result[i] = this.items[i];
@@ -124,7 +99,7 @@ class Tracker {
     }
 
     //вспомогательный метод, возвращает индекс i элемента Backe в массиве items[].
-    private int findIndex(Item item) {
+    private int findIndex(ru.job4j.tracker.Item item) {
         int index = -1;
         
         for (int i = 0; i < this.items.length; i++) {

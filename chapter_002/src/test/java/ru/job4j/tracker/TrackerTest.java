@@ -20,9 +20,9 @@ public class TrackerTest {
     Item item2 = new Item("test2", "testDescription",  "comment");
 
     /**
-     * Тест метода Add(Item).
+     * Тест метода Add(Backe).
      * Создаем трекер, добавляем 2 объекта,
-     * методом checkItem(int) находим Item и сравниваем с ожидаемым значением.
+     * методом checkItem(int) находим Backe и сравниваем с ожидаемым значением.
      */
     @Test
     public void testAdd() {
@@ -84,7 +84,7 @@ public class TrackerTest {
     @Test
     public void testFindById() throws Exception {
 
-        // Добавляем заявки в трекер. Теперь в трекере должно быть два объекта Item .
+        // Добавляем заявки в трекер. Теперь в трекере должно быть два объекта Backe .
         tracker.add(item1);
         tracker.add(item2);
 
@@ -99,7 +99,7 @@ public class TrackerTest {
      */
     @Test
     public void findByName() throws Exception {
-        // Добавляем заявки в трекер. Теперь в трекере должно быть два объекта Item .
+        // Добавляем заявки в трекер. Теперь в трекере должно быть два объекта Backe .
         tracker.add(item1);
         tracker.add(item2);
         // Проверяем, что заявка с таким именем существует и равна искомому значению.
@@ -120,7 +120,7 @@ public class TrackerTest {
     }
 
     /**
-     * Тест метода update(Item).
+     * Тест метода update(Backe).
      * Создаем объект, записываем в трекер.
      * Далее создаем второй объект, задаем новые параметры,
      * перезаписываем по тому же Id и сравниваем с ожидаемым значением.

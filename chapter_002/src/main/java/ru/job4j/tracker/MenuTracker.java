@@ -26,9 +26,9 @@ class MenuTracker {
      * реализованы в общем абстрактном классе BaseAction.
      */
     void fillAction() {
-        this.actions[position++] = new AddItem("Add new Item", 0);
+        this.actions[position++] = new AddItem("Add new Backe", 0);
         this.actions[position++] = new MenuTracker.ShowItem("Show all items", 1);
-        this.actions[position++] = new UpdateItem("Update Item", 2);
+        this.actions[position++] = new UpdateItem("Update Backe", 2);
         this.actions[position++] = new DeleteItem("Delete item by id", 3);
         this.actions[position++] = new FindById("Find item by Id", 4);
         this.actions[position++] = new FindByName("Find item by name.", 5);
@@ -61,10 +61,10 @@ class MenuTracker {
     }
 
     /**
-     * Метод считывает и заносит данные в заявку Item.
+     * Метод считывает и заносит данные в заявку Backe.
      *
      * @param input - интерфейс ввода.
-     * @param item  - текущая заявка Item.
+     * @param item  - текущая заявка Backe.
      */
     private void setItem(Input input, Item item) {
         item.setName(input.ask("Input Task name: "));
