@@ -26,7 +26,7 @@ class MenuTracker {
      * реализованы в общем абстрактном классе BaseAction.
      */
     void fillAction() {
-        this.actions[position++] = new AddItem("Add new Backe", 0);
+        this.actions[position++] = new AddItem("Add new Item", 0);
         this.actions[position++] = new MenuTracker.ShowItem("Show all items", 1);
         this.actions[position++] = new UpdateItem("Update Backe", 2);
         this.actions[position++] = new DeleteItem("Delete item by id", 3);

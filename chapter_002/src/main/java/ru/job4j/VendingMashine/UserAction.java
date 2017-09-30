@@ -10,8 +10,8 @@ interface UserAction {
     // соответствующий расположению в массиве действий.
     int key();
 
-    // То, что доолжен делать класс с хранилищем Tracker в соответствии с интерфейсом Input.
-    void execute(Input input, Tracker tracker);
+    // То, что доолжен делать класс с хранилищем Vending в соответствии с интерфейсом Input.
+    void execute(Input input, Vending vending);
 
     // Вывод информации о назначении класса.
     String info();

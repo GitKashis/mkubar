@@ -7,7 +7,7 @@ import java.util.Scanner;
 /**
  * Класс ConsoleInput используется для ввода пользовательских данных из консоли;
  * Расширен от интерфейсного класса Input.
- * {@link ru.job4j.tracker.Input}
+ * {@link ru.job4j.VendingMashine.Input}
  */
 class ConsoleInput implements Input {
     //считывание ввода.

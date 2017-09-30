@@ -38,7 +38,29 @@ class Tracker {
      * @param comment     - коментарий.
      * @return item.
      */
+    Item addComment(Item commentItem, String comment) {
+               //находим в массиве заявку, для которой надо добавить коментарий.
+                       Item item = findById(commentItem.getId());
+        if (item != null) {
+            item.setComment(comment);
+                   }
+                return item;
+            }
 
+   /**
+    * Метод перезаписывает элемент с соответствующим Id.
+ *
+     * @param newItem - измененный элемент.
+     */
+            void update(Item newItem) {
+
+               for (int i = 0; i < this.position; i++) {
+                   if (this.items[i].getId().equals(newItem.getId())) {
+                       this.items[i] = newItem;
+                               break;
+                          }
+               }
+            }
 
 
     /**

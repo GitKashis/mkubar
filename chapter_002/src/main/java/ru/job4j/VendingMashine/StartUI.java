@@ -19,22 +19,20 @@ public class StartUI {
 
     private void init() {
         // инициализируем хранение и методы ввода.
-        Backe backe = new Backe();
-        MenuTracker menu = new MenuTracker(input, backe);
+        Vending vending = new Vending();
+        MenuTracker menu = new MenuTracker(input, vending);
 
-        // какой товар хотите выбрать?
         menu.fillAction();
+        menu.fillBacke();
 
         // выбираем до тех пор, пока не будет выбрано действие Exit Programm
         // нажатием клавиши '6'.
         do {
-            menu.show();
+            menu.showItems();
             menu.select(input.ask("Select: ", menu.getLenght()));
         }
         while (!EXIT.equals(input.ask("Exit?: ")));
     }
-    }
-
 
     public static void main(String[] args) {
         // вместо интерфейса ConsoleInput использован ValidateInput, в котором добавлен

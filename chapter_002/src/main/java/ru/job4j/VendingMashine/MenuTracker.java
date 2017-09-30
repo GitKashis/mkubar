@@ -1,24 +1,29 @@
 package ru.job4j.VendingMashine;
 
-import ru.job4j.tracker.BaseAction;
+import java.util.Map;
 
 class MenuTracker {
     private Input input;
-    private Tracker tracker;
+    private Vending vending;
     private int position = 0;
-    private UserAction[] items = new UserAction[7];
+    private UserAction[] actions = new UserAction[7];
 
     /**
      * Конструктор.
-     *
-     * @param input   - интерффейс.
+     *  @param input   - интерффейс.
      * @param tracker - хранилище объектов-заявок.
      */
-    MenuTracker(Input input, Tracker tracker) {
+    MenuTracker(Input input, Vending vending) {
         this.input = input;
-        this.tracker = tracker;
-    }
+        this.vending = vending;
 
+
+    }
+    void fillBacke(){
+        this.vending.add("Плюшка", 35);
+        this.vending.add("Супер Плюшка", 45);
+        this.vending.add("Мега Плюшка", 70);
+    }
     /**
      * Метод назначает для интерфейсу соответствующий объект.
      * т.к. для разных объектов интерфейс одинаков, то все эти объекты
@@ -28,14 +33,13 @@ class MenuTracker {
      * реализованы в общем абстрактном классе BaseAction.
      */
     void fillAction() {
-        this.items[position++] = new BuyItem();
-        this.items[position++] = new ShowItem("Show all items", 1);
-        this.items[position++] = new MenuTracker.ExitProgam("Exit Program", 6);
+        this.actions[position++] = new BuyBacke("", 0);
+        this.actions[position++] = new BuyBacke("", 1);
+        this.actions[position++] = new BuyBacke("", 2);
+
     }
 
-    int[] getLenght() {
-        return new int[items.length];
-    }
+
 
     /**
      * Выбор пользователем действия из списка меню.
@@ -44,91 +48,33 @@ class MenuTracker {
      *            в массиве действий actions[].
      */
     void select(int key) {
-        this.items[key].execute(input, tracker);
+        this.actions[key].execute(input, this.vending);
     }
 
-    /**
-     * Вывод форматированной строки, заявленной классом,  в список меню.
-     */
-    void show() {
-        for (UserAction actions : this.actions) {
-            if (actions != null) {
-                System.out.println(actions.info());
-            }
+    void showItems() {
+        int indexOfMenu = 0;
+        for(Backe backe : vending.getAll()){
+            System.out.println(String.format("%s. %s. Цена %s.", indexOfMenu++, backe.getName(), backe.getPrice()));
         }
     }
 
-    /**
-     * Метод считывает и заносит данные в заявку Backe.
-     *
-     * @param input - интерфейс ввода.
-     * @param backe  - текущая заявка Backe.
-     */
-    private void setItem(ru.job4j.tracker.Input input, Backe backe) {
-        backe.setName(input.ask("Input Task name: "));
-        backe.setDescription(input.ask("Input Task description: "));
-        backe.setComment(input.ask("Input Task comment: "));
-    }
 
     /**
-     * Внутренний класс Add().
+     * Внутренний класс().
      */
-    private class AddItem extends BaseAction {
-        AddItem(String name, int key) {
+    private class BuyBacke extends BaseAction {
+        BuyBacke(String name, int key) {
             super(name, key);
         }
 
-        public void execute(ru.job4j.tracker.Input input, Tracker tracker) {
-            Backe backe = new Backe();
-            setItem(input, backe);
-            tracker.add(backe);
-        }
-    }
-
-    /**
-     * Внутренний статический класс Show.
-     */
-    private static class ShowItem extends BaseAction {
-
-        ShowItem(String name, int key) {
-            super(name, key);
-        }
-
-        public void execute(ru.job4j.tracker.Input input, Tracker tracker) {
-            input.print(tracker.getAll());
-        }
-
-    }
-
-
-    /**
-     * Внутренний класс Delete.
-     */
-    private class DeleteItem extends BaseAction {
-
-        DeleteItem(String name, int key) {
-            super(name, key);
-        }
-
-        public void execute(ru.job4j.tracker.Input input, Tracker tracker) {
-            Backe backe = tracker.findById(input.ask("Input Task Id to delete: "));
-            tracker.delete(backe);
+        public void execute(Input input, Vending vending) {
+        vending.buy(2, Integer.valueOf(input.ask("Сколько дадите денег?")));
         }
     }
 
 
-    /**
-     * Внутренний статический класс ExitProgam.
-     */
-    private class ExitProgam extends BaseAction {
-        ExitProgam(String name, int key) {
-            super(name, key);
-        }
-
-        @Override
-        public void execute(ru.job4j.tracker.Input input, Tracker tracker) {
-            System.out.println("Program closes...");
-        }
+    int[] getLenght() {
+        return new int[this.actions.length];
     }
 }
 
