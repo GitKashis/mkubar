@@ -5,40 +5,51 @@ package ru.job4j.VendingMashine;
  */
 public class Money {
     // номинал монет
-    private int oneCoin;
-    private int twoCoin;
-    private int fiveCoin;
-    private int tenCoin;
+    private static int tenCoin = 10;
+    private static int fiveCoin = 5;
+    private static int twoCoin = 4;
+    private static int oneCoin = 50;
 
-    public int getOneCoin() {
+
+    static int getOneCoin() {
         return oneCoin;
     }
 
-    public void setOneCoin(int oneCoin) {
-        this.oneCoin = oneCoin;
-    }
-
-    public int getTwoCoin() {
+    static int getTwoCoin() {
         return twoCoin;
     }
 
-    public void setTwoCoin(int twoCoin) {
-        this.twoCoin = twoCoin;
-    }
-
-    public int getFiveCoin() {
+    static int getFiveCoin() {
         return fiveCoin;
     }
 
-    public void setFiveCoin(int fiveCoin) {
-        this.fiveCoin = fiveCoin;
-    }
-
-    public int getTenCoin() {
+    static int getTenCoin() {
         return tenCoin;
     }
 
-    public void setTenCoin(int tenCoin) {
-        this.tenCoin = tenCoin;
+    static int tenCoinDecrement(){
+        return tenCoin--;
+    }
+    static int fiveCoinDecrement(){
+        return fiveCoin--;
+    }
+    static int twoCoinDecrement(){
+        return twoCoin--;
+    }
+    static int oneCoinDecrement(){
+        return oneCoin--;
+    }
+
+    static int AddTenCoin(int ten){
+        return tenCoin += ten;
+    }
+    static int AddFiveCoin(int five){
+        return fiveCoin += five;
+    }
+    static int AddTwoCoin(int two){
+        return twoCoin += two;
+    }
+    static int AddTOneCoin(int one){
+        return oneCoin += one;
     }
 }

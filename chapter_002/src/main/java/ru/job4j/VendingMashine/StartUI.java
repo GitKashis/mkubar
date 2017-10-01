@@ -5,7 +5,7 @@ package ru.job4j.VendingMashine;
  *
  * @author Mikhail Kubar
  * @version 1.0
- * @since 09.09.17
+ * @since 30.09.17
  */
 public class StartUI {
     //интерфейс ввода.
@@ -21,23 +21,23 @@ public class StartUI {
         // инициализируем хранение и методы ввода.
         Vending vending = new Vending();
         MenuTracker menu = new MenuTracker(input, vending);
-
+        // загружаем список действий и список продуктов.
         menu.fillAction();
-        menu.fillBacke();
+        menu.fillCake();
 
-        // выбираем до тех пор, пока не будет выбрано действие Exit Programm
-        // нажатием клавиши '6'.
+        // выбираем до тех пор, пока не будет выбрано действие Exit Programm.
         do {
-            menu.showItems();
+            menu.showMoney();
+            menu.show();
             menu.select(input.ask("Select: ", menu.getLenght()));
         }
-        while (!EXIT.equals(input.ask("Exit?: ")));
+        while (!EXIT.equals(input.ask("Exit (y/n): ")));
     }
 
     public static void main(String[] args) {
         // вместо интерфейса ConsoleInput использован ValidateInput, в котором добавлен
         // контроль данных, вводимых пользоваелем.
-        StartUI stage = new StartUI(new ConsoleInput());
+        StartUI stage = new StartUI(new ValidateInput());
         stage.init();
     }
 

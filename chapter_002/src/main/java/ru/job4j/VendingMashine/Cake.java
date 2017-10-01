@@ -1,18 +1,18 @@
 package ru.job4j.VendingMashine;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class Backe {
+/**
+ * Класс 'Плюшка' с названием и ценой.
+ */
+class Cake {
     private  String name;
     private int price;
 
-    Backe(String name, int price) {
+    Cake(String name, int price) {
         this.price = price;
         this.name = name;
     }
 
-    public int getPrice() {
+    int getPrice() {
         return this.price;
     }
 

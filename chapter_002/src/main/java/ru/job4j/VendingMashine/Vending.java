@@ -1,62 +1,103 @@
 package ru.job4j.VendingMashine;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
- * Метод хранит массив заявок items, реализует операции CRUD для объектов типа Backe.
+ * Метод хранит массив заявок items, реализует операции CRUD для объектов типа Cake.
  *
  * @author Mikhail Kubar
  * @version 1.0
  * @since 04.09.17
  */
 class Vending {
-
-    private Backe[] backes = new Backe[5];
-    // запас монет.
-    private Money money = new Money();
+    // список продуктов.
+    private Cake[] cakes = new Cake[10];
     //индекс массива Items[].
     private int position = 0;
 
-    Vending() {
-        this.money.setOneCoin(10);
-        this.money.setTwoCoin(10);
-        this.money.setFiveCoin(10);
-        this.money.setTenCoin(10);
-
+    /**
+     * Метод создает объект с именем и ценой и добавляет в список продуктов.
+     *
+     * @param name - название продукта.
+     * @param price - цена.
+     * @return Cake cace.
+     */
+    void add(String name, int price){
+        Cake cace = new Cake(name, price);
+        this.cakes[position++] = cace;
     }
 
     /**
-     * Метод присваивает новой заявке рандомный Id и добавляет в конец массива items.
-     *
-     * @param item - новая заявка.
-     * @return Backe item.
+     * Метод расчитывает сдачу, выдаваемую монетами номиналом по 10, 5, 2, 1.
+     * @param numOfMenu - номер продукта в списке меню.
+     * @param cash - колиество денег покупателя.
      */
-    void add(String name, int price){
-        Backe backe = new Backe(name, price);
-        this.backes[position++] = backe;
-    }
-
     void buy(int numOfMenu, int cash){
-        int price = this.backes[numOfMenu].getPrice();
-        int toOut = cash - price;
+        int price = this.cakes[numOfMenu].getPrice();
 
         if (price > cash) System.out.println("Сумма недостаточна!");
+        else {
+            int toOut = cash - price;
+            int toOutTen = 0;
+            int toOutFive = 0;
+            int toOutTwo = 0;
+            int toOutOne = 0;
 
-        int toOutTen = toOut % 10;
-        int toOutFive = (toOut - toOutTen * 10) % 5;
-        int toOutTwo = (toOut - toOutTen * 10 - toOutFive * 5) % 2;
-        int toOutOne = toOut - toOutTen * 10 - toOutFive * 5 - toOutTwo * 2;
-
-        System.out.println("Сдача: " + toOut + ", " + toOutTen + ", " + toOutFive + ", " +  toOutTwo + ", " +  toOutOne);
+            System.out.print("Ваша сдача: " + toOut);
+            // пока не закончатся десятки.
+            while ((Money.getTenCoin() > 0) && (toOut >= 10)) {
+                toOut -= 10;
+                Money.tenCoinDecrement();
+                toOutTen++;
+            }
+            // пока не закончатся пятерки.
+            while ((Money.getFiveCoin() > 0) && (toOut >= 5)) {
+                toOut -= 5;
+                Money.fiveCoinDecrement();
+                toOutFive++;
+            }
+            // пока не закончатся двойки.
+            while ((Money.getTwoCoin() > 0) && (toOut > 1)) {
+                toOut -= 2;
+                Money.twoCoinDecrement();
+                toOutTwo++;
+            }
+            // пока не закончатся единички.
+            while ((Money.getOneCoin() > 0) && (toOut > 0)) {
+                toOut--;
+                Money.oneCoinDecrement();
+                toOutOne++;
+            }
+            System.out.println(". (десяток: " + toOutTen + ", пятерок: " + toOutFive + ", двоек: " + toOutTwo + ", единичек: " + toOutOne + ")");
+        }
     }
 
-    Backe[] getAll() {
-        Backe result[] = new Backe[position];
+    /**
+     * Отобразить список продуктов с ценой.
+     */
+    void showItems() {
+        int indexOfMenu = 0;
+        for(Cake backe : this.getAll()){
+            System.out.println(String.format("%s. %s. Цена %s.", indexOfMenu++, backe.getName(), backe.getPrice()));
+        }
+    }
+
+    /**
+     * Вспомогательный метод.
+     * @return массив без пустых ячеек.
+     */
+    private Cake[] getAll() {
+        Cake result[] = new Cake[position];
         for (int i = 0; i != this.position; i++) {
-            if (backes[i] != null)
-                result[i] = this.backes[i];
+            if (cakes[i] != null)
+                result[i] = this.cakes[i];
         }
         return result;
+    }
+
+    /**
+     * Вспомогательный метод для возбуждения ошибки MenuOutException.
+     * @return
+     */
+    int[] getCaceRange(){
+        return new int[this.getAll().length];
     }
 }
