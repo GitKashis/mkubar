@@ -13,7 +13,7 @@ import static java.lang.String.*;
 */
 
 public class Performance {
-    private static final int amount = 1000000;
+    private static final int amount = 300000;
 
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
@@ -29,7 +29,7 @@ public class Performance {
     private static long add(Collection<String> collection, int amount) {
         long start = System.currentTimeMillis();
         for (int i = 0; i < amount; i++) {
-            collection.add("");
+            collection.add(Integer.toString(i));
         }
         long finish = System.currentTimeMillis();
         return (finish - start);
@@ -38,7 +38,7 @@ public class Performance {
     private static long delete(Collection<String> collection, int amount) {
         long start = System.currentTimeMillis();
         for (int i = 0; i < amount; i++) {
-            collection.remove("");
+            collection.remove(Integer.toString(i));
         }
         long finish = System.currentTimeMillis();
         return (finish - start);
