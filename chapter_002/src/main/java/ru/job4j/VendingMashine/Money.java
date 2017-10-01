@@ -1,14 +1,15 @@
 package ru.job4j.VendingMashine;
 
 /**
+ * Класс 'Монеты'.
  * Created by Kubar on 30.09.2017.
  */
-public class Money {
-    // номинал монет
+class Money {
+    // начальный запас монет.
     private static int tenCoin = 10;
-    private static int fiveCoin = 5;
-    private static int twoCoin = 4;
-    private static int oneCoin = 50;
+    private static int fiveCoin = 10;
+    private static int twoCoin = 10;
+    private static int oneCoin = 10;
 
 
     static int getOneCoin() {

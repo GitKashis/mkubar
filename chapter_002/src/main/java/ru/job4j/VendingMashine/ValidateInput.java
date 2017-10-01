@@ -1,7 +1,5 @@
 package ru.job4j.VendingMashine;
 
-import ru.job4j.tracker.MenuOutException;
-
 /**
  * Класс проверяет корректность вводимых пользователем данных при помощи блоков try .. catch.
  * Created by Kubar on 15.09.2017.
