@@ -12,7 +12,7 @@ class MenuOutException extends  RuntimeException {
      *
      * @param msg - сообщение.
      */
-    public MenuOutException(String msg){
+    public MenuOutException(String msg) {
         super(msg);
     }
 }

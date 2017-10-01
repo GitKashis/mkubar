@@ -14,6 +14,8 @@ class ValidateInput extends ConsoleInput {
             try {
                 value = super.ask(question, range);
                 invalid = false;
+            } catch (CoinRangeException cre) {
+                System.out.println("To money");
             }
             // если выбран пункт не в диапазоне меню, то вывод сообщения.
             catch (MenuOutException moe) {
@@ -23,6 +25,7 @@ class ValidateInput extends ConsoleInput {
             catch (NumberFormatException nfe) {
                 System.out.println("Input correct date again");
             }
+
         }
         while (invalid);
         return value;

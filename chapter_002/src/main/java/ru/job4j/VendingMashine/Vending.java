@@ -16,21 +16,22 @@ class Vending {
     /**
      * Метод создает объект с именем и ценой и добавляет в список продуктов.
      *
-     * @param name - название продукта.
+     * @param name  - название продукта.
      * @param price - цена.
      * @return Cake cace.
      */
-    void add(String name, int price){
+    void add(String name, int price) {
         Cake cace = new Cake(name, price);
         this.cakes[position++] = cace;
     }
 
     /**
      * Метод расчитывает сдачу, выдаваемую монетами номиналом по 10, 5, 2, 1.
+     *
      * @param numOfMenu - номер продукта в списке меню.
-     * @param cash - колиество денег покупателя.
+     * @param cash      - колиество денег покупателя.
      */
-    void buy(int numOfMenu, int cash){
+    void buy(int numOfMenu, int cash) {
         int price = this.cakes[numOfMenu].getPrice();
 
         if (price > cash) System.out.println("Сумма недостаточна!");
@@ -75,13 +76,14 @@ class Vending {
      */
     void showItems() {
         int indexOfMenu = 0;
-        for(Cake backe : this.getAll()){
+        for (Cake backe : this.getAll()) {
             System.out.println(String.format("%s. %s. Цена %s.", indexOfMenu++, backe.getName(), backe.getPrice()));
         }
     }
 
     /**
      * Вспомогательный метод.
+     *
      * @return массив без пустых ячеек.
      */
     private Cake[] getAll() {
@@ -95,9 +97,10 @@ class Vending {
 
     /**
      * Вспомогательный метод для возбуждения ошибки MenuOutException.
+     *
      * @return
      */
-    int[] getCaceRange(){
+    int[] getCaceRange() {
         return new int[this.getAll().length];
     }
 }

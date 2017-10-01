@@ -28,7 +28,7 @@ class ConsoleInput implements Input {
      * Перегруженный метод ask проверяет ответ пользователя на наличие пункта в меню.
      *
      * @param question
-     * @param range - длина массива = область значений.
+     * @param range    - длина массива = область значений.
      * @return если выбор верный, возвращает номер действия,
      * если нет - возбуждается ошибка MenuOutException с сообщением msg.
      */
@@ -36,17 +36,17 @@ class ConsoleInput implements Input {
     public int ask(String question, int[] range) {
         int key = Integer.valueOf(this.ask(question));
         boolean exist = false;
-        for(int i = 0; i <= range.length; i++)
-            if(key == i) {
+        for (int i = 0; i <= range.length; i++)
+            if (key == i) {
                 exist = true;
                 break;
             }
-        if (exist) return  key;
+        if (exist) return key;
         else throw new MenuOutException("Out of menu range");
     }
 
     public void print(Object[] objects) {
-        for(Object obj : objects) {
+        for (Object obj : objects) {
             System.out.println(obj);
         }
     }

@@ -1,6 +1,5 @@
 package ru.job4j.VendingMashine;
 
-
 import static ru.job4j.VendingMashine.Money.*;
 
 /**
@@ -14,24 +13,26 @@ class MenuTracker {
 
     /**
      * Конструктор.
-     *  @param input   - интерффейс.
+     *
+     * @param input   - интерффейс.
      * @param vending - хранилище объектов-плюшек.
      */
     MenuTracker(Input input, Vending vending) {
         this.input = input;
         this.vending = vending;
     }
-    
-    void fillCake(){
+
+    void fillCake() {
         this.vending.add("Плюшка", 35);
         this.vending.add("Супер Плюшка", 45);
         this.vending.add("Мега Плюшка", 70);
     }
+
     /**
      * Метод назначает для интерфейсу соответствующий объект.
      * т.к. для разных объектов интерфейс одинаков, то все эти объекты
      * будут содержать методы key(), execute(), show().
-     *
+     * <p>
      * Название операции и её ключ перенесены в конструктор,
      * реализованы в общем абстрактном классе BaseAction.
      */
@@ -44,7 +45,7 @@ class MenuTracker {
     /**
      * Отобразить текущее количество монет.
      */
-    void showMoney(){
+    void showMoney() {
         System.out.println(String.format("%s. %s. %s. %s.",
                 getTenCoin(), getFiveCoin(), getTwoCoin(), getOneCoin()));
     }
@@ -79,9 +80,9 @@ class MenuTracker {
         }
 
         public void execute(Input input, Vending vending) {
-        vending.showItems();
-           int choise = (input.ask("Что желаете? ", vending.getCaceRange()));
-        vending.buy(choise, Integer.valueOf(input.ask("Введите сумму: ")));
+            vending.showItems();
+            int choise = (input.ask("Что желаете? ", vending.getCaceRange()));
+            vending.buy(choise, Integer.valueOf(input.ask("Введите сумму: ")));
         }
     }
 
@@ -94,13 +95,18 @@ class MenuTracker {
         AddCoin(String name, int key) {
             super(name, key);
         }
+
         @Override
         public void execute(Input input, Vending vending) {
-            AddTenCoin(input.ask("Добавить монет по десять: ", vending.getCaceRange()));
-            AddFiveCoin(input.ask("Добавить монет по пять: ", vending.getCaceRange()));
-            AddTwoCoin(input.ask("Добавить монет по два: ", vending.getCaceRange()));
-            AddTOneCoin(input.ask("Добавить монет по одному: ", vending.getCaceRange()));
-
+            int[] rangeOfCoin = new int[100];
+            try {
+                AddTenCoin(input.ask("Добавить монет по десять: ", rangeOfCoin));
+                AddFiveCoin(input.ask("Добавить монет по пять: ", rangeOfCoin));
+                AddTwoCoin(input.ask("Добавить монет по два: ", rangeOfCoin));
+                AddTOneCoin(input.ask("Добавить монет по одному: ", rangeOfCoin));
+            } catch (CoinRangeException moe) {
+                throw new CoinRangeException("Money");
+            }
         }
     }
 
