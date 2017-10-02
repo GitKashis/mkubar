@@ -1,8 +1,7 @@
 package ru.job4j.collections;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * //todo
@@ -64,6 +63,23 @@ public class Converter {
         return result;
     }
 
+    /**
+     * Конвертация листа массивов в один лист Integer
+     * (реализовано средствами Java8 Stream API).
+     * @param list
+     * @return
+     */
+    private static List<Integer> convert (List<int[]> list){
+        List<Integer> result= new ArrayList<>();
+        for(int[] scope : list){
+            result.addAll(
+                    Arrays.stream(scope)
+                    .boxed()
+                            .collect(Collectors.toList()));
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         int[][] array = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
         List<Integer> integers = toList(array);
@@ -74,5 +90,10 @@ public class Converter {
 
         int[][] result = toArray(integers, 3);
         System.out.println(Arrays.deepToString(result));
-    }
+
+        List<int[]> list= new ArrayList<>();
+            list.add(new int[]{1, 2});
+            list.add(new int[]{3, 4, 5, 6});
+        System.out.println(convert(list));
+}
 }
