@@ -15,9 +15,9 @@ import static org.junit.Assert.*;
 public class TrackerTest {
 
     // создаем трекер и 2 заявки.
-    Tracker tracker = new Tracker();
-    Item item1 = new Item("test1", "testDescription",  "comment");
-    Item item2 = new Item("test2", "testDescription",  "comment");
+    private Tracker tracker = new Tracker();
+    private Item item1 = new Item("test1", "testDescription",  "comment");
+    private Item item2 = new Item("test2", "testDescription",  "comment");
 
     /**
      * Тест метода Add(Backe).
@@ -32,8 +32,8 @@ public class TrackerTest {
 
         // Сравниваем два объекта - то, что записано и найдено
         // прямым обращением по индексу (метод checkItem(int) с тем, что добавляли.
-        assertThat(tracker.getAll()[0], is(item1));
-        assertThat(tracker.getAll()[1], is(item2));
+        assertThat(tracker.getAll().get(0), is(item1));
+        assertThat(tracker.getAll().get(1), is(item2));
     }
 
     /**
@@ -66,10 +66,10 @@ public class TrackerTest {
         tracker.add(item1);
         tracker.add(item2);
         //previous next - количество элементов массива.
-        int previous = tracker.getAll().length;
+        int previous = tracker.getAll().size();
         //удаляем.
         tracker.delete(item2);
-        int next = tracker.getAll().length;
+        int next = tracker.getAll().size();
         //Проверяем количеством.
         assertThat(next, is(previous - 1));
         //проверяем поиском по id.
@@ -115,7 +115,7 @@ public class TrackerTest {
         tracker.add(item1);
         tracker.add(item2);
         //ожидается 2 элемента.
-        int result = tracker.getAll().length;
+        int result = tracker.getAll().size();
         assertThat(result, is(2));
     }
 
@@ -145,6 +145,6 @@ public class TrackerTest {
         tracker.add(item1);
         tracker.add(item2);
 
-        assertThat(tracker.getAll()[1], is(item2));
+        assertThat(tracker.getAll().get(1), is(item2));
     }
 }

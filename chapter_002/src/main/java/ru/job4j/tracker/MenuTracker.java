@@ -1,10 +1,12 @@
 package ru.job4j.tracker;
 
+import java.util.ArrayList;
+import java.util.List;
+
 class MenuTracker {
     private Input input;
     private Tracker tracker;
-    private int position = 0;
-    private UserAction[] actions = new UserAction[7];
+    private List<UserAction> actions = new ArrayList<>();
 
     /**
      * Конструктор.
@@ -26,17 +28,17 @@ class MenuTracker {
      * реализованы в общем абстрактном классе BaseAction.
      */
     void fillAction() {
-        this.actions[position++] = new AddItem("Add new Item", 0);
-        this.actions[position++] = new MenuTracker.ShowItem("Show all items", 1);
-        this.actions[position++] = new UpdateItem("Update Backe", 2);
-        this.actions[position++] = new DeleteItem("Delete item by id", 3);
-        this.actions[position++] = new FindById("Find item by Id", 4);
-        this.actions[position++] = new FindByName("Find item by name.", 5);
-        this.actions[position++] = new MenuTracker.ExitProgam("Exit Program", 6);
+        this.actions.add(new AddItem("Add new Item", 0));
+        this.actions.add(new MenuTracker.ShowItem("Show all items", 1));
+        this.actions.add(new UpdateItem("Update Backe", 2));
+        this.actions.add(new DeleteItem("Delete item by id", 3));
+        this.actions.add(new FindById("Find item by Id", 4));
+        this.actions.add(new FindByName("Find item by name.", 5));
+        this.actions.add(new MenuTracker.ExitProgam("Exit Program", 6));
     }
 
     int[] getLenght() {
-        return new int[this.actions.length];
+        return new int[this.actions.size()];
     }
 
     /**
@@ -46,18 +48,16 @@ class MenuTracker {
      *            в массиве действий actions[].
      */
     void select(int key) {
-        this.actions[key].execute(this.input, this.tracker);
+        this.actions.get(key).execute(this.input, this.tracker);
     }
 
     /**
      * Вывод форматированной строки, заявленной классом,  в список меню.
      */
     void show() {
-        for (UserAction actions : this.actions) {
-            if (actions != null) {
-                System.out.println(actions.info());
-            }
-        }
+        this.actions.stream().filter(actions -> actions != null).forEach(actions -> {
+            System.out.println(actions.info());
+        });
     }
 
     /**
@@ -97,7 +97,7 @@ class MenuTracker {
         }
 
         public void execute(Input input, Tracker tracker) {
-            input.print(tracker.getAll());
+            input.print(tracker.getAll().toArray());
         }
 
     }

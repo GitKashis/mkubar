@@ -1,6 +1,8 @@
 package ru.job4j.tracker;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -12,9 +14,7 @@ import java.util.Random;
  */
 class Tracker {
     //выделяем память для массива заявок Backe на 100 элементов.
-    private Item[] items = new Item[100];
-    //индекс массива Items[].
-    private int position = 0;
+    private List<Item> items = new ArrayList<>();
     //случайное число для присвоения Id.
     private static final Random rn = new Random();
 
@@ -27,7 +27,7 @@ class Tracker {
     Item add(Item item) {
         item.setId(this.generateId());
         item.setCreate(createTime());
-        this.items[position++] = item;
+        this.items.add(item);
         return item;
     }
 
@@ -52,15 +52,15 @@ class Tracker {
  *
      * @param newItem - измененный элемент.
      */
-            void update(Item newItem) {
-
-               for (int i = 0; i < this.position; i++) {
-                   if (this.items[i].getId().equals(newItem.getId())) {
-                       this.items[i] = newItem;
-                               break;
-                          }
-               }
+   void update(Item newItem) {
+        for(Item scope : items){
+            if (scope.getId().equals(newItem.getId()))
+            {
+              scope = newItem;
+                break;
             }
+        }
+   }
 
 
     /**
@@ -71,18 +71,8 @@ class Tracker {
      * @param delItem - удаляемый элемент.
      */
     void delete(Item delItem) {
-        //новый массив меньше на 1.
-        //находим индекс удаляемого элемента.
-        int index = this.findIndex(delItem);
 
-        if (index >= 0 && index < items.length) {
-
-            Item[] copy = new Item[items.length - 1];
-            System.arraycopy(items, 0, copy, 0, index);
-            System.arraycopy(items, index + 1, copy, index, items.length - index - 1);
-            this.items = copy;
-            position--;
-        }
+        items.remove(delItem);
     }
 
     /**
@@ -92,14 +82,15 @@ class Tracker {
      * @return item - элемент массива.
      */
     Item findById(String id) {
-        Item result = null;
-        for (Item item : this.getAll()) {
-            if (item != null && item.getId().equals(id)) {
-                result = item;
-                break;
-            }
-        }
-        return result;
+        return (Item) items.stream().filter(Item -> Item.getId().equals(id));
+//        Item result = null;
+//        for (Item item : this.getAll()) {
+//            if (item != null && item.getId().equals(id)) {
+//                result = item;
+//                break;
+//            }
+//        }
+//        return result;
     }
 
     /**
@@ -131,31 +122,15 @@ class Tracker {
      *
      * @return Backe[]
      */
-    Item[] getAll() {
-        Item result[] = new Item[position];
-        for (int i = 0; i != this.position; i++) {
-            if (items[i] != null)
-                result[i] = this.items[i];
-        }
-        return result;
+    List<Item> getAll() {
+        for(Item item : items){
+            items.remove(null);
+            }
+        return items;
     }
 
     // вспомогательный метод для генерации уникального ключа Id.
     private String generateId() {
         return String.valueOf(rn.nextInt(100));
     }
-
-    //вспомогательный метод, возвращает индекс i элемента Backe в массиве items[].
-    private int findIndex(Item item) {
-        int index = -1;
-        
-        for (int i = 0; i < this.items.length; i++) {
-            if (items[i] != null && this.items[i].equals(item)) {
-                index = i;
-                break;
-            }
-        }
-        return index;
-    }
-
 }
