@@ -12,16 +12,29 @@ import static java.lang.String.*;
  */
 class User {
     private String name, city;
+    private int age;
 
     User(String name, String city) {
         this.name = name;
         this.city = city;
     }
+
+    User(String name, int age){
+        this.name = name;
+        this.age = age;
+    }
+
     @Override
     public String toString() {
-        return "User: " + name + " from " + city;
+        return format("User: %s, age %s.", name, age);
+    }
+
+    int getAge() {
+        return age;
     }
 }
+
+
 
 public class UserConvert{
 
