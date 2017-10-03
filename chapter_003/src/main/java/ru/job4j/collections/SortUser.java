@@ -18,14 +18,40 @@ public class SortUser {
         return sortedSet;
     }
 
+    /**
+     * Отсортировать List<User> по длине имени.
+     * @param list список User
+     * @return List входящий отсортированый параметр
+     */
+    private static List<User> sortNameLength (List<User> list){
+        list.sort(Comparator.comparingInt(p -> p.getName() .length()));
+        return list;
+    }
+
+    /**
+     * Отсортировать List<User> по имени и возрасту.
+     * @param list список User
+     * @return List входящий отсортированый параметр
+     */
+    private static List<User> sortByAllFields(List<User> list){
+        list.sort(Comparator.comparing(User::getName).thenComparing(User::getAge));
+        return list;
+    }
+
+
     public static void main(String[] args) {
         List<User> persons =
                 Arrays.asList(
                         new User("Andrew", 57),
+                        new User("Vitia", 44),
                         new User("Igor", 25),
                         new User("Ira", 32),
+                        new User("Andrew", 11),
                         new User("Vitia", 8));
 
-        System.out.println(sort(persons));
+        // сортировка по длине имени
+        System.out.println(sortNameLength(persons));
+        // сортировка по имени и возрасту
+        System.out.println(sortByAllFields(persons));
     }
 }

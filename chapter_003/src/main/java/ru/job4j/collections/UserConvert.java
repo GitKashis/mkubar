@@ -11,6 +11,8 @@ import static java.lang.String.*;
  * Created by Kubar on 02.10.2017.
  */
 class User {
+
+
     private String name, city;
     private int age;
 
@@ -26,9 +28,11 @@ class User {
 
     @Override
     public String toString() {
-        return format("User: %s, age %s.", name, age);
+        return format("\n User: %s, age %s", name, age);
     }
-
+    String getName() {
+        return name;
+    }
     int getAge() {
         return age;
     }
