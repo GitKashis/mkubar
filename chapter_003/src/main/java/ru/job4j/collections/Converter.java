@@ -36,6 +36,9 @@ public class Converter {
      * @return
      */
     private static int[][] toArray(List<Integer> list, int rows) {
+        // перед работой с List удалим все пустые контейнеры.
+        list.removeAll(Collections.singleton(null));
+
         int value = list.size();
         int cols;
         boolean isReady;
@@ -82,10 +85,15 @@ public class Converter {
 
     public static void main(String[] args) {
         int[][] array = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+
         List<Integer> integers = toList(array);
         System.out.println(integers.toString());
         integers.remove(7);
         integers.remove(7);
+
+        // для метода конвертирования из листа в двумерный массив
+        // добавим пустое значение null, выведем на экран.
+        integers.add(null);
         System.out.println(integers.toString());
 
         int[][] result = toArray(integers, 3);
