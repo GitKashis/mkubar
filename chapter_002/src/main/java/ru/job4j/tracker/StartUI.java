@@ -13,15 +13,20 @@ public class StartUI {
     private Input input;
     //ключ завершения цикла.
     private static final String EXIT = "y";
-
+    Tracker tracker = new Tracker();
     //конструктор.
-    private StartUI(Input input) {
+    public StartUI(Input input) {
         this.input = input;
     }
 
-    private void init() {
+    public StartUI(Input input, Tracker tracker) {
+        this.input = input;
+        this.tracker = tracker;
+    }
+
+    public void init() {
         // инициализируем хранение и методы ввода.
-        Tracker tracker = new Tracker();
+
         MenuTracker menu = new MenuTracker(input, tracker);
 
         // что будем делать с заявками?

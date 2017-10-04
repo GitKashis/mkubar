@@ -53,13 +53,13 @@ class Tracker {
      * @param newItem - измененный элемент.
      */
    void update(Item newItem) {
-        for(Item scope : items){
-            if (scope.getId().equals(newItem.getId()))
-            {
-              scope = newItem;
-                break;
-            }
-        }
+       for(int i = 0; i < items.size(); i++){
+           if (items.get(i).getId().equals(newItem.getId()))
+           {
+               items.set(i, newItem);
+               break;
+           }
+       }
    }
 
 
@@ -82,15 +82,14 @@ class Tracker {
      * @return item - элемент массива.
      */
     Item findById(String id) {
-        return (Item) items.stream().filter(Item -> Item.getId().equals(id));
-//        Item result = null;
-//        for (Item item : this.getAll()) {
-//            if (item != null && item.getId().equals(id)) {
-//                result = item;
-//                break;
-//            }
-//        }
-//        return result;
+        Item result = null;
+        for (Item item : this.getAll()) {
+            if (item != null && item.getId().equals(id)) {
+                result = item;
+                break;
+            }
+        }
+        return result;
     }
 
     /**
