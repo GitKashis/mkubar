@@ -1,19 +1,11 @@
 package ru.job4j.Bank;
 
-public class User {
-    String name, passport;
+class User {
+    private String name, passport;
 
-    public User(String name, String passport) {
+    User(String name, String passport) {
         this.name = name;
         this.passport = passport;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPassport() {
-        return passport;
     }
 
     @Override
