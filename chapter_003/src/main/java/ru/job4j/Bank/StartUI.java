@@ -65,20 +65,28 @@ class StartUI {
      * @return true/false
      */
     boolean transferMoney(User srcUser, Account srcAccount, User dstUser, Account dstAccount, int amount) {
-
+        // проверим, есть ли такие пользователи в базе. Если нет - завершаем работу.
         boolean result = users.containsKey(srcUser) && users.containsKey(dstUser);
+
         if (result) {
+            // для каждого пользователя получим список аккаунтов, из которого выберем нужный.
             Account sourceAcc = users.get(srcUser).stream().filter(p -> p.equals(srcAccount)).findAny().get();
             Account sourceDest = users.get(dstUser).stream().filter(p -> p.equals(dstAccount)).findAny().get();
 
+            // проверим наличие необходимой суммы у плательщика.
             if ((sourceAcc.getValue() - amount) >= 0) {
                 sourceAcc.setValue(sourceAcc.getValue() - amount);
                 sourceDest.setValue(sourceAcc.getValue() + amount);
-            } else result = false;
+            }
+            else result = false;
         }
         return result;
     }
 
+    /**
+     * Вспомогательный метод для тестирования.
+     * @return users
+     */
     Map<User, List<Account>> getMap(){
         return users;
     }
