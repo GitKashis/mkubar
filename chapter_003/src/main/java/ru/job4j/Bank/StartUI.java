@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * Задание: реализовать коллекцию Map для банка.
  */
-public class StartUI {
+class StartUI {
 
     /**
      * Коллекция обозначает, что у каждого пользователя может быть
@@ -18,7 +18,7 @@ public class StartUI {
      *
      * @param user
      */
-    private void addUser(User user) {
+    void addUser(User user) {
         //для нового юзера создаем счет по реквизитам
         List<Account> aList = new LinkedList<>();
         users.put(user, aList);
@@ -29,7 +29,7 @@ public class StartUI {
      *
      * @param user
      */
-    private void deleteUser(User user) {
+    void deleteUser(User user) {
         users.remove(user);
     }
 
@@ -39,7 +39,7 @@ public class StartUI {
      * @param user
      * @param account
      */
-    private void addAccountToUser(User user, Account account) {
+    void addAccountToUser(User user, Account account) {
         users.get(user).add(account);
     }
 
@@ -49,7 +49,7 @@ public class StartUI {
      * @param user
      * @return
      */
-    private List<Account> getUserAccounts(User user) {
+    List<Account> getUserAccounts(User user) {
         return users.get(user);
     }
 
@@ -64,7 +64,7 @@ public class StartUI {
      * @param amount     - сумма.
      * @return true/false
      */
-    private boolean transferMoney(User srcUser, Account srcAccount, User dstUser, Account dstAccount, int amount) {
+    boolean transferMoney(User srcUser, Account srcAccount, User dstUser, Account dstAccount, int amount) {
 
         boolean result = users.containsKey(srcUser) && users.containsKey(dstUser);
         if (result) {
@@ -79,31 +79,7 @@ public class StartUI {
         return result;
     }
 
-
-//    public static void main(String[] args) {
-//        StartUI stage = new StartUI();
-//
-//        User mary = new User("Mary", "passport");
-//        Account maryAcc1 = new Account("maryAcc1");
-//        stage.addUser(mary);
-//        stage.addAccountToUser(mary, maryAcc1);
-//
-//        User petr = new User("Petr", "passport");
-//        Account petrAcc1 = new Account("petrAcc1");
-//        Account petrAcc2 = new Account("petrAcc2");
-//        stage.addUser(petr);
-//        stage.addAccountToUser(petr, petrAcc1);
-//        stage.addAccountToUser(petr, petrAcc2);
-//
-//        User ivan = new User("Ivan", "passport");
-//        Account ivanAcc1 = new Account("ivanAcc1");
-//        Account ivanAcc2 = new Account("ivanAcc2");
-//        stage.addUser(ivan);
-//        stage.addAccountToUser(ivan, ivanAcc1);
-//        stage.addAccountToUser(ivan, ivanAcc2);
-//
-//        stage.users.forEach((key, value) -> System.out.println(key + " :" + value));
-//
-//        System.out.println(stage.transferMoney(ivan, ivanAcc2, ivan, ivanAcc1, 50));
-//    }
+    Map<User, List<Account>> getMap(){
+        return users;
+    }
 }
