@@ -1,15 +1,19 @@
 package ru.job4j.SimpleArray;
 
+import java.util.Arrays;
+import java.util.Iterator;
+
 /**
  * Контейнер SimpleArray<T> на базе массива objects
  * Created by Kubar on 08.10.2017.
  */
 @SuppressWarnings("unchecked")
-class SimpleArray<T> {
+public class SimpleArray<T> implements Iterable<T>{
     private Object[] objects;
     private int index = 0;
+    private int itr = 0;
 
-    SimpleArray(int size) {
+    public SimpleArray(int size) {
         this.objects = new Object[size];
     }
 
@@ -17,7 +21,7 @@ class SimpleArray<T> {
      * Добавление элемента в конец массива.
      * @param value - добавляемое значение типа T.
      */
-    void add(T value){
+    public void add(T value){
         this.objects[index++] = value;
     }
 
@@ -26,7 +30,7 @@ class SimpleArray<T> {
      * Уменьшение длины массива на 1.
      * @param remIndex  - позиция элемента в массиве для удаления.
      */
-    void delete(int remIndex){
+    public void delete(int remIndex){
         // копирование со сдвигом.
         System.arraycopy(this.objects, remIndex + 1, this.objects, remIndex, this.objects.length - 1 - remIndex);
 
@@ -43,7 +47,7 @@ class SimpleArray<T> {
      * @param updIndex
      * @param value
      */
-    void update(int updIndex, T value){
+    public void update(int updIndex, T value){
         this.objects[updIndex] = value;
     }
 
@@ -52,7 +56,41 @@ class SimpleArray<T> {
      * @param position
      * @return T.
      */
-    T get(int position){
+    public T get(int position){
         return (T) this.objects[position];
+    }
+
+    /**
+     * Get index of specified element.
+     * @param elem - element which index you need.
+     * @return int.
+     */
+    public int getIndex(T elem) {
+        for (Object item : objects) {
+            if (elem.equals(item)) {
+                return Arrays.asList(objects).indexOf(elem);
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Iterator for SimpleArray.
+     * @return Iterator.
+     */
+    @Override
+    public Iterator<T> iterator() {
+        Object[] data = this.objects;
+        return new Iterator<T>() {
+            @Override
+            public boolean hasNext() {
+                return data.length > itr;
+            }
+
+            @Override
+            public T next() {
+                return (T) data[itr++];
+            }
+        };
     }
 }
