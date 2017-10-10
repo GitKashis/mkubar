@@ -26,7 +26,7 @@ public class MyLinkedListTest {
     }
 
     /**
-     * Тести разерности списка.
+     * Тести размерности списка.
      */
     @Test
     public void size() throws Exception {
@@ -43,7 +43,7 @@ public class MyLinkedListTest {
     /**
      * Тестирование добавления и считывания элементов.
      * Обход начинается с головы списка, т.е с элемента,
-     * который зашел последним. Реализуется последовательность FILO.
+     * который зашел первым. Реализуется последовательность FIFO.
      */
     @Test
     public void add() throws Exception {
@@ -53,20 +53,42 @@ public class MyLinkedListTest {
         list.add("second");
         list.add("last");
 
-        String result = list.get(0);
+        String result = list.get(2);
         assertThat(result, is("last"));
     }
 
+    /**
+     * После второго должен вернуть false
+     */
     @Test
     public void iteratorHasNext() throws Exception {
         MyLinkedList<String> list = new MyLinkedList<>();
-        Iterator<String> itr = list.iterator();
 
         list.add("first");
         list.add("second");
+
+        Iterator<String> itr = list.iterator();
+        itr.next();
+        itr.next();
 
         boolean result = itr.hasNext();
         assertThat(result, is(false));
     }
 
+    /**
+     * после второго должен вернуть second
+     */
+    @Test
+    public void iteratorNext() throws Exception {
+        MyLinkedList<String> list = new MyLinkedList<>();
+
+        list.add("first");
+        list.add("second");
+
+        Iterator<String> itr = list.iterator();
+        itr.next();
+
+        String result = itr.next();
+        assertThat(result, is("second"));
+    }
 }
