@@ -1,46 +1,48 @@
 package ru.job4j.chess;
 
+import ru.job4j.chess.figures.Figure;
+
 /**
- * Класс описывает координаты и состояние ячейки.
- * Created by Kubar on 24.09.2017.
+ * Класс описывает клетку на доске.
  */
- class Cell {
-    private int horisontal;
-    private int vertical;
-    private boolean isBusy;
+public class Cell {
+    /**
+     * X - координаты по вертикали.
+     */
+    private int positionX;
+    /**
+     * Y координаты по горизонтали.
+     */
+    private int positionY;
 
-    boolean isBusy() {
-        return this.isBusy;
+    private Figure figure = null;
+    private Board board = null;
+
+    /**
+     * Конструктор.
+     * @param positionX - X - по вертикали.
+     * @param positionY -  Y cпо горизонтали.
+     * @param board - Board.
+     */
+    public Cell(int positionX, int positionY, Board board) {
+        this.positionX = positionX;
+        this.positionY = positionY;
+        this.board = board;
     }
 
-    void setBusy(boolean busy) {
-        this.isBusy = busy;
+    public int[] getPosition() {
+        return new int[]{this.positionX, this.positionY};
     }
 
-    int getHorisontal() {
-        return horisontal;
+    public Figure getFigure() {
+        return this.figure;
     }
 
-    int getVertical() {
-        return vertical;
+    public void setFigure(Figure figure) {
+        this.figure = figure;
     }
 
-    Cell(int horisontal, int vertical) {
-        this.horisontal = horisontal;
-        this.vertical = vertical;
-        this.isBusy = false;
-    }
-
-    @Override
-    public String toString() {
-        return "Cell{" + horisontal + "" + vertical +   ", isBusy=" + isBusy +'}';
-    }
-
-    void setHorisontal(int horisontal) {
-        this.horisontal = horisontal;
-    }
-
-    void setVertical(int vertical) {
-        this.vertical = vertical;
+    public Board getBoard() {
+        return this.board;
     }
 }
