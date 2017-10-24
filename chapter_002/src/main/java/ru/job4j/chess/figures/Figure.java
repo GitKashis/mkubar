@@ -19,6 +19,7 @@ public abstract class Figure {
      */
     public Figure(Cell position) {
         this.position = position;
+        this.position.setBusy(true);
     }
 
     /**
@@ -39,10 +40,13 @@ public abstract class Figure {
 
     /**
      * Двигаем фигуру на новую позицию.
+     * Старую клетку освобождаем, новую занимаем.
      * @param dist - клетка назначени.
      */
     public void clone(Cell dist) {
         position.setFigure(null);
+        position.setBusy(false);
         dist.setFigure(this);
+        dist.setBusy(true);
     }
 }

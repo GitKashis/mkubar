@@ -1,6 +1,6 @@
 package ru.job4j.VendingMashine;
 
-public class ChargeMetod {
+class ChargeMetod {
     /**
      * метод возвращает сдачу монетами по 1, 2, 5, 10.
      * @param price - цена покупки.

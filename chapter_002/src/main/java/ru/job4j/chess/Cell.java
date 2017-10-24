@@ -16,18 +16,26 @@ public class Cell {
     private int positionY;
 
     private Figure figure = null;
-    private Board board = null;
+
+    private boolean busy;
+
+    public void setBusy(boolean busy) {
+        this.busy = busy;
+    }
+
+    public boolean isBusy(){
+        return this.busy;
+    }
 
     /**
      * Конструктор.
      * @param positionX - X - по вертикали.
      * @param positionY -  Y cпо горизонтали.
-     * @param board - Board.
      */
-    public Cell(int positionX, int positionY, Board board) {
+    public Cell(int positionX, int positionY) {
         this.positionX = positionX;
         this.positionY = positionY;
-        this.board = board;
+        this.busy = false;
     }
 
     public int[] getPosition() {
@@ -42,7 +50,22 @@ public class Cell {
         this.figure = figure;
     }
 
-    public Board getBoard() {
-        return this.board;
+    // переопределяем методы для сравнения ячеек при проверке исключения OccupiedWay.
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Cell cell = (Cell) o;
+
+        return positionX == cell.positionX && positionY == cell.positionY && busy == cell.busy;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = positionX;
+        result = 31 * result + positionY;
+        result = 31 * result + (busy ? 1 : 0);
+        return result;
     }
 }

@@ -88,10 +88,15 @@ public class StartChessTest {
     @Test(expected = OccupiedWayException.class)
     public void moveToOccupedcell() {
         Board board = new Board();
-        Figure bishop1 = new Bishop(board.getCell(4, 2));
-        Figure bishop2 = new Bishop(board.getCell(0, 6));
+        Figure bishop1 = new Bishop(board.getCell(0, 0));
+        Figure bishop2 = new Bishop(board.getCell(4, 2));
         board.addFigure(bishop1);
         board.addFigure(bishop2);
-        board.move(board.getCell(4, 2), board.getCell(0, 6));
+        board.move(board.getCell(0, 0), board.getCell(2, 2));
+        board.move(board.getCell(4, 2), board.getCell(3, 3));
+
+        board.move(board.getCell(3, 3), board.getCell(1, 1));
+
+
     }
 }

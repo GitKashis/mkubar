@@ -1,14 +1,13 @@
 package ru.job4j.chess.figures;
 
-import ru.job4j.chess.Board;
 import ru.job4j.chess.Cell;
 import ru.job4j.chess.chessexeptions.ImpossibleMoveException;
-
 
 /**
  * Фигура Слон'.
  */
 public class Bishop extends Figure {
+
     /**
      * Конструктор.
      * @param position - позиция фигуры на доске.
@@ -35,7 +34,6 @@ public class Bishop extends Figure {
         int distX = dist.getPosition()[0];
         int distY = dist.getPosition()[1];
 
-        Board board = this.getCell().getBoard();
         Cell[] cells;
 
         // если клетка назначения принадлежит диагоналям, то считаем ячейки,
@@ -51,7 +49,7 @@ public class Bishop extends Figure {
             int startY = thisY + deltaY;
 
             while (startX != distX + deltaX) {
-                cells[i++] = board.getCell(startX, startY);
+                cells[i++] = new Cell(startX, startY);
                 startX += deltaX;
                 startY += deltaY;
             }

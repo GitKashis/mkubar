@@ -1,8 +1,6 @@
 package ru.job4j.chess;
 
-import ru.job4j.chess.chessexeptions.FigureNotFoundException;
-import ru.job4j.chess.chessexeptions.ImpossibleMoveException;
-import ru.job4j.chess.chessexeptions.OccupiedWayException;
+import ru.job4j.chess.chessexeptions.*;
 import ru.job4j.chess.figures.Figure;
 
 public class Board {
@@ -42,8 +40,13 @@ public class Board {
             throw new ImpossibleMoveException();
         }
 
-        for (Cell cell : figureWay) {
-            if (cell.getFigure() != null) {
+        // в результате работы метода way получено направление прохода,
+        // т.е. массив чистых клеток, по координатам совпадающих с клетками на доске.
+        // Сравним клетки полученого пути с клетками на доске. Если соответствующая клетка на доске будет isBusy, то
+        // генерируем исключение.
+        for (Cell cellFromFihureWay : figureWay) {
+            Cell cellFromBoardField = boardField[cellFromFihureWay.getPosition()[0]][cellFromFihureWay.getPosition()[1]];
+            if (!cellFromFihureWay.equals(cellFromBoardField)) {
                 throw new OccupiedWayException();
             }
         }
@@ -57,7 +60,7 @@ public class Board {
     private void fillBoardByCell() {
         for (int i = 0; i < boardField.length; i++) {
             for (int j = 0; j < boardField.length; j++) {
-                boardField[i][j] = new Cell(i, j, this);
+                boardField[i][j] = new Cell(i, j);
             }
         }
     }
@@ -77,9 +80,9 @@ public class Board {
      * @param figure - figure.
      */
     public void addFigure(Figure figure) {
-        for (Figure f : figures) {
-            if (f == null) {
-                f = figure;
+        for (int i = 0; i < figures.length; i++) {
+            if (figures[i] == null) {
+                figures[i] = figure;
                 break;
             }
         }
