@@ -3,10 +3,11 @@ package ru.job4j.sorting;
 import java.util.Arrays;
 
 
+/**
+ * Класс-контейнер, содержит в себе строку исходной структуры, рассредоточеную по массиву line.
+ * Для возможности сравнения класса были переопределены методы equals, hashCode.
+ */
 public class ArrayLine {
-    public String[] getLine() {
-        return this.line;
-    }
 
     private String[] line;
 
@@ -18,7 +19,7 @@ public class ArrayLine {
         return this.line;
     }
 
-    public int getLenght(){
+    public int length(){
         return this.line.length;
     }
 
