@@ -1,16 +1,10 @@
 package ru.job4j.sorting;
 
 import java.util.*;
-import static java.util.Collections.reverseOrder;
-import java.util.stream.Collectors;
-
-import static java.util.Comparator.*;
-import static java.util.stream.Collectors.toList;
-
 
 public class Sorting {
 
-    public static List<ArrayLine> convertToList(String[] source){
+    public List<ArrayLine> convertToList(String[] source){
         List<ArrayLine> out = new ArrayList<>();
 
         for (String aSource : source) {
@@ -20,7 +14,7 @@ public class Sorting {
         return out;
     }
 
-    public static List<ArrayLine> checkAndAdd(List<ArrayLine> list){
+    public List<ArrayLine> checkAndAdd(List<ArrayLine> list){
 
         List<ArrayLine> out = new ArrayList<>();
 
@@ -32,36 +26,46 @@ public class Sorting {
             if((str.toArray().length > 1)&&(!(list.contains(subLine)))) out.add(subLine);
             }
         HashSet<ArrayLine> hs = new HashSet<>(out);
-        return hs.stream().collect(toList());
+        return new ArrayList<>(hs);
 }
 
-public static List<ArrayLine> sort(List<ArrayLine> list){
+    public List<ArrayLine> sort(List<ArrayLine> list){
 
-Collections.sort(list);
+        Comparator<ArrayLine> pcomp = new firstComp().thenComparing(new lengthComp()).thenComparing(new twoComp());
+        Collections.sort(list, pcomp);
 
-//        return list.stream().sorted(
-//                comparing(ArrayLine::toString)
-//                        .thenComparing(comparing(ArrayLine::getLenght)))
-//                .collect(toList());
-return list;
-    }
-    public static void main(String[] args) {
-        String[] source = new String[]{
-                "K1/SK1",
-                "K1/SK2",
-                "K1/SK1/SSK1",
-                "K1/SK1/SSK2",
-                "K2",
-                "K2/SK1/SSK1",
-                "K2/SK1/SSK2"
-        };
-
-        //convertToList(source).forEach(o -> System.out.println(o.toString()));
-        List<ArrayLine> out = checkAndAdd(convertToList(source));
-        System.out.println("Сортировка:");
-        sort(out).forEach(o -> System.out.println(o.toString()));
-
+    return list;
     }
 
+    class firstComp implements Comparator<ArrayLine>{
 
+        public int compare(ArrayLine o1, ArrayLine o2) {
+            int compValue = o1.toArray()[0].compareTo( o2.toArray()[0]);
+            return compValue;
+        }
+    }
+
+    class twoComp implements Comparator<ArrayLine>{
+        public int compare(ArrayLine o1, ArrayLine o2) {
+            int compareValue = o1.toArray().length - (o2.toArray().length);
+            if (o1.getLenght() < 1) return -1;
+               else if (o1.toArray()[1] == (o2.toArray()[1]))
+                        return compareValue;
+               return compareValue;
+        }
+    }
+
+    class threeComp implements Comparator<ArrayLine>{
+        public int compare(ArrayLine o1, ArrayLine o2) {
+            if (o1.getLenght() < o2.getLenght()) return - 1;
+                else
+                        return o1.toArray()[2].compareTo( o2.toArray()[2]);
+        }
+    }
+
+    class lengthComp implements Comparator<ArrayLine>{
+        public int compare(ArrayLine o1, ArrayLine o2) {
+            return o1.toArray().length - (o2.toArray().length);
+        }
+    }
 }

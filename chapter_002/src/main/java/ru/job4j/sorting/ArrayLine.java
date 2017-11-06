@@ -3,9 +3,9 @@ package ru.job4j.sorting;
 import java.util.Arrays;
 
 
-public class ArrayLine implements Comparable {
+public class ArrayLine {
     public String[] getLine() {
-        return line;
+        return this.line;
     }
 
     private String[] line;
@@ -18,7 +18,7 @@ public class ArrayLine implements Comparable {
         return this.line;
     }
 
-    public Integer getLenght(){
+    public int getLenght(){
         return this.line.length;
     }
 
@@ -33,14 +33,6 @@ public class ArrayLine implements Comparable {
         return Arrays.equals(line, arrayLine.line);
     }
 
-//    public int compareTo(ArrayLine o2){
-//        ArrayLine o1 = this;
-//
-//        if (o1.getLenght() > o2.getLenght()){return 1;}
-//            else if (o1.getLenght() < o2.getLenght()){return -1;}
-//            return 0;
-//    }
-
     @Override
     public int hashCode() {
         return Arrays.hashCode(line);
@@ -51,10 +43,4 @@ public class ArrayLine implements Comparable {
         return Arrays.toString(line);
     }
 
-    @Override
-    public int compareTo(Object o) {
-        int compareValue =  this.toString().compareTo(o.toString());
-        if (compareValue == 0) return this.toString().length() - o.toString().length();
-        return compareValue;
-    }
 }
