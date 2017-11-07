@@ -1,4 +1,4 @@
-package ru.job4j.VendingMashine;
+package ru.job4j.vendingMashine;
 
 import org.junit.Test;
 

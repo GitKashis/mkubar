@@ -1,6 +1,6 @@
-package ru.job4j.VendingMashine;
+package ru.job4j.vendingMashine;
 
-import static ru.job4j.VendingMashine.Money.*;
+import static ru.job4j.vendingMashine.Money.*;
 
 /**
  * Класс для работы с меню.

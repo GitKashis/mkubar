@@ -1,4 +1,4 @@
-package ru.job4j.VendingMashine;
+package ru.job4j.vendingMashine;
 
 /**
  * Базовый абстрактный класс, содержащий конструктор и реализующий общий метод info().
@@ -12,7 +12,6 @@ abstract class BaseAction implements UserAction {
      * Конструктор с параметрами.
      * @param name - имя операции.
      * @param key - функциональная клавиша.
-     * @param i
      */
     BaseAction(String name, int key) {
         this.name = name;

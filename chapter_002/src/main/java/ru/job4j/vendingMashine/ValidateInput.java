@@ -1,4 +1,4 @@
-package ru.job4j.VendingMashine;
+package ru.job4j.vendingMashine;
 
 /**
  * Класс проверяет корректность вводимых пользователем данных при помощи блоков try .. catch.

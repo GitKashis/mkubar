@@ -1,4 +1,4 @@
-package ru.job4j.VendingMashine;
+package ru.job4j.vendingMashine;
 
 import ru.job4j.tracker.MenuOutException;
 
@@ -7,7 +7,7 @@ import java.util.Scanner;
 /**
  * Класс ConsoleInput используется для ввода пользовательских данных из консоли;
  * Расширен от интерфейсного класса Input.
- * {@link ru.job4j.VendingMashine.Input}
+ * {@link ru.job4j.vendingMashine.Input}
  */
 class ConsoleInput implements Input {
     //считывание ввода.

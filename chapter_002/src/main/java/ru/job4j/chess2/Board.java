@@ -1,7 +1,7 @@
-package ru.job4j.chess_2_0;
+package ru.job4j.chess2;
 
-import ru.job4j.chess_2_0.chessexeptions.*;
-import ru.job4j.chess_2_0.figures.Figure;
+import ru.job4j.chess2.chessexeptions.*;
+import ru.job4j.chess2.figures.Figure;
 
 public class Board {
 
@@ -32,7 +32,9 @@ public class Board {
             }
         }
         // Никого не нашли? Исключение!
-        if (k == figures.length) throw new FigureNotFoundException();
+        if (k == figures.length) {
+            throw new FigureNotFoundException();
+        }
 
         // фигуру нашли.
         // Проверим, может ли она пойти из точки source в точку dist. За это отвечает метод way.

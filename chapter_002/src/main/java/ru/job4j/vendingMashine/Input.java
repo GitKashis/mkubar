@@ -1,4 +1,4 @@
-package ru.job4j.VendingMashine;
+package ru.job4j.vendingMashine;
 
 /**
  * Интерфейс методов для консольного ввода данных.

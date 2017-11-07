@@ -1,4 +1,4 @@
-package ru.job4j.chess_2_0.chessexeptions;
+package ru.job4j.chess2.chessexeptions;
 
 public class OccupiedWayException extends RuntimeException {
 }

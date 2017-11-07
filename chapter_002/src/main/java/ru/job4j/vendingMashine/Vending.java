@@ -1,4 +1,4 @@
-package ru.job4j.VendingMashine;
+package ru.job4j.vendingMashine;
 
 /**
  * Метод хранит массив заявок items, реализует операции CRUD для объектов типа Cake.

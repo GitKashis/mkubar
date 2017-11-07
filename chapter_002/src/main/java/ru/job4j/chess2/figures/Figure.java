@@ -1,7 +1,7 @@
-package ru.job4j.chess_2_0.figures;
+package ru.job4j.chess2.figures;
 
-import ru.job4j.chess_2_0.Cell;
-import ru.job4j.chess_2_0.chessexeptions.ImpossibleMoveException;
+import ru.job4j.chess2.Cell;
+import ru.job4j.chess2.chessexeptions.ImpossibleMoveException;
 
 /**
  * Абстрактный класс для фигуры.

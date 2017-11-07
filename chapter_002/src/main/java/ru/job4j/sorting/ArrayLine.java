@@ -15,18 +15,22 @@ public class ArrayLine {
         this.line = line;
     }
 
-    public String[] toArray(){
+    public String[] toArray() {
         return this.line;
     }
 
-    public int length(){
+    public int length() {
         return this.line.length;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         ArrayLine arrayLine = (ArrayLine) o;
 

@@ -1,4 +1,4 @@
-package ru.job4j.chess_2_0;
+package ru.job4j.chess2;
 
 /**
  * Класс описывает клетку на доске.
@@ -28,8 +28,12 @@ public class Cell {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Cell cell = (Cell) o;
 

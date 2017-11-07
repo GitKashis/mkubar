@@ -8,4 +8,4 @@
  * @version 1.0
  * @since 30.09.17
  */
-package ru.job4j.VendingMashine;
+package ru.job4j.vendingMashine;

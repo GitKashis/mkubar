@@ -1,4 +1,4 @@
-package ru.job4j.VendingMashine;
+package ru.job4j.vendingMashine;
 
 /**
  * Класс 'Плюшка' с названием и ценой.

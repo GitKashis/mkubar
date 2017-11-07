@@ -1,8 +1,8 @@
-package ru.job4j.chess_2_0;
+package ru.job4j.chess2;
 
 import org.junit.Test;
-import ru.job4j.chess_2_0.chessexeptions.*;
-import ru.job4j.chess_2_0.figures.*;
+import ru.job4j.chess2.chessexeptions.*;
+import ru.job4j.chess2.figures.*;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;

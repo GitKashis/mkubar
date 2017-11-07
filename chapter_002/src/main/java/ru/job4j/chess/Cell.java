@@ -23,7 +23,7 @@ public class Cell {
         this.busy = busy;
     }
 
-    public boolean isBusy(){
+    public boolean isBusy() {
         return this.busy;
     }
 
@@ -53,8 +53,12 @@ public class Cell {
     // переопределяем методы для сравнения ячеек при проверке исключения OccupiedWay.
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Cell cell = (Cell) o;
 
