@@ -28,19 +28,17 @@ public class ExpandSet {
 
         // множество массивов
         Set<String[]> result = new HashSet<>();
-
+        int i=0;
         for (String aString : source) {
-
+            System.out.println(i++);
             String[] deps = aString.split("/");
 
             List<String> sum = new ArrayList();
-            String[] subStr;
 
             for (String values : deps) {
-
                 sum.add(values);
-                subStr = sum.toArray(new String[sum.size()]);
-                result.add(subStr);
+                List<String> subStr = new ArrayList<>(sum);
+                result.add(subStr.toArray(new String[subStr.size()]));
             }
         }
         return result;

@@ -30,4 +30,10 @@ public class SortingSetTest {
 
         assertThat(result.size(), is(9));
     }
+
+    // тестирование /
+    @Test
+    public void spliting() {
+
+    }
 }

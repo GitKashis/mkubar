@@ -32,6 +32,8 @@ public class SortingSet {
                     out.add(subLine);
                 }
             }
+
+
         }
         return out;
     }
