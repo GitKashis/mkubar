@@ -24,8 +24,11 @@ public class DynamicArray<T> implements Iterable<T> {
     * массива происходит его увеличение в два раза.
     */
     public void add(T item) {
-        if(pointer == array.length-1)
-            resize(array.length*2); // увеличу в 2 раза, если достигли границ
+        if (pointer == array.length - 1)
+            // увеличу в 2 раза, если достигли границ
+        {
+            resize(array.length * 2);
+        }
         array[pointer++] = item;
     }
 
@@ -47,12 +50,13 @@ public class DynamicArray<T> implements Iterable<T> {
         System.arraycopy(array, index + 1, array, index, pointer - index);
         array[pointer] = null;
         pointer--;
-        if (array.length > INIT_SIZE && pointer < array.length / CUT_RATE)
-            resize(array.length/2);
+        if (array.length > INIT_SIZE && pointer < array.length / CUT_RATE) {
+            resize(array.length / 2);
+        }
         // если элементов в CUT_RATE раз меньше чем
         // длина массива, то уменьшу в два раза
     }
-   /*
+    /*
     * Возвращает количество элементов в списке.
     */
     public int size() {
@@ -75,7 +79,7 @@ public class DynamicArray<T> implements Iterable<T> {
         return new Iterator<T>() {
             @Override
             public boolean hasNext() {
-                return ((T) data[itr] != null)&&(data.length > itr);
+                return ((T) data[itr] != null) && (data.length > itr);
             }
 
             @Override

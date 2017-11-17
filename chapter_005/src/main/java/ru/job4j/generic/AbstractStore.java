@@ -1,6 +1,6 @@
 package ru.job4j.generic;
 
-import ru.job4j.SimpleArray.SimpleArray;
+import ru.job4j.simplearray.SimpleArray;
 
 /**
  *
@@ -22,7 +22,7 @@ class AbstractStore<T extends Base> implements Store<Base> {
 
     /**
      * Get this storage.
-     * @return SimpleArray.
+     * @return simplearray.
      */
     public SimpleArray<Base> getStorage() {
         return this.storage;

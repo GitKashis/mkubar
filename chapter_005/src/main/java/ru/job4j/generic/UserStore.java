@@ -1,6 +1,6 @@
 package ru.job4j.generic;
 
-import ru.job4j.SimpleArray.SimpleArray;
+import ru.job4j.simplearray.SimpleArray;
 
 /**
  *

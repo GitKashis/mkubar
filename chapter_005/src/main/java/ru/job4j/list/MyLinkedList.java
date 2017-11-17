@@ -7,7 +7,7 @@ import java.util.Iterator;
  * Created by Kubar on 09.10.2017.
  */
 @SuppressWarnings("unchecked")
-class MyLinkedList<T> implements Iterable<T>{
+class MyLinkedList<T> implements Iterable<T> {
     // beginning of bag
     private Node<T> head;
     // ending of bag
@@ -29,13 +29,17 @@ class MyLinkedList<T> implements Iterable<T>{
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
 
-            Node<?> node=(Node<?>) o;
+            Node<?> node = (Node<?>) o;
 
             return item != null ? item.equals(node.item) : node.item == null;
-       }
+        }
 
         @Override
         public int hashCode() {
@@ -84,6 +88,7 @@ class MyLinkedList<T> implements Iterable<T>{
             head = newNode;
             tail = newNode;
         }
+
         // иначе добавляем в конец, тогда tail будет указывать не на null,
         // а на добавленый элемент.
         else {
@@ -97,17 +102,18 @@ class MyLinkedList<T> implements Iterable<T>{
     /**
      * Метод пробегает по всему списку в поисках элемента с указанным индексом.
      *
-     * @param getIndex - позиция элемента в списке.
      * @return <T> item.
      */
-    T get(int index){
-        if (index < 0 || index >= this.size())
-            throw new IndexOutOfBoundsException("Index: "+index+", Size: "+size());
+    T get(int index) {
+        if (index < 0 || index >= this.size()) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
+        }
 
         Node<T> check = head;
 
-        for (int i = 0; i < index; i++)
-              check = check.next;
+        for (int i = 0; i < index; i++) {
+            check = check.next;
+        }
 
         return check.item;
     }

@@ -1,4 +1,4 @@
-package ru.job4j.SimpleArray;
+package ru.job4j.simplearray;
 
 import org.junit.Test;
 
@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 
 
 /**
- * Тестирование SimpleArray
+ * Тестирование simplearray
  * Created by Kubar on 08.10.2017.
  */
 public class SimpleArrayTest {
