@@ -2,6 +2,7 @@ package ru.job4j.simplearray;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Контейнер simplearray<T> на базе массива objects
@@ -26,37 +27,41 @@ public class SimpleArray<T> implements Iterable<T> {
     }
 
     /**
-     * Удаление элемента из массива со сдвигом (без дыр) элементов,
+     * Удаление элемента из массива со сдвигом элементов,
      * Уменьшение длины массива на 1.
      * @param remIndex  - позиция элемента в массиве для удаления.
      */
     public void delete(int remIndex) {
+        if (remIndex > this.objects.length)
+            throw new IndexOutOfBoundsException();
+
+        Object[] trimmedArray = new Object[this.objects.length - 1];
         // копирование со сдвигом.
-        System.arraycopy(this.objects, remIndex + 1, this.objects, remIndex, this.objects.length - 1 - remIndex);
-
-        // создаем массив меньшей длины, приводим к типу T.
-        T[] newArr = (T[]) new Object[this.objects.length - 1];
-
-        // копируем в новый массив.
-        System.arraycopy(this.objects, 0, newArr, 0, this.objects.length - 1);
-        this.objects = newArr;
+        System.arraycopy(this.objects, remIndex + 1, trimmedArray, remIndex, this.objects.length - 1 - remIndex);
+        this.objects = trimmedArray;
     }
 
     /**
      * Перезапись значения по указанному индексу.
-     * @param updIndex
-     * @param value
+     * @param updIndex - индекс.
+     * @param value - значение.
      */
     public void update(int updIndex, T value) {
+        if (updIndex > this.objects.length)
+            throw new IndexOutOfBoundsException();
+
         this.objects[updIndex] = value;
     }
 
     /**
      * Возвращает из массива объект типа T по указанной позиции.
-     * @param position
+     * @param position - индекс.
      * @return T.
      */
     public T get(int position) {
+        if (position > this.objects.length)
+            throw new IndexOutOfBoundsException();
+
         return (T) this.objects[position];
     }
 
@@ -89,6 +94,9 @@ public class SimpleArray<T> implements Iterable<T> {
 
             @Override
             public T next() {
+                if (itr > data.length)
+                    throw new NoSuchElementException();
+
                 return (T) data[itr++];
             }
         };
