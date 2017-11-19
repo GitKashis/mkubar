@@ -1,4 +1,4 @@
-package ru.job4j.collections;
+package ru.job4j.iterator;
 
 import java.math.BigInteger;
 import java.util.Iterator;
@@ -27,7 +27,7 @@ class PrimeIterator implements Iterator {
      */
     @Override
     public boolean hasNext() {
-        return isContain(position) ;
+        return isContain(position);
     }
 
     /**
@@ -52,18 +52,18 @@ class PrimeIterator implements Iterator {
      * @param start - левая граница интервала.
      * @return true, если числа есть.
      */
-    private boolean isContain(int start){
+    private boolean isContain(int start) {
         boolean result = false;
 
-        while (start < values.length){
+        while (start < values.length) {
             BigInteger bigInteger = BigInteger.valueOf(values[this.position]);
 
-            if (bigInteger.isProbablePrime((int) Math.log(values[this.position]))){
+            if ((bigInteger.intValue() != 1) && (bigInteger.isProbablePrime((int) Math.log(values[this.position])))) {
                 result = true;
                 break;
             }
             start++;
-            this.position++;
+            position++;
         }
         return result;
     }
