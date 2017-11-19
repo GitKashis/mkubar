@@ -1,4 +1,4 @@
-package ru.job4j.collections;
+package ru.job4j.iterator;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -26,7 +26,7 @@ class EvenIterator implements Iterator {
      */
     @Override
     public boolean hasNext() {
-        return isContain(position) ;
+        return isContain(position);
     }
 
     /**
@@ -38,29 +38,30 @@ class EvenIterator implements Iterator {
     @Override
     public Object next() {
         // если далее не обнаружено четных, то генерируем ошибку.
-        if(!isContain(position))
+        if(!isContain(position)) {
             throw new NoSuchElementException();
+        }
         // иначе возвращаем четное и идем дальше.
         return values[position++];
     }
 
     /**
      * Вспомогательный метод, проверяет есть ли
-     * в интервале (position, length) четные числа
+     * в интервале (position, length) четные числа.
      *
      * @param start - левая граница интервала.
      * @return true, если числа есть.
      */
-    private boolean isContain(int start){
+    private boolean isContain(int start) {
         boolean result = false;
 
-         while (start < values.length){
-            if (values[this.position] % 2 == 0){
+         while (start < values.length) {
+            if (values[this.position] % 2 == 0) {
                 result = true;
                 break;
             }
             start++;
-            this.position++;
+            position++;
         }
         return result;
     }
