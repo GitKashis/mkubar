@@ -10,10 +10,18 @@ import java.util.NoSuchElementException;
  */
 @SuppressWarnings("unchecked")
 public class SimpleArray<T> implements Iterable<T> {
+    // внутренний «рабочий» массив объектов
     private Object[] objects;
+    // переменная отвечает за текущее количество объектов, указывает на последний элемент в массиве.
+    // инкрементируется после каждого добавления, декремент после удаления.
+    // Фактически, не соответствует длине рабочего массива, т.к. после удаления элемента массив не «подрезается»,
+    // и в хвосте находятся null-элементы.
     private int index = 0;
-    private int itr = 0;
 
+    /**
+     *  Конструктор.
+     * @param size - исходный размер массива
+     */
     public SimpleArray(int size) {
         this.objects = new Object[size];
     }
@@ -23,6 +31,13 @@ public class SimpleArray<T> implements Iterable<T> {
      * @param value - добавляемое значение типа T.
      */
     public void add(T value) {
+        // если заполнен, создаем новый большей размерности
+        if (index >= this.objects.length) {
+            Object[] expandArray = new Object[objects.length * 2];
+            System.arraycopy(this.objects, 0, expandArray, 0, index);
+            this.objects = expandArray;
+        }
+
         this.objects[index++] = value;
     }
 
@@ -32,13 +47,13 @@ public class SimpleArray<T> implements Iterable<T> {
      * @param remIndex  - позиция элемента в массиве для удаления.
      */
     public void delete(int remIndex) {
-        if (remIndex > this.objects.length)
+        if (remIndex > this.index)
             throw new IndexOutOfBoundsException();
 
-        Object[] trimmedArray = new Object[this.objects.length - 1];
         // копирование со сдвигом.
-        System.arraycopy(this.objects, remIndex + 1, trimmedArray, remIndex, this.objects.length - 1 - remIndex);
-        this.objects = trimmedArray;
+        System.arraycopy(this.objects, remIndex + 1, this.objects, remIndex, this.index - 1 - remIndex);
+        // меняем «полезное» количество элементов
+        this.index--;
     }
 
     /**
@@ -47,7 +62,7 @@ public class SimpleArray<T> implements Iterable<T> {
      * @param value - значение.
      */
     public void update(int updIndex, T value) {
-        if (updIndex > this.objects.length)
+        if (updIndex > this.index)
             throw new IndexOutOfBoundsException();
 
         this.objects[updIndex] = value;
@@ -59,7 +74,7 @@ public class SimpleArray<T> implements Iterable<T> {
      * @return T.
      */
     public T get(int position) {
-        if (position > this.objects.length)
+        if (position > this.index)
             throw new IndexOutOfBoundsException();
 
         return (T) this.objects[position];
@@ -71,12 +86,7 @@ public class SimpleArray<T> implements Iterable<T> {
      * @return int.
      */
     public int getIndex(T elem) {
-        for (Object item : objects) {
-            if (elem.equals(item)) {
-                return Arrays.asList(objects).indexOf(elem);
-            }
-        }
-        return -1;
+        return Arrays.asList(objects).indexOf(elem);
     }
 
     /**
@@ -85,16 +95,20 @@ public class SimpleArray<T> implements Iterable<T> {
      */
     @Override
     public Iterator<T> iterator() {
+        //
+        int count = this.index;
         Object[] data = this.objects;
+
         return new Iterator<T>() {
+            private int itr = 0;
             @Override
             public boolean hasNext() {
-                return data.length > itr;
+                return count > itr;
             }
 
             @Override
             public T next() {
-                if (itr > data.length)
+                if (itr > count)
                     throw new NoSuchElementException();
 
                 return (T) data[itr++];

@@ -15,7 +15,7 @@ public class SimpleArrayTest {
 
     @Before
     public void setUp() {
-        array = new SimpleArray<>(4);
+        array = new SimpleArray<>(2);
         array.add(54);
         array.add(4);
         array.add(5);
