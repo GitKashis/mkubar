@@ -17,7 +17,6 @@ public class DynamicArray<T> implements Iterable<T> {
     private final int CUT_RATE = 4;
     private Object[] array = new Object[INIT_SIZE];
     private int pointer = 0;
-    private int itr = 0;
 
     /*
     * Добавляет новый элемент в список. При достижении размера внутреннего
@@ -47,15 +46,20 @@ public class DynamicArray<T> implements Iterable<T> {
     * места.
     */
     public void remove(int index) {
+        if (index > this.pointer)
+            throw new IndexOutOfBoundsException();
+
         System.arraycopy(array, index + 1, array, index, pointer - index);
         array[pointer] = null;
-        pointer--;
+        this.pointer--;
+
+        // если элементов в CUT_RATE раз меньше чем
+        // длина массива, то уменьшу в два раза
         if (array.length > INIT_SIZE && pointer < array.length / CUT_RATE) {
             resize(array.length / 2);
         }
-        // если элементов в CUT_RATE раз меньше чем
-        // длина массива, то уменьшу в два раза
     }
+
     /*
     * Возвращает количество элементов в списке.
     */
@@ -77,6 +81,7 @@ public class DynamicArray<T> implements Iterable<T> {
         Object[] data = this.array;
 
         return new Iterator<T>() {
+            private int itr = 0;
             @Override
             public boolean hasNext() {
                 return ((T) data[itr] != null) && (data.length > itr);
