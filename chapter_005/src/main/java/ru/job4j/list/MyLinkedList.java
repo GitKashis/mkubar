@@ -20,7 +20,7 @@ class MyLinkedList<T> implements Iterable<T> {
         // объект хранения.
         private T item;
         //ссылка на следующий элемент.
-        private Node<T> next;
+        private Node next;
 
         Node(T item) {
             this.item = item;
@@ -45,7 +45,18 @@ class MyLinkedList<T> implements Iterable<T> {
         public int hashCode() {
             return item != null ? item.hashCode() : 0;
         }
+
+        /**
+         * Set the next node.
+         * @param next - the link to the next node.
+         */
+        public void setNext(Node next) {
+            this.next = next;
+        }
+
+
     }
+
 
     /**
      * Создадим пустой список.
@@ -72,6 +83,9 @@ class MyLinkedList<T> implements Iterable<T> {
         return count;
     }
 
+    public T getValue(Node node) {
+        return (T) node.item;
+    }
     /**
      * Если список не пуст, узел добавляется в конец списка,
      * а поле tail теперь указывает на новый конец списка.
@@ -118,6 +132,37 @@ class MyLinkedList<T> implements Iterable<T> {
         return check.item;
     }
 
+    boolean remove (int index) {
+        if (index < 0 || index >= this.size()) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
+        }
+
+        Node<T> node = this.head;
+        // если первый элемент
+        if (index == 0) {
+            this.head = node.next;
+            this.count--;
+            return true;
+        } // если последний элемент
+            else if (index == this.size() - 1) {
+                    for (int i = 0; i < this.size() - 2; i++) {
+                        node = node.next;
+                    }
+            node.setNext(null);
+            this.tail = node;
+            this.count--;
+            return true;
+        }
+        else {
+            for (int i = 0; i < index - 1; i++) {
+                node = node.next;
+            }
+            node.setNext(node.next.next);
+            this.count--;
+            return true;
+        }
+    }
+
     /**
      * Итератор односторонний
      *
@@ -142,5 +187,4 @@ class MyLinkedList<T> implements Iterable<T> {
             }
         };
     }
-
 }

@@ -1,5 +1,6 @@
 package ru.job4j.list;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Iterator;
@@ -12,6 +13,19 @@ import static org.junit.Assert.*;
  * Created by Kubar on 09.10.2017.
  */
 public class MyLinkedListTest {
+    private MyLinkedList<String> list;
+
+    @Before
+    public void setUp() {
+
+        list =new MyLinkedList<>();
+
+        list.add("zero");
+        list.add("one");
+        list.add("two");
+        list.add("three");
+        list.add("four");
+    }
 
     /**
      * Пустым может быть в начале при инициализации,
@@ -30,12 +44,6 @@ public class MyLinkedListTest {
      */
     @Test
     public void size() throws Exception {
-        MyLinkedList<String> list = new MyLinkedList<>();
-
-        list.add("first");
-        list.add("second");
-        list.add("last");
-
         int result = list.size();
         assertThat(result, is(3));
     }
@@ -47,11 +55,6 @@ public class MyLinkedListTest {
      */
     @Test
     public void add() throws Exception {
-        MyLinkedList<String> list = new MyLinkedList<>();
-
-        list.add("first");
-        list.add("second");
-        list.add("last");
 
         String result = list.get(2);
         assertThat(result, is("last"));
@@ -62,12 +65,9 @@ public class MyLinkedListTest {
      */
     @Test
     public void iteratorHasNext() throws Exception {
-        MyLinkedList<String> list = new MyLinkedList<>();
-
-        list.add("first");
-        list.add("second");
-
         Iterator<String> itr = list.iterator();
+
+        itr.next();
         itr.next();
         itr.next();
 
@@ -80,15 +80,20 @@ public class MyLinkedListTest {
      */
     @Test
     public void iteratorNext() throws Exception {
-        MyLinkedList<String> list = new MyLinkedList<>();
-
-        list.add("first");
-        list.add("second");
 
         Iterator<String> itr = list.iterator();
         itr.next();
 
         String result = itr.next();
         assertThat(result, is("second"));
+    }
+
+    /**
+     * Тестирование удаления элемента по индексу
+     */
+    @Test
+    public void removeFirst() {
+        assertThat(list.remove(0), is(true));
+        assertThat(list.remove(1), is(true));
     }
 }
