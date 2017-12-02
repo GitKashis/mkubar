@@ -4,7 +4,7 @@ package ru.job4j.generic;
  * todo: comment
  * Created by Kubar on 08.10.2017.
  */
-abstract class Base {
+public abstract class Base {
 
     /**
      * @return

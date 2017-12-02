@@ -4,12 +4,16 @@ package ru.job4j.generic;
  *
  * Created by Kubar on 08.10.2017.
  */
-class User extends Base {
+public class User extends Base {
 
     /**
      * User ID.
      */
     private String id;
+
+    public String getName() {
+        return name;
+    }
 
     /**
      * User name.

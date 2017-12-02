@@ -6,7 +6,7 @@ import ru.job4j.simplearray.SimpleArray;
  * Created by Kubar on 08.10.2017.
  */
 @SuppressWarnings("unchecked")
-public class RoleStore  extends AbstractStore {
+public class RoleStore  extends AbstractStore<Role> {
     /**
      * Constructor with default RoleStorage size = 5.
      */

@@ -6,17 +6,17 @@ import ru.job4j.simplearray.SimpleArray;
  *
  * Created by Kubar on 08.10.2017.
  */
-class AbstractStore<T extends Base> implements Store<Base> {
+public class AbstractStore<T extends Base> implements Store<T> {
     /**
      * Storage.
      */
-    private SimpleArray<Base> storage;
+    private SimpleArray<T> storage;
 
     /**
      * Constructor for AbstracStorage.
      * @param storage - storage.
      */
-    AbstractStore(SimpleArray<Base> storage) {
+    AbstractStore(SimpleArray<T> storage) {
         this.storage = storage;
     }
 
@@ -24,7 +24,7 @@ class AbstractStore<T extends Base> implements Store<Base> {
      * Get this storage.
      * @return simplearray.
      */
-    public SimpleArray<Base> getStorage() {
+    public SimpleArray<T> getStorage() {
         return this.storage;
     }
 
@@ -34,7 +34,7 @@ class AbstractStore<T extends Base> implements Store<Base> {
      * @return Base - added element.
      */
     @Override
-    public Base add(Base model) {
+    public T add(T model) {
         this.storage.add(model);
         return storage.get(storage.getIndex(model));
     }
@@ -45,16 +45,16 @@ class AbstractStore<T extends Base> implements Store<Base> {
      * @return Base - element before updating.
      */
     @Override
-    public Base update(Base model) {
+    public T update(T model) {
         Base oldElem = null;
         for (Base item : storage) {
             if (item.getId().equals(model.getId())) {
                 oldElem = item;
-                storage.update(storage.getIndex(item), model);
+                storage.update(storage.getIndex((T) item), model);
                 break;
             }
         }
-        return oldElem;
+        return (T) oldElem;
     }
 
     /**
@@ -67,7 +67,7 @@ class AbstractStore<T extends Base> implements Store<Base> {
         boolean result = false;
         for (Base item : storage) {
             if (item.getId().equals(id)) {
-                storage.delete(storage.getIndex(item));
+                storage.delete(storage.getIndex((T) item));
                 result = true;
                 break;
             }
