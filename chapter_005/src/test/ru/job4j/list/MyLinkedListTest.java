@@ -18,7 +18,7 @@ public class MyLinkedListTest {
     @Before
     public void setUp() {
 
-        list =new MyLinkedList<>();
+        list = new MyLinkedList<>();
 
         list.add("zero");
         list.add("one");
@@ -45,7 +45,7 @@ public class MyLinkedListTest {
     @Test
     public void size() throws Exception {
         int result = list.size();
-        assertThat(result, is(3));
+        assertThat(result, is(5));
     }
 
     /**
@@ -57,7 +57,7 @@ public class MyLinkedListTest {
     public void add() throws Exception {
 
         String result = list.get(2);
-        assertThat(result, is("last"));
+        assertThat(result, is("two"));
     }
 
     /**
@@ -66,13 +66,13 @@ public class MyLinkedListTest {
     @Test
     public void iteratorHasNext() throws Exception {
         Iterator<String> itr = list.iterator();
-
+        assertThat(itr.hasNext(), is(true));
         itr.next();
         itr.next();
         itr.next();
-
-        boolean result = itr.hasNext();
-        assertThat(result, is(false));
+        itr.next();
+        itr.next();
+        assertThat(itr.hasNext(), is(false));
     }
 
     /**
@@ -83,9 +83,9 @@ public class MyLinkedListTest {
 
         Iterator<String> itr = list.iterator();
         itr.next();
+        itr.next();
 
-        String result = itr.next();
-        assertThat(result, is("second"));
+        assertThat(itr.next(), is("two"));
     }
 
     /**

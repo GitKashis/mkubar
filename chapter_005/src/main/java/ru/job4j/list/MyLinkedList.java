@@ -1,13 +1,14 @@
 package ru.job4j.list;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Реализация односвязного списка.
  * Created by Kubar on 09.10.2017.
  */
 @SuppressWarnings("unchecked")
-class MyLinkedList<T> implements Iterable<T> {
+public class MyLinkedList<T> implements Iterable<T> {
     // beginning of bag
     private Node<T> head;
     // ending of bag
@@ -16,13 +17,13 @@ class MyLinkedList<T> implements Iterable<T> {
     private int count = 0;
 
     // Внутренний класс-контейнер.
-    private class Node<T> {
+    private class Node<E> {
         // объект хранения.
-        private T item;
+        private E item;
         //ссылка на следующий элемент.
         private Node next;
 
-        Node(T item) {
+        Node(E item) {
             this.item = item;
             this.next = null;
         }
@@ -61,7 +62,7 @@ class MyLinkedList<T> implements Iterable<T> {
     /**
      * Создадим пустой список.
      */
-    MyLinkedList() {
+    public MyLinkedList() {
         this.head = null;
         this.tail = null;
         this.count = 0;
@@ -72,27 +73,25 @@ class MyLinkedList<T> implements Iterable<T> {
      *
      * @return true if this bag is empty; false otherwise
      */
-    boolean isEmpty() {
+    public boolean isEmpty() {
         return head == null;
     }
 
     /**
      * @return the number of items in this bag
      */
-    int size() {
+    public int size() {
         return count;
     }
 
-    public T getValue(Node node) {
-        return (T) node.item;
-    }
+
     /**
      * Если список не пуст, узел добавляется в конец списка,
      * а поле tail теперь указывает на новый конец списка.
      *
      * @param item the item to add to this bag
      */
-    void add(T item) {
+    public void add(T item) {
 
         //создаем новый контейнер для хранения item
         Node<T> newNode = new Node(item);
@@ -116,9 +115,9 @@ class MyLinkedList<T> implements Iterable<T> {
     /**
      * Метод пробегает по всему списку в поисках элемента с указанным индексом.
      *
-     * @return <T> item.
+     * @return <E> item.
      */
-    T get(int index) {
+    public T get(int index) {
         if (index < 0 || index >= this.size()) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
         }
@@ -132,7 +131,7 @@ class MyLinkedList<T> implements Iterable<T> {
         return check.item;
     }
 
-    boolean remove (int index) {
+    public boolean remove (int index) {
         if (index < 0 || index >= this.size()) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
         }
@@ -181,6 +180,9 @@ class MyLinkedList<T> implements Iterable<T> {
 
             @Override
             public T next() {
+                if (!hasNext())
+                    throw new NoSuchElementException();
+
                 T value = thisNode.item;
                 thisNode = thisNode.next;
                 return value;
