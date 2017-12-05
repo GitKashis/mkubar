@@ -9,17 +9,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class SimpleHashSetTest {
-    private SimpleHashSet simple;
+    private NewSimpleHashSet simple;
 
     @Before
     public void setUp() {
-        simple = new SimpleHashSet(5, 5);
+        simple = new NewSimpleHashSet();
     }
 
     /**
      * Duplicate elements.
      */
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void whenAddSameItemTurnWithoutThis() throws Exception {
         assertThat(simple.add(11), is(true));
         assertThat(simple.add(1), is(true));
@@ -31,7 +31,7 @@ public class SimpleHashSetTest {
     /**
      * Remove elements.
      */
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void whenRemoveElement() throws Exception {
         simple.add(11);
         simple.add(1);
