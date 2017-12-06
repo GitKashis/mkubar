@@ -9,16 +9,21 @@ public class CyclingCheck<T> {
     /**
      * Check cyclical Node.
      *
-     * @param first - start element.
+     * @param  - start element.
      * @return boolean.
      */
-    public boolean hasCycle(Node<T> first) {
-        Node<T> next = first.getNext();
+    public boolean hasCycle(Node<T> next) {
+        // сохраняем точку входя для проверки на круговой список
+        Node start = next;
+        // запоминаем предыдущий элемент
+        Node prev = start;
 
         while (next.getNext() != null) {
-            if (next.getNext().equals(first.getNext())) {
+            if ((next.getNext().equals(prev))||(next.getNext().equals(start))) {
                 return true;
-            } else {
+            }
+            else {
+                prev = next;
                 next = next.getNext();
             }
         }

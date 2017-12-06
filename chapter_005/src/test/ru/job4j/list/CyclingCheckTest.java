@@ -24,7 +24,7 @@ public class CyclingCheckTest {
         four = new Node(4);
     }
     @Test
-    public void whenNodeIsCyclicThenHasCycleReturnTrue() {
+    public void whenNodeHasRoundCyclicThenReturnTrue() {
         first.setNext(two);
         two.setNext(third);
         third.setNext(four);
@@ -33,14 +33,27 @@ public class CyclingCheckTest {
         boolean result = new CyclingCheck<Node>().hasCycle(two);
         assertThat(result, is(true));
     }
+
+    @Test
+    public void whenNodeHasLoopThenReturnTrue() {
+        first.setNext(two);
+        two.setNext(third);
+        third.setNext(four);
+        four.setNext(third);
+
+        boolean result = new CyclingCheck<Node>().hasCycle(two);
+        assertThat(result, is(true));
+    }
+
     /**
      * Testing when node has not cyclical.
      */
     @Test
     public void whenNodeIsNotCyclicThenHasCycleReturnFalse() {
         first.setNext(two);
+        two.setNext(third);
         third.setNext(four);
-        four.setNext(first);
+        four.setNext(null);
 
         boolean result = new CyclingCheck<Node>().hasCycle(first);
         assertThat(result, is(false));

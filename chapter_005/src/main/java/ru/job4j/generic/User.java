@@ -21,18 +21,8 @@ public class User extends Base {
     private String name;
 
     public User(String id, String name) {
-        this.id = id;
+        super(id);
         this.name = name;
-    }
-
-    @Override
-    String getId() {
-        return this.id;
-    }
-
-    @Override
-    void setId(String id) {
-        this.id = id;
     }
 
     @Override

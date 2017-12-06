@@ -14,18 +14,8 @@ class Role extends Base {
 
     // Constructor
     public Role(String id, String roleName) {
-        this.id = id;
+        super(id);
         this.roleName = roleName;
-    }
-
-    @Override
-    String getId() {
-        return this.id;
-    }
-
-    @Override
-    void setId(String id) {
-        this.id = id;
     }
 
     @Override
@@ -43,7 +33,6 @@ class Role extends Base {
             return false;
         }
         return roleName != null ? roleName.equals(role.roleName) : role.roleName == null;
-
     }
 
     @Override
