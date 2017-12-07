@@ -52,4 +52,16 @@ public class SimpleHashSetTest {
 
         assertThat(simple.contains(11), is(true));
     }
+
+    @Test
+    public void IntegerTest() {
+        Integer i = 50;
+        Integer z = new Integer(50);
+        Integer y = 50;
+        System.out.println("i " + System.identityHashCode(i));
+        System.out.println("z " + System.identityHashCode(z));
+        System.out.println("y " + System.identityHashCode(y));
+        System.out.println("i == z " + (i == z));
+        System.out.println("i == y " + (i == y));
+    }
 }
