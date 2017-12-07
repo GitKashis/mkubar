@@ -23,6 +23,11 @@ public class CyclingCheckTest {
         third = new Node(3);
         four = new Node(4);
     }
+
+
+    /**
+     * Круговой список
+     */
     @Test
     public void whenNodeHasRoundCyclicThenReturnTrue() {
         first.setNext(two);
@@ -34,17 +39,37 @@ public class CyclingCheckTest {
         assertThat(result, is(true));
     }
 
+    /**
+     *           ┌ < ┐
+     *           |    |
+     * 1 -> 2 -> 3 -> 4
+     */
     @Test
-    public void whenNodeHasLoopThenReturnTrue() {
+    public void whenNodeHasReverseLoopThenReturnTrue() {
         first.setNext(two);
         two.setNext(third);
         third.setNext(four);
         four.setNext(third);
 
-        boolean result = new CyclingCheck<Node>().hasCycle(two);
+        boolean result = new CyclingCheck<Node>().hasCycle(first);
         assertThat(result, is(true));
     }
 
+    /**
+     *      ┌  <-   ┐
+     *      |        |
+     * 1 -> 2 -> 3 -> 4
+     */
+    @Test
+    public void whenNodeHasLoopThenReturnTrue() {
+        first.setNext(two);
+        two.setNext(third);
+        third.setNext(four);
+        four.setNext(two);
+
+        boolean result = new CyclingCheck<Node>().hasCycle(first);
+        assertThat(result, is(true));
+    }
     /**
      * Testing when node has not cyclical.
      */

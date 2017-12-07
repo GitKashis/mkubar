@@ -8,24 +8,19 @@ package ru.job4j.list;
 public class CyclingCheck<T> {
     /**
      * Check cyclical Node.
-     *
-     * @param  - start element.
-     * @return boolean.
      */
-    public boolean hasCycle(Node<T> next) {
-        // сохраняем точку входя для проверки на круговой список
-        Node start = next;
-        // запоминаем предыдущий элемент
-        Node prev = start;
+    public boolean hasCycle(Node<T> head) {
+        if (head == null) return false;
 
-        while (next.getNext() != null) {
-            if ((next.getNext().equals(prev))||(next.getNext().equals(start))) {
+        Node fast = head.getNext();
+        Node slow = head;
+
+        while (fast != null && fast.getNext() !=  null) {
+            if (fast == slow) {
                 return true;
             }
-            else {
-                prev = next;
-                next = next.getNext();
-            }
+            fast = fast.getNext().getNext();
+            slow = slow.getNext();
         }
         return false;
     }

@@ -7,7 +7,7 @@ import ru.job4j.simplearray.SimpleArray;
  * Created by Kubar on 08.10.2017.
  */
 @SuppressWarnings("unchecked")
-public class UserStore extends AbstractStore {
+public class UserStore extends AbstractStore<User> {
     /**
      * Constructor with default UserStorage size = 5.
      */

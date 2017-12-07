@@ -4,7 +4,7 @@ package ru.job4j.generic;
  * Role.
  * Created by Kubar on 08.10.2017.
  */
-class Role extends Base {
+public class Role extends Base {
 
     // Role id.
     private String id;
