@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 
 public class NewSimpleHashSet<T> implements Iterable<T> {
     // начальный размер массива
-    private final int INIT_SIZE = 100 ;
+    private final int INIT_SIZE = 16 ;
 
     private Object[] objects = new Object[INIT_SIZE];
     // количество элементов
@@ -33,8 +33,7 @@ public class NewSimpleHashSet<T> implements Iterable<T> {
     public boolean remove(T item) {
         int h = index(hash(item));
         if (objects[h].equals(item)) {
-                System.arraycopy(objects, h + 1, objects, h, objects.length - h - 1);
-                objects[cnt] = null;
+                objects[h] = null;
                 this.cnt--;
                 return true;
             }
@@ -50,7 +49,8 @@ public class NewSimpleHashSet<T> implements Iterable<T> {
 
     /* возвращает номер ячейки по значению хэш-функции */
     private int index(int hash) {
-        return Math.abs(hash) % objects.length;
+        return hash & (objects.length - 1);
+
     }
 
     /**
@@ -60,25 +60,38 @@ public class NewSimpleHashSet<T> implements Iterable<T> {
      */
     @Override
     public Iterator iterator() {
-        //
-        int count = this.objects.length;
-        Object[] data = this.objects;
+
+        T[] data = (T[]) this.objects;
 
         return new Iterator() {
             private int itr = 0;
 
             @Override
             public boolean hasNext() {
-                return count > itr;
+                return isContain(itr);
             }
 
             @Override
             public T next() {
-
-                if(!hasNext()) {
+                // если далее не обнаружено четных, то генерируем ошибку.
+                if(!isContain(itr)) {
                     throw new NoSuchElementException();
                 }
-                return (T) data[itr++];
+                // иначе возвращаем четное и идем дальше.
+                return data[itr++];
+            }
+
+            private boolean isContain(int start) {
+                boolean result = false;
+                while (start < data.length) {
+                    if (objects[itr] != null) {
+                        result = true;
+                        break;
+                    }
+                    start++;
+                    itr++;
+                }
+                return result;
             }
         };
     }

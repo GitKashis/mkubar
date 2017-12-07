@@ -26,6 +26,8 @@ public class SimpleHashSetTest {
         assertThat(simple.add(2), is(true));
         assertThat(simple.add(2), is(false));
         assertThat(simple.add(1), is(false));
+
+        simple.forEach(System.out::println);
     }
 
     /**
@@ -40,6 +42,7 @@ public class SimpleHashSetTest {
         simple.add(1);
 
         assertThat(simple.remove(11), is(true));
+        simple.forEach(System.out::println);
     }
 
     /**
@@ -54,14 +57,9 @@ public class SimpleHashSetTest {
     }
 
     @Test
-    public void IntegerTest() {
-        Integer i = 50;
-        Integer z = new Integer(50);
-        Integer y = 50;
-        System.out.println("i " + System.identityHashCode(i));
-        System.out.println("z " + System.identityHashCode(z));
-        System.out.println("y " + System.identityHashCode(y));
-        System.out.println("i == z " + (i == z));
-        System.out.println("i == y " + (i == y));
+    public void testAbs() {
+        System.out.println(Integer.MIN_VALUE);
+        System.out.println(Math.abs(Integer.MIN_VALUE ));
+        System.out.println(Math.abs(Integer.MIN_VALUE + 1));
     }
 }
