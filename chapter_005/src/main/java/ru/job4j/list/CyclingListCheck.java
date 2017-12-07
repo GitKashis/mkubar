@@ -1,11 +1,6 @@
 package ru.job4j.list;
 
-/**
- * Class for CyclingList check.
- *
- * @param <T> - value
- */
-public class CyclingCheck<T> {
+public class CyclingListCheck<T> {
     /**
      * Check cyclical Node.
      */

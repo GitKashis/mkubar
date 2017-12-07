@@ -10,7 +10,7 @@ import static org.junit.Assert.assertThat;
  * Class for testing CyclingCheck.
  *
  */
-public class CyclingCheckTest {
+public class CyclingListCheckTest {
     /**
      * Testing when node has cyclical.
      */
@@ -35,7 +35,7 @@ public class CyclingCheckTest {
         third.setNext(four);
         four.setNext(first);
 
-        boolean result = new CyclingCheck<Node>().hasCycle(two);
+        boolean result = new CyclingListCheck<Node>().hasCycle(two);
         assertThat(result, is(true));
     }
 
@@ -51,7 +51,7 @@ public class CyclingCheckTest {
         third.setNext(four);
         four.setNext(third);
 
-        boolean result = new CyclingCheck<Node>().hasCycle(first);
+        boolean result = new CyclingListCheck<Node>().hasCycle(first);
         assertThat(result, is(true));
     }
 
@@ -67,7 +67,7 @@ public class CyclingCheckTest {
         third.setNext(four);
         four.setNext(two);
 
-        boolean result = new CyclingCheck<Node>().hasCycle(first);
+        boolean result = new CyclingListCheck<Node>().hasCycle(first);
         assertThat(result, is(true));
     }
     /**
@@ -80,7 +80,7 @@ public class CyclingCheckTest {
         third.setNext(four);
         four.setNext(null);
 
-        boolean result = new CyclingCheck<Node>().hasCycle(first);
+        boolean result = new CyclingListCheck<Node>().hasCycle(first);
         assertThat(result, is(false));
     }
 }
