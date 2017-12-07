@@ -26,8 +26,6 @@ public class SimpleHashSetTest {
         assertThat(simple.add(2), is(true));
         assertThat(simple.add(2), is(false));
         assertThat(simple.add(1), is(false));
-
-        simple.forEach(System.out::println);
     }
 
     /**
@@ -42,7 +40,6 @@ public class SimpleHashSetTest {
         simple.add(1);
 
         assertThat(simple.remove(11), is(true));
-        simple.forEach(System.out::println);
     }
 
     /**

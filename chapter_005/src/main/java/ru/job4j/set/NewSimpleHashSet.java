@@ -62,7 +62,6 @@ public class NewSimpleHashSet<T> implements Iterable<T> {
     public Iterator iterator() {
 
         T[] data = (T[]) this.objects;
-
         return new Iterator() {
             private int itr = 0;
 
