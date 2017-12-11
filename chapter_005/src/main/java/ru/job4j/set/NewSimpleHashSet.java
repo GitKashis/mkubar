@@ -19,6 +19,7 @@ public class NewSimpleHashSet<T> implements Iterable<T> {
             return false;
         int h = index(hash(x));
         objects[h] = x;
+        this.cnt++;
         return true;
     }
 
