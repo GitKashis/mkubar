@@ -96,7 +96,7 @@ public class SimpleHashTable<K, V> implements Iterable {
      * Увеличение массива, если таблица заполнена.
      */
     private void resizeTable() {
-        Container<K, V>[] newTable = new Container[table.length * 2];
+        Container[] newTable = new Container[table.length * 2];
         copyOldTable(newTable);
     }
 
@@ -134,34 +134,12 @@ public class SimpleHashTable<K, V> implements Iterable {
 
     /**
      * Iterator.
-     * @return Iterator.
      */
-    @Override
-//    public Iterator iterator() {
-//        return new Iterator() {
-//            /**
-//             * Позиция итератора.
-//             */
-//            private int itrPosition = 0;
-//
-//            @Override
-//            public boolean hasNext() {
-//                return !(table[itrPosition] == null && itrPosition < table.length - 1);
-//            }
-//
-//            @Override
-//            public V next() {
-//                if (!hasNext())
-//                    throw new NoSuchElementException();
-//                return table[itrPosition++].getContainerValue();
-//            }
-//        };
-//    }
+
+    private int itr = 0;
+
     public Iterator iterator() {
-
         return new Iterator() {
-            private int itr = 0;
-
             @Override
             public boolean hasNext() {
                 return isContain(itr);
@@ -169,16 +147,16 @@ public class SimpleHashTable<K, V> implements Iterable {
 
             @Override
             public V next() {
-                if(!isContain(itr)) {
+                if (!hasNext())
                     throw new NoSuchElementException();
-                }
+
                 return table[itr++].getContainerValue();
             }
 
             private boolean isContain(int start) {
                 boolean result = false;
                 while (start < table.length) {
-                    if (table[itr] != null) {
+                    if (table[start] != null) {
                         result = true;
                         break;
                     }
@@ -188,7 +166,6 @@ public class SimpleHashTable<K, V> implements Iterable {
                 return result;
             }
         };
-    }
     }
 
     /**

@@ -76,13 +76,16 @@ public class SimpleHashTableTest {
     /**
      * Testing insert same elements into HashTable collection.
      */
-    @Test
+    @Test(expected = NoSuchElementException.class)
     public void whenAddThreeElementsAndCallHasNextThenOnFourAttemptReturnFalse() {
 
-        table.iterator().next();
-        table.iterator().next();
-        table.iterator().next();
+        table.iterator().next();    // value 1
+        table.iterator().next();    // value 2
+        table.iterator().next();    // value 3
 
-        assertThat(table.iterator().hasNext(), is(true));
+        table.iterator().hasNext();     // false
+        table.iterator().next();    // no elements
+
+        assertThat(table.iterator().hasNext(), is(false));
     }
 }
