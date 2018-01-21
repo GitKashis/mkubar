@@ -2,7 +2,7 @@ package ru.job4j.tree;
 
 import java.util.*;
 
-public class Tree<E extends Comparable<E>> implements SimpleTree<E>, Comparator<E> {
+public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
     private Node<E> root;
 
     public Tree(E rootData) {
@@ -27,16 +27,21 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E>, Comparator<
         return rsl;
     }
 
+    /**
+     * Метод добавляет в коолекцию элемент, если его еще не было.
+     * @param parent parent.
+     * @param child  child.
+     * @return true, если добавление произошло.
+     */
     @Override
     public boolean add(E parent, E child) {
-        Node<E> node = findBy(parent).get();
-        return node.leaves().add(new Node<E>(child));
-
-    }
-
-    @Override
-    public int compare(E o1, E o2) {
-        return 0;
+        // ищем элементы в коллекции.
+        Optional<Node<E>> node1 = findBy(parent);
+        Optional<Node<E>> node2 = findBy(child);
+        // проверяем, есть ли уже такой элемент child в коллекции.
+        // если такого нет, то ищем родителя parent, к которому нужно прицепить этот child
+        return (!node2.isPresent() && node1.isPresent())
+                    && node1.get().leaves().add(new Node<>(child));
     }
 
     @Override

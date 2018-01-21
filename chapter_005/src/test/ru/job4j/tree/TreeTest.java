@@ -16,6 +16,6 @@ public class TreeTest {
         tree.add("root", "two");
         tree.add("two", "three");
 
-        assertThat(tree.add("two", "three"), is(true));
+        assertThat(tree.add("three", "four"), is(true));
     }
 }

@@ -7,7 +7,6 @@ import java.util.List;
  */
 public class Node<E> {
     private final List<Node<E>> children = new ArrayList<>();
-
     private final E value;
 
     public Node(final E value) {
@@ -24,5 +23,9 @@ public class Node<E> {
 
     public boolean eqValue(E that) {
         return this.value.equals(that);
+    }
+
+    public int getSize() {
+        return children.size();
     }
 }
