@@ -7,7 +7,8 @@ import java.util.List;
  */
 public class Node<E> {
     private final List<Node<E>> children = new ArrayList<>();
-    private final E value;
+    private E value;
+    protected Node<E> left, right;
 
     public Node(final E value) {
         this.value = value;
@@ -27,5 +28,9 @@ public class Node<E> {
 
     public E getValue() {
         return value;
+    }
+
+    public void setValue(E e) {
+        this.value = e;
     }
 }

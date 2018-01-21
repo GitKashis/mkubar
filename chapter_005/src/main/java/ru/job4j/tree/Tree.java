@@ -73,6 +73,33 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
                     && nodeParent.get().leaves().add(new Node<>(child));
     }
 
+    public void add(E e){
+        Node<E> currentNode = root, emptyNode = null;
+        while (currentNode != null) {
+            int cmp = e.compareTo(currentNode.getValue());
+            if (cmp == 0) {
+                currentNode.setValue(e);
+            } else {
+                emptyNode = currentNode;
+                if (cmp < 0) {
+                    currentNode = currentNode.left;
+                } else {
+                    currentNode = currentNode.right;
+                }
+            }
+        }
+
+        Node<E> newNode = new Node<>(e);
+        if (emptyNode == null) {
+            root = newNode;
+        } else {
+            if (e.compareTo(emptyNode.getValue()) < 0) {
+                emptyNode.left = newNode;
+            } else {
+                emptyNode.right = newNode;
+            }
+        }
+    }
     /**
      * Итератор обхода в ширину.
      * Инициализируем корневым элементом.
