@@ -47,4 +47,34 @@ public class TreeTest {
         assertThat(it.next(), Matchers.is("four"));
         it.next();
     }
+
+    /**
+     * Testing binary.
+     */
+    @Test
+    public void whenCheckThatTreeIsBinaryThenReturnFalse() {
+        tree.add("root", "one");
+        tree.add("root", "two");
+        tree.add("two", "three");
+        tree.add("two", "four");
+        tree.add("two", "five");
+
+        boolean result = tree.isBinary();
+        assertThat(result, is(false));
+    }
+    /**
+     * Testing binary.
+     */
+    @Test
+    public void whenCheckThatTreeIsBinaryThenReturnTrue() {
+        tree.add("root", "one");
+        tree.add("root", "two");
+        tree.add("one", "three");
+        tree.add("one", "four");
+        tree.add("two", "five");
+        tree.add("two", "six");
+
+        boolean result = tree.isBinary();
+        assertThat(result, is(true));
+    }
 }

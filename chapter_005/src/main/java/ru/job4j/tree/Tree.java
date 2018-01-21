@@ -9,6 +9,35 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
         root = new Node<>(rootData);
     }
 
+    /**
+     * Check that this collection is binary.
+     * @return boolean.
+     */
+    public boolean isBinary() {
+        return getAround(root);
+    }
+
+    /**
+     * Get around this collection and check that each parent has not more 2 children.
+     * @param root - start position for check.
+     * @return boolean.
+     */
+    private boolean getAround(Node<E> root) {
+        boolean result = true;
+        List<Node<E>> children = root.leaves();
+        if (children.size() > 0 && children.size() < 3 || children.size() == 0) {
+            for (Node<E> node : root.leaves()) {
+                result = getAround(node);
+                if (!result) {
+                    break;
+                }
+            }
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
     @Override
     public Optional<Node<E>> findBy(E value) {
         Optional<Node<E>> rsl = Optional.empty();
