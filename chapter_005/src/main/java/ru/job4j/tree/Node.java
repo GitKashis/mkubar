@@ -7,7 +7,24 @@ import java.util.List;
  */
 public class Node<E> {
     private final List<Node<E>> children = new ArrayList<>();
-    private final E value;
+    private E value;
+    private Node<E> left, right;
+
+    public Node<E> getLeft() {
+        return left;
+    }
+
+    public void setLeft(Node<E> left) {
+        this.left = left;
+    }
+
+    public Node<E> getRight() {
+        return right;
+    }
+
+    public void setRight(Node<E> right) {
+        this.right = right;
+    }
 
     public Node(final E value) {
         this.value = value;
@@ -25,7 +42,12 @@ public class Node<E> {
         return this.value.equals(that);
     }
 
-    public int getSize() {
-        return children.size();
+    public E getValue() {
+        return value;
     }
+
+    public void setValue(E e) {
+        this.value = e;
+    }
+
 }
