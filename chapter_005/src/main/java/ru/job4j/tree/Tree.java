@@ -2,7 +2,7 @@ package ru.job4j.tree;
 
 import java.util.*;
 
-public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
+public class Tree<E extends Comparable<E>> implements SimpleTree<E>, Comparator<E> {
     private Node<E> root;
 
     public Tree(E rootData) {
@@ -74,59 +74,76 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
     }
 
     public void add(E e){
-        Node<E> currentNode = root, emptyNode = null;
-        while (currentNode != null) {
-            int cmp = e.compareTo(currentNode.getValue());
-            if (cmp == 0) {
-                currentNode.setValue(e);
-            } else {
-                emptyNode = currentNode;
-                if (cmp < 0) {
-                    currentNode = currentNode.left;
-                } else {
-                    currentNode = currentNode.right;
+        Node<E> newNode = new Node(e);
+
+        if (root == null) {
+            root = newNode;
+        }
+        else {
+            Node<E> current = root;
+            Node<E> parrent;
+
+            while(true) {
+                parrent = current;
+                if(e.compareTo(current.getValue()) < 0) {
+                    current = current.getLeft();
+                    if(current == null){
+                        parrent.setLeft(newNode);
+                        return;
+                    }
+                }
+                else {
+                    current = current.getRight();
+                    if(current == null){
+                        parrent.setRight(newNode);
+                        return;
+                    }
                 }
             }
         }
-
-        Node<E> newNode = new Node<>(e);
-        if (emptyNode == null) {
-            root = newNode;
-        } else {
-            if (e.compareTo(emptyNode.getValue()) < 0) {
-                emptyNode.left = newNode;
-            } else {
-                emptyNode.right = newNode;
-            }
-        }
     }
+
+
     /**
      * Итератор обхода в ширину.
      * Инициализируем корневым элементом.
      */
     @Override
     public Iterator<E> iterator() {
-        Queue<Node<E>> data = new LinkedList<>();
-        data.add(root);
-
         return new Iterator<E>() {
+            Deque<Node<E>> NodeStack = new LinkedList<>();
+            Node<E> current = root;
+
             @Override
             public boolean hasNext() {
-                return data.isEmpty();
+                return current != null;
             }
 
             @Override
             public E next() {
-                if (hasNext())
-                    throw new NoSuchElementException();
+//                if (current == null) {
+//                    throw new NoSuchElementException();
+//                }
 
-                Node<E> current = data.poll();
-                if (!current.leaves().isEmpty()) {
-                    data.addAll(current.leaves());
+                if (current.getRight() != null) {
+                    NodeStack.push(current.getRight());
                 }
+
+                if (current.getLeft() != null) {
+                    current = current.getLeft();
+                }
+                else {
+                    current = NodeStack.pop();
+                }
+
                 return current.getValue();
             }
         };
+    }
+
+    @Override
+    public int compare(E o1, E o2) {
+        return 0;
     }
 }
 

@@ -40,6 +40,11 @@ public class TreeTest {
      */
     @Test(expected = NoSuchElementException.class)
     public void testsThatNextMethodDoesntDependsOnPriorHasNextInvocation () {
+        tree.add("root", "one");
+        tree.add("root", "two");
+        tree.add("two", "three");
+        tree.add("two", "four");
+
         assertThat(it.next(), Matchers.is("root"));
         assertThat(it.next(), Matchers.is("one"));
         assertThat(it.next(), Matchers.is("two"));
@@ -81,18 +86,39 @@ public class TreeTest {
     /**
      * Testing binary.
      */
-    @Test
-    public void whenAddElementsAtTreeThenTheyAdded() {
-        Tree<Integer> tree = new Tree<>(0);
-        tree.add(1);
-        tree.add(5);
-        tree.add(2);
-        tree.add(10);
-        tree.add(3);
-        tree.add(7);
-        tree.add(9);
-        tree.add(6);
-        tree.add(6);
+    @Test(expected = NoSuchElementException.class)
+    public void whenAddStringElementsAtTreeThenTheyAdded() {
+        tree.add("root", "one");
+        tree.add("root", "two");
+        tree.add("one", "three");
+        tree.add("one", "four");
+        tree.add("two", "five");
+        tree.add("two", "six");
 
+        assertThat(it.next(), Matchers.is("root"));
+        assertThat(it.next(), Matchers.is("one"));
+        assertThat(it.next(), Matchers.is("two"));
+        assertThat(it.next(), Matchers.is("three"));
+        assertThat(it.next(), Matchers.is("four"));
+        assertThat(it.next(), Matchers.is("five"));
+        assertThat(it.next(), Matchers.is("six"));
+
+        tree.forEach(System.out::println);
+        it.next();
+    }
+
+    @Test//(expected = NoSuchElementException.class)
+    public void whenAddIntegerElementsAtTreeThenTheyAdded() {
+    Tree newtree = new Tree(5);
+
+        newtree.add(3);
+        newtree.add(16);
+        newtree.add(4);
+        newtree.add(6);
+        newtree.add(2);
+        newtree.add(11);
+
+       // it.next();
+        newtree.forEach(System.out::println);
     }
 }
