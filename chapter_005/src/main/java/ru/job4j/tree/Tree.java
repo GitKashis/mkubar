@@ -2,7 +2,7 @@ package ru.job4j.tree;
 
 import java.util.*;
 
-public class Tree<E extends Comparable<E>> implements SimpleTree<E>, Comparator<E> {
+public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
     private Node<E> root;
 
     public Tree(E rootData) {
@@ -69,12 +69,13 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E>, Comparator<
         Optional<Node<E>> nodeChild = findBy(child);
         // проверяем, есть ли уже такой элемент child в коллекции.
         // если такого нет, то ищем родителя parent, к которому нужно прицепить этот child
-        return (!nodeChild.isPresent() && nodeParent.isPresent())
-                    && nodeParent.get().leaves().add(new Node<>(child));
+        if (!nodeChild.isPresent() && nodeParent.isPresent())
+            if (nodeParent.get().leaves().add(new Node<>(child))) return true;
+        return false;
     }
 
     public void add(E e){
-        Node<E> newNode = new Node(e);
+        Node<E> newNode = new Node<>(e);
 
         if (root == null) {
             root = newNode;
@@ -103,47 +104,49 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E>, Comparator<
         }
     }
 
+    class BinaryTreeIterator implements Iterator<E> {
+        Node<E> current;
+        Deque<Node<E>> NodeStack;
 
-    /**
-     * Итератор обхода в ширину.
-     * Инициализируем корневым элементом.
-     */
-    @Override
-    public Iterator<E> iterator() {
-        return new Iterator<E>() {
-            Deque<Node<E>> NodeStack = new LinkedList<>();
-            Node<E> current = root;
+        BinaryTreeIterator(){
+            NodeStack = new LinkedList<>(null);
+            current = root;
 
-            @Override
-            public boolean hasNext() {
-                return current != null;
+            if(current == null){
+                return;
+            }
+            NodeStack.push(null);
+
+            while (current.getLeft() != null)
+            {
+                NodeStack.push(current);
+                current = current.getLeft();
+            }
+        }
+        @Override
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        @Override
+        public E next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
             }
 
-            @Override
-            public E next() {
-//                if (current == null) {
-//                    throw new NoSuchElementException();
-//                }
-
-                if (current.getRight() != null) {
-                    NodeStack.push(current.getRight());
-                }
-
-                if (current.getLeft() != null) {
+            if (current.getRight()!= null) {
+                current = current.getRight();
+                while (current.getLeft() != null) {
+                    NodeStack.push(current);
                     current = current.getLeft();
                 }
-                else {
-                    current = NodeStack.pop();
-                }
-
-                return current.getValue();
             }
-        };
-    }
+            else {
+                current = NodeStack.pop();
+            }
 
-    @Override
-    public int compare(E o1, E o2) {
-        return 0;
+            return current.getValue();
+        }
     }
 }
 
