@@ -2,9 +2,9 @@ package ru.job4j.tree;
 
 import java.util.*;
 
-public class Tree<E extends Comparable<E>> implements SimpleTree<E>, Comparator<E> {
+public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
     private Node<E> root;
-
+    private int size;
     public Tree(E rootData) {
         root = new Node<>(rootData);
     }
@@ -69,12 +69,16 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E>, Comparator<
         Optional<Node<E>> nodeChild = findBy(child);
         // проверяем, есть ли уже такой элемент child в коллекции.
         // если такого нет, то ищем родителя parent, к которому нужно прицепить этот child
-        return (!nodeChild.isPresent() && nodeParent.isPresent())
-                    && nodeParent.get().leaves().add(new Node<>(child));
+        if (!nodeChild.isPresent() && nodeParent.isPresent())
+            if (nodeParent.get().leaves().add(new Node<>(child))) {
+            size++;
+            return true;
+        }
+        return false;
     }
 
     public void add(E e){
-        Node<E> newNode = new Node(e);
+        Node<E> newNode = new Node<>(e);
 
         if (root == null) {
             root = newNode;
@@ -89,6 +93,7 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E>, Comparator<
                     current = current.getLeft();
                     if(current == null){
                         parrent.setLeft(newNode);
+                        size++;
                         return;
                     }
                 }
@@ -96,6 +101,7 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E>, Comparator<
                     current = current.getRight();
                     if(current == null){
                         parrent.setRight(newNode);
+                        size++;
                         return;
                     }
                 }
@@ -103,47 +109,51 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E>, Comparator<
         }
     }
 
-
-    /**
-     * Итератор обхода в ширину.
-     * Инициализируем корневым элементом.
-     */
+    private Node<E> current;
     @Override
     public Iterator<E> iterator() {
-        return new Iterator<E>() {
-            Deque<Node<E>> NodeStack = new LinkedList<>();
-            Node<E> current = root;
+        Deque<Node<E>> nodeStack = new LinkedList<>();
+        current = root;
 
-            @Override
+        while (current.getLeft() != null) {
+            nodeStack.push(current);
+            current = current.getLeft();
+        }
+
+        return new Iterator<E>() {
+        private E tmp;
+        @Override
             public boolean hasNext() {
-                return current != null;
+                return size != 0;
             }
 
             @Override
             public E next() {
-//                if (current == null) {
-//                    throw new NoSuchElementException();
-//                }
-
-                if (current.getRight() != null) {
-                    NodeStack.push(current.getRight());
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
                 }
 
-                if (current.getLeft() != null) {
-                    current = current.getLeft();
+                if (current.getRight()!= null) {
+                    current = current.getRight();
+
+                    while (current.getLeft() != null) {
+                        nodeStack.push(current);
+                        current = current.getLeft();
+                    }
+
                 }
                 else {
-                    current = NodeStack.pop();
+                        if(tmp == null) {
+                            tmp = current.getValue();
+                            return tmp;
+                        }
+                        current = nodeStack.pop();
                 }
 
+                size--;
                 return current.getValue();
             }
         };
-    }
-
-    @Override
-    public int compare(E o1, E o2) {
-        return 0;
     }
 }
 

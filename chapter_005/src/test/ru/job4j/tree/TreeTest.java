@@ -10,10 +10,9 @@ import java.util.NoSuchElementException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-
 public class TreeTest {
     private Tree<String> tree;
-    private Iterator it;
+    private Iterator<String> it;
     @Before
     public void setUp(){
         tree = new Tree<>("root");
@@ -117,7 +116,8 @@ public class TreeTest {
         newtree.add(6);
         newtree.add(2);
         newtree.add(11);
-
+        newtree.add(14);
+        newtree.add(8);
        // it.next();
         newtree.forEach(System.out::println);
     }

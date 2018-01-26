@@ -1,5 +1,6 @@
 package ru.job4j.tree;
 
+import java.util.Iterator;
 import java.util.Optional;
 
 public interface SimpleTree<E extends Comparable<E>> extends Iterable<E> {
