@@ -9,16 +9,14 @@ import java.util.NoSuchElementException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static ru.job4j.tree.Tree.*;
-
 
 public class TreeTest {
     private Tree<String> tree;
-    private Iterator<Integer> it;
+    private Iterator<String> it;
     @Before
     public void setUp(){
         tree = new Tree<>("root");
-        it = new Tree.BinaryTreeIterator();
+        it = tree.iterator();
         }
 
     /**
@@ -111,14 +109,15 @@ public class TreeTest {
     @Test//(expected = NoSuchElementException.class)
     public void whenAddIntegerElementsAtTreeThenTheyAdded() {
     Tree newtree = new Tree(5);
-    Iterator<> itr = new BinaryTreeIterator();
+
         newtree.add(3);
         newtree.add(16);
         newtree.add(4);
         newtree.add(6);
         newtree.add(2);
         newtree.add(11);
-
+        newtree.add(14);
+        newtree.add(8);
        // it.next();
         newtree.forEach(System.out::println);
     }
