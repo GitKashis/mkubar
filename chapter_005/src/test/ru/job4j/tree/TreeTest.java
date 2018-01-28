@@ -101,24 +101,38 @@ public class TreeTest {
         assertThat(it.next(), Matchers.is("four"));
         assertThat(it.next(), Matchers.is("five"));
         assertThat(it.next(), Matchers.is("six"));
-
-        tree.forEach(System.out::println);
         it.next();
     }
 
-    @Test//(expected = NoSuchElementException.class)
+    /**
+     * Бинарное дерево с числовыми элементами.
+     * Тестирование добавления элементов.
+     * Тестирование итератора симметричного обхода, вывод элементов в порядке возрастания.
+     * Проверка на исключение NoSuchElementException
+     */
+    @Test(expected = NoSuchElementException.class)
     public void whenAddIntegerElementsAtTreeThenTheyAdded() {
-    Tree newtree = new Tree(5);
+        Tree<Integer> binary = new Tree();
 
-        newtree.add(3);
-        newtree.add(16);
-        newtree.add(4);
-        newtree.add(6);
-        newtree.add(2);
-        newtree.add(11);
-        newtree.add(14);
-        newtree.add(8);
-       // it.next();
-        newtree.forEach(System.out::println);
+        binary.add(3);
+        binary.add(16);
+        binary.add(4);
+        binary.add(6);
+        binary.add(2);
+        binary.add(11);
+        binary.add(14);
+        binary.add(8);
+
+        Iterator<Integer> itr = binary.iterator();
+
+        assertThat(itr.next(), is(2));
+        assertThat(itr.next(), is(3));
+        assertThat(itr.next(), is(4));
+        assertThat(itr.next(), is(6));
+        assertThat(itr.next(), is(8));
+        assertThat(itr.next(), is(11));
+        assertThat(itr.next(), is(14));
+        assertThat(itr.next(), is(16));
+        itr.next();
     }
 }
