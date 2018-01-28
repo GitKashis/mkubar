@@ -88,11 +88,11 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
      */
     @Override
     public boolean add(E parent, E child) {
-        Optional<Node<E>> nodeParent = findBy(parent);
-        Optional<Node<E>> nodeChild = findBy(child);
+        Optional<Node<E>> aParent = findBy(parent);
+        Optional<Node<E>> aChild = findBy(child);
 
-        if (!nodeChild.isPresent() && nodeParent.isPresent()) {
-            if (nodeParent.get().leaves().add(new Node<>(child))) {
+        if (!aChild.isPresent() && aParent.isPresent()) {
+            if (aParent.get().leaves().add(new Node<>(child))) {
                 size++;
                 return true;
             }
@@ -108,10 +108,10 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
      * @param e - элемент.
      */
     public void add(E e) {
-        Node<E> newNode = new Node<>(e);
+        Node<E> node = new Node<>(e);
 
         if (root == null) {
-            root = newNode;
+            root = node;
         } else {
             Node<E> current = root;
             Node<E> parrent;
@@ -121,14 +121,14 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
                 if (e.compareTo(current.getValue()) < 0) {
                     current = current.getLeft();
                     if (current == null) {
-                        parrent.setLeft(newNode);
+                        parrent.setLeft(node);
                         size++;
                         return;
                     }
                 } else {
                     current = current.getRight();
                     if (current == null) {
-                        parrent.setRight(newNode);
+                        parrent.setRight(node);
                         size++;
                         return;
                     }
