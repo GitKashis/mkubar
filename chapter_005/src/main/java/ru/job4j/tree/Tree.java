@@ -91,11 +91,12 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
         Optional<Node<E>> nodeParent = findBy(parent);
         Optional<Node<E>> nodeChild = findBy(child);
 
-        if (!nodeChild.isPresent() && nodeParent.isPresent())
+        if (!nodeChild.isPresent() && nodeParent.isPresent()) {
             if (nodeParent.get().leaves().add(new Node<>(child))) {
                 size++;
                 return true;
             }
+        }
         return false;
     }
 
@@ -106,29 +107,27 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
      * Если дерево пустое, то первый элемент - корень.
      * @param e - элемент.
      */
-    public void add(E e){
+    public void add(E e) {
         Node<E> newNode = new Node<>(e);
 
         if (root == null) {
             root = newNode;
-        }
-        else {
+        } else {
             Node<E> current = root;
             Node<E> parrent;
 
-            while(true) {
+            while (true) {
                 parrent = current;
-                if(e.compareTo(current.getValue()) < 0) {
+                if (e.compareTo(current.getValue()) < 0) {
                     current = current.getLeft();
-                    if(current == null){
+                    if (current == null) {
                         parrent.setLeft(newNode);
                         size++;
                         return;
                     }
-                }
-                else {
+                } else {
                     current = current.getRight();
-                    if(current == null){
+                    if (current == null) {
                         parrent.setRight(newNode);
                         size++;
                         return;
@@ -190,16 +189,15 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
                     throw new NoSuchElementException();
                 }
 
-                if (current.getRight()!= null) {
+                if (current.getRight() != null) {
                     current = current.getRight();
 
                     while (current.getLeft() != null) {
                         stack.push(current);
                         current = current.getLeft();
                     }
-                }
-                else {
-                    if(tmp == null) {
+                } else {
+                    if (tmp == null) {
                         tmp = current.getValue();
                         return tmp;
                     }
