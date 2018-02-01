@@ -1,28 +1,31 @@
 package ru.job4j.thread;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-
-
+/**
+ * Class for testing threads.
+ *
+ */
 public class CounterTest {
-    private Counter counter;
-    private String text = "A thread is a thread of execution in a program. The Java Virtual Machine allows an application to have multiple threads of execution running concurrently.";
-
-    @Before
-    public void setUp() {
-        counter = new Counter(text);
-    }
+    private String text = "The Java Virtual Machine allows an application to have " +
+            "multiple threads of execution running concurrently";
+    private Thread t1, t2;
 
     @Test
-    public void getSpaces() {
-        System.out.println(counter.getSpaces());
+    public void analizeText() throws InterruptedException {
+        System.out.println("Start analizing text");
+        t1 = new Thread(new LetterCounter(text));
+        t2 = new Thread(new SpacesCounter(text));
+
+        t1.start();
+        t1.join();
+
+        t2.start();
+        t2.join();
+
+        System.out.println("Finish analizing text");
+
+
     }
 
-    @Test
-    public void getLetters() {
-        System.out.println(counter.getLetters());
-    }
 }
