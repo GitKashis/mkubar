@@ -105,12 +105,12 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
         return new Iterator<E>() {
             @Override
             public boolean hasNext() {
-                return data.isEmpty();
+                return !data.isEmpty();
             }
 
             @Override
             public E next() {
-                if (hasNext())
+                if (!hasNext())
                     throw new NoSuchElementException();
 
                 Node<E> current = data.poll();
