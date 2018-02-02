@@ -14,8 +14,8 @@ public class CounterTest {
     @Test
     public void analizeText() throws InterruptedException {
         System.out.println("Start analizing text");
-        t1 = new Thread(new LetterCounter(text));
-        t2 = new Thread(new SpacesCounter(text));
+        t1 = new Thread(new LetterCounter(text), "t1");
+        t2 = new Thread(new SpacesCounter(text), "t2");
 
         t1.start();
         t1.join();
