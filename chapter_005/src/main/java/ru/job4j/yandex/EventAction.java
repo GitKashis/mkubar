@@ -1,33 +1,79 @@
 package ru.job4j.yandex;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NavigableMap;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public class EventAction<E> implements EventCounter {
-    public static final int STEP_SIZE = 10;
-    public static final int SECOND_SIZE = 1000;
-    public static final int MINUTE_SIZE = 60 * SECOND_SIZE;
-    public static final int HOUR_SIZE = 60 * MINUTE_SIZE;
-    public static final int DAY_SIZE = 24 * HOUR_SIZE;
+/**
+ * Реализовать объект для учета однотипных событий в системе.
+ * Например, отправка фото в сервисе фотографий.
+ * События поступают в произвольный момент времени.
+ * Возможно как 10К событий в секунду так и 2 в час.
 
-    private Long initialTimestamp;
-    private volatile NavigableMap<TimePeriod, E> map;
+ * Интерфейс:
+    1. Учесть событие.
+    2. Выдать число событий за последнюю минуту (60 секунд).
+    3. Выдать число событий за последний час (60 минут).
+    4. Выдать число событий за последние сутки (24 часа).
+ */
+public class EventAction implements EventCounter {
 
-    public EventAction(Long initialTimestamp) {
-        this.initialTimestamp = initialTimestamp;
-        map = new TreeMap<>();
+    private static final int SECOND_SIZE = 1000;
+    private static final int MINUTE_SIZE = 60 * SECOND_SIZE;
+    private static final int HOUR_SIZE = 60 * MINUTE_SIZE;
+    private static final int DAY_SIZE = 24 * HOUR_SIZE;
+
+    /**
+     * Т.к. нагрузка может быть очень высокой, следует предусмотреть многопоточную обработку
+     * и учесть, что в одно и то же время могут произойти несколько событий,
+     * соответственно их время создания будет одинаквым.
+     * Для учета событий и храненя значений их времени выбираем список.
+     * (Хотя интерфейс Navigable удобнее для извлечения диапазона значений,
+     * но он предусматривает только уникальные ключи)
+     */
+    private volatile List<Long> list;
+
+    /**
+     * Конструктор.
+     * В данном случае не учитывается ситуация out of memory или перегрузка IO.
+     * При обработке больших потоков данных следует использовать интерфейс BlockingQueue
+     * чтобы иметь возможности задавать размер queue и следить за переполением.
+     */
+    EventAction() {
+        list = new LinkedList<>();
     }
 
+    /**
+     * при возникновении события учитывается время его создания.
+     * Учитывая высокую нагруженность для разных событий время возникновения
+     * может быть одинаковым.
+     */
     @Override
     public void eventPerformed() {
-        long currentTime = System.currentTimeMillis();
-        map.put(currentTime, null);
+        list.add(System.currentTimeMillis());
     }
 
+    /**
+     * Метод запроса количества событий за определенный промежуток времени.
+     *
+     * @param period - время отчета.
+     * @return количество событий за период.
+     */
     @Override
     public long getEventCount(TimePeriod period) {
-        return map()
+        long result;
+        long currentTimeMillis = System.currentTimeMillis();
+
+        switch (period){
+            case LAST_DAY: {result = (currentTimeMillis - DAY_SIZE); break;}
+            case LAST_HOUR: {result = (currentTimeMillis - HOUR_SIZE); break;}
+            case LAST_MINUTE: {result = (currentTimeMillis - MINUTE_SIZE); break;}
+            case LAST_SECOND: {result = (currentTimeMillis - SECOND_SIZE); break;}
+
+            default: throw new IllegalArgumentException("Unknown time period " + period);
+        }
+        long finalResult = result;
+
+        return list.stream().filter(p -> p >= finalResult && p <= currentTimeMillis)
+                .collect(Collectors.toList()).size();
     }
 }
