@@ -1,4 +1,4 @@
-package ru.job4j.threadSafe;
+package ru.job4j.thread.threadSafe;
 
 import org.junit.Test;
 
