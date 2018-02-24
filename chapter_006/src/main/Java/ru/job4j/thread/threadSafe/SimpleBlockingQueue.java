@@ -32,14 +32,13 @@ public class SimpleBlockingQueue<T> {
      */
     public synchronized boolean offer(T value) throws InterruptedException {
         System.out.println("[BlockingQueue]: try to put: " + value );
+
         while (this.queue.size() == this.limit) {
             System.out.println("[BlockingQueue]: queue is full, waiting");
             this.wait();
         }
-        if (this.queue.size() < this.limit) {
-            System.out.println("[BlockingQueue]: there was a place, notify");
-            this.notifyAll();
-        }
+        System.out.println("[BlockingQueue]: there was a place, notify");
+        this.notifyAll();
 
         return this.queue.offer(value);
     }
@@ -53,15 +52,12 @@ public class SimpleBlockingQueue<T> {
      */
     public synchronized T pool() throws InterruptedException {
         System.out.println("[BlockingQueue]: try to take");
-        while (this.queue.size() == 0){
+        while (this.queue.size() == 0) {
             System.out.println("[BlockingQueue]: queue is empty, waiting until a put");
             this.wait();
         }
-
-        if (this.queue.size() != 0) {
-            System.out.println("[BlockingQueue]: there are items in the queue, notify");
-            this.notifyAll();
-        }
+        System.out.println("[BlockingQueue]: there are items in the queue, notify");
+        this.notifyAll();
 
         T item = this.queue.remove();
         System.out.println("[BlockingQueue]: take ok: " + item );

@@ -53,7 +53,7 @@ public class SimpleBlockingQueueTest {
                 try {
                     int i = this.consume();
                     System.out.println(String.format("[%s]: consume %s", Thread.currentThread().getName(), i));
-                    Thread.currentThread().sleep(100);
+                    Thread.currentThread().sleep(300);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -108,8 +108,8 @@ public class SimpleBlockingQueueTest {
     }
 
     /**
-     * Если входящих потоков больше, то они быстрее заполняют очередь.
-     * Исходящий не успевает разбирать.
+     * Входящий поток один, не успевает быстро заполнить очередь.
+     * Исходящим приходится ждать.
      */
     @Test
     public void WhenOneProducerThreeCustomer() throws InterruptedException {
