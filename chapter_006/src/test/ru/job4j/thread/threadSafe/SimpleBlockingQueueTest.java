@@ -1,10 +1,24 @@
 package ru.job4j.thread.threadSafe;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Random;
 
 public class SimpleBlockingQueueTest {
+
+    /**
+     * Емкость очереди.
+     */
+    private int limit = 5;
+
+    /**
+     * Скорость работы потоков
+     */
+    private int speedProducer = 100;
+    private int speedConsumer = 100;
+
+    private SimpleBlockingQueue<Integer> queue;
 
     /**
      * Класс-поставщик.
@@ -22,13 +36,16 @@ public class SimpleBlockingQueueTest {
             while (true) {
                 try {
                     queue.offer(produce());
-                    Thread.currentThread().sleep(300);
+                    Thread.currentThread().sleep(speedProducer);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         }
 
+        /**
+         * Генератор чисел
+         */
         private Integer produce() {
             Integer i = new Random().nextInt(100);
             System.out.println(String.format("[%s]: produce %s", Thread.currentThread().getName(), i));
@@ -53,7 +70,7 @@ public class SimpleBlockingQueueTest {
                 try {
                     int i = this.consume();
                     System.out.println(String.format("[%s]: consume %s", Thread.currentThread().getName(), i));
-                    Thread.currentThread().sleep(300);
+                    Thread.currentThread().sleep(speedConsumer);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -61,8 +78,13 @@ public class SimpleBlockingQueueTest {
         }
 
         private int consume() throws InterruptedException {
-            return queue.pool();
+            return queue.poll();
         }
+    }
+
+    @Before
+    public void setUp() {
+        queue = new SimpleBlockingQueue<>(limit);
     }
 
     /**
@@ -70,7 +92,6 @@ public class SimpleBlockingQueueTest {
      */
     @Test
     public void testTwoThread() throws InterruptedException {
-        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(5);
 
         Thread producer = new Thread(new Producer(queue), "Producer");
         Thread customer = new Thread(new Consumer(queue), "Consumer");
@@ -78,8 +99,7 @@ public class SimpleBlockingQueueTest {
         producer.start();
         customer.start();
 
-        producer.join();
-        customer.join();
+        Thread.sleep(2000);
     }
 
     /**
@@ -88,7 +108,7 @@ public class SimpleBlockingQueueTest {
      */
     @Test
     public void WhenThreeProducerOneCustomer() throws InterruptedException {
-        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(5);
+        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(limit);
 
         Thread producer1 = new Thread(new Producer(queue), "Producer1");
         Thread producer2 = new Thread(new Producer(queue), "Producer2");
@@ -101,19 +121,15 @@ public class SimpleBlockingQueueTest {
         producer3.start();
         customer.start();
 
-        producer1.join();
-        producer2.join();
-        producer3.join();
-        customer.join();
+        Thread.sleep(2000);
     }
 
     /**
-     * Входящий поток один, не успевает быстро заполнить очередь.
-     * Исходящим приходится ждать.
+     * Если входящих потоков больше, то они быстрее заполняют очередь.
+     * Исходящий не успевает разбирать.
      */
     @Test
     public void WhenOneProducerThreeCustomer() throws InterruptedException {
-        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(5);
 
         Thread producer = new Thread(new Producer(queue), "Producer");
 
@@ -126,9 +142,6 @@ public class SimpleBlockingQueueTest {
         customer2.start();
         customer3.start();
 
-        producer.join();
-        customer1.join();
-        customer2.join();
-        customer3.join();
+        Thread.sleep(2000);
     }
 }
