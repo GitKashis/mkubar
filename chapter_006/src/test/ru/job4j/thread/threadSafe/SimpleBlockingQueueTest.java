@@ -1,9 +1,12 @@
 package ru.job4j.thread.threadSafe;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class SimpleBlockingQueueTest {
 
@@ -19,6 +22,7 @@ public class SimpleBlockingQueueTest {
     private int speedConsumer = 100;
 
     private SimpleBlockingQueue<Integer> queue;
+    private ExecutorService executorService;
 
     /**
      * Класс-поставщик.
@@ -85,6 +89,7 @@ public class SimpleBlockingQueueTest {
     @Before
     public void setUp() {
         queue = new SimpleBlockingQueue<>(limit);
+        executorService = Executors.newFixedThreadPool(5);
     }
 
     /**
@@ -92,11 +97,8 @@ public class SimpleBlockingQueueTest {
      */
     @Test
     public void testTwoThread() throws InterruptedException {
-
         new Thread(new Producer(queue), "Producer").start();
         new Thread(new Consumer(queue), "Consumer").start();
-
-        Thread.sleep(2000);
     }
 
     /**
@@ -104,17 +106,14 @@ public class SimpleBlockingQueueTest {
      * Исходящий не успевает разбирать.
      */
     @Test
-    public void WhenThreeProducerOneCustomer() throws InterruptedException {
-
+    public void WhenThreeProducerOneCustomer() {
         for (int i = 0; i < 3; i++) {
-            new Thread(new Producer(queue), "Producer" + i).start();
+            executorService.submit(new Producer(queue));
         }
 
         for (int i = 0; i < 1; i++) {
-            new Thread(new Consumer(queue), "Consumer" + i).start();
+            executorService.submit(new Consumer(queue));
         }
-
-        Thread.sleep(2000);
     }
 
     /**
@@ -122,16 +121,19 @@ public class SimpleBlockingQueueTest {
      * Исходящий не успевает разбирать.
      */
     @Test
-    public void WhenOneProducerThreeCustomer() throws InterruptedException {
+    public void WhenOneProducerThreeCustomer() {
         for (int i = 0; i < 1; i++) {
-            new Thread(new Producer(queue), "Producer" + i).start();
+            executorService.submit(new Producer(queue));
         }
 
         for (int i = 0; i < 3; i++) {
-            new Thread(new Consumer(queue), "Consumer" + i).start();
+            executorService.submit(new Consumer(queue));
         }
-
-        Thread.sleep(2000);
     }
 
+    @After
+    public void disposeThreads() throws InterruptedException {
+        Thread.sleep(1000);
+        executorService.shutdown();
+    }
 }
