@@ -93,11 +93,8 @@ public class SimpleBlockingQueueTest {
     @Test
     public void testTwoThread() throws InterruptedException {
 
-        Thread producer = new Thread(new Producer(queue), "Producer");
-        Thread customer = new Thread(new Consumer(queue), "Consumer");
-
-        producer.start();
-        customer.start();
+        new Thread(new Producer(queue), "Producer").start();
+        new Thread(new Consumer(queue), "Consumer").start();
 
         Thread.sleep(2000);
     }
@@ -108,18 +105,14 @@ public class SimpleBlockingQueueTest {
      */
     @Test
     public void WhenThreeProducerOneCustomer() throws InterruptedException {
-        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(limit);
 
-        Thread producer1 = new Thread(new Producer(queue), "Producer1");
-        Thread producer2 = new Thread(new Producer(queue), "Producer2");
-        Thread producer3 = new Thread(new Producer(queue), "Producer3");
+        for (int i = 0; i < 3; i++) {
+            new Thread(new Producer(queue), "Producer" + i).start();
+        }
 
-        Thread customer = new Thread(new Consumer(queue), "Customer");
-
-        producer1.start();
-        producer2.start();
-        producer3.start();
-        customer.start();
+        for (int i = 0; i < 1; i++) {
+            new Thread(new Consumer(queue), "Consumer" + i).start();
+        }
 
         Thread.sleep(2000);
     }
@@ -130,18 +123,15 @@ public class SimpleBlockingQueueTest {
      */
     @Test
     public void WhenOneProducerThreeCustomer() throws InterruptedException {
+        for (int i = 0; i < 1; i++) {
+            new Thread(new Producer(queue), "Producer" + i).start();
+        }
 
-        Thread producer = new Thread(new Producer(queue), "Producer");
-
-        Thread customer1 = new Thread(new Consumer(queue), "Customer1");
-        Thread customer2 = new Thread(new Consumer(queue), "Customer2");
-        Thread customer3 = new Thread(new Consumer(queue), "Customer3");
-
-        producer.start();
-        customer1.start();
-        customer2.start();
-        customer3.start();
+        for (int i = 0; i < 3; i++) {
+            new Thread(new Consumer(queue), "Consumer" + i).start();
+        }
 
         Thread.sleep(2000);
     }
+
 }
