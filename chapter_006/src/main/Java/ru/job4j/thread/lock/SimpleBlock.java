@@ -22,7 +22,9 @@ public class SimpleBlock {
      * Method for unlock treads.
      */
     public synchronized void unlock() {
-        block = false;
-        notify();
+        if (block) {
+            block = false;
+            notifyAll();
+        }
     }
 }
