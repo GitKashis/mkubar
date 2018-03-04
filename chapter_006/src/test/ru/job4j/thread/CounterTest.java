@@ -2,6 +2,8 @@ package ru.job4j.thread;
 
 
 import org.junit.Test;
+import ru.job4j.count.LettersCount;
+import ru.job4j.count.SpacesCount;
 
 /**
  * Class for testing threads.

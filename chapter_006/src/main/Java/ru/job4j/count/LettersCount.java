@@ -1,4 +1,4 @@
-package ru.job4j.thread;
+package ru.job4j.count;
 
 public class LettersCount implements Runnable {
     /**
