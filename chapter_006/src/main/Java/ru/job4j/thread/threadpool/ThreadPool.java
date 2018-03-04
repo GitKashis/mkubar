@@ -20,7 +20,10 @@ public class ThreadPool {
      */
     public ThreadPool(final int length) {
         this.pool = new WorkTread[length];
-        for (int i = 0; i < length; i++) {
+    }
+
+    public void go() {
+        for (int i = 0; i < pool.length; i++) {
             pool[i] = new WorkTread();
             pool[i].start();
         }
