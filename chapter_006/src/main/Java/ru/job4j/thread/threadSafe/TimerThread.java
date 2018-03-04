@@ -1,6 +1,5 @@
 package ru.job4j.thread.threadSafe;
 
-import ru.job4j.thread.LettersCount;
 
 /**
  *  Класс-таймер следит за работой потока LettersCount. Если заданное время истекает, а подсчет еще ведется,
@@ -42,6 +41,7 @@ public class TimerThread {
 
         if (t1.isAlive()) {
             t1.interrupt();
+            System.out.println("Count is interrupted");
         }
         return t1.isInterrupted();
     }
