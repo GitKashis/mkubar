@@ -19,7 +19,7 @@ public class ParallelSearcher {
         threadManager.startSearch();
     }
 
-    public List<String> getResults() {
+    public synchronized List<String> getResults() {
         return results;
     }
 }

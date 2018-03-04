@@ -48,7 +48,7 @@ public class DirectoryVisitor extends SimpleFileVisitor<Path> {
      * @throws IOException - exception.
      */
     @Override
-    public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
+    public synchronized FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
         String content = new String(Files.readAllBytes(path));
 
         if (ext != null && path.toString().endsWith(ext) && text != null && content.contains(text)) {
