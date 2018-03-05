@@ -10,9 +10,10 @@ public class Juniorlab {
 
         for (int i = pow(10,k-1); i < pow(10,k); i++) {
             String s = ""+i;
-            System.out.println(s);
+
             for (int j = 0; j < k; j++) {
-                arr[j] = s.charAt(s.length() - j - 1);
+                arr[j] = (int)s.charAt(j);
+                System.out.println(arr[j]);
             }
 
             if (sum(arr) == n) {
@@ -37,5 +38,17 @@ public class Juniorlab {
             result += arr[i];
         }
         return result;
+    }
+
+    public void test() {
+        int[] arr = new int[4];
+        String s = "1234";
+        for (int j = 0; j < 4; j++) {
+            arr[j] = s.charAt(j);
+            System.out.println((char)arr[j]);
+        }
+
+        int f = Integer.parseInt(String.valueOf((char)arr[0]));
+        System.out.println(f);
     }
 }

@@ -11,6 +11,7 @@ public class JuniorlabTest {
     @Test
     public void gcd_6() {
         Juniorlab lab = new Juniorlab();
-        lab.num(10, 3);
+        //lab.num(10, 3);
+        lab.test();
     }
 }
