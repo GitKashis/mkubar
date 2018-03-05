@@ -1,48 +1,27 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Juniorlab {
 
-    public static int[] findAll(int n, int k){
-        // список для подходящих значений
-        List<Integer> list = new ArrayList<>();
-        // ищем в заданном диапазоне методом перебора значений
-        for (int i = (int) Math.pow(10,k-1); i < Math.pow(10,k); i++) {
-            //конвертируем для получения цифр поазрядно
-            String s = "" + i;
-            int arr[] = new int[s.length()];
+    private static Pattern pattern; // подстрока
+    private static Matcher matcher; // строка
 
-            // переводим число в массив цифр
-            for (int count = 0; count < s.length(); count++) {
-                arr[count] = Integer.parseInt(String.valueOf(s.charAt(count)));
-            }
-            // отсеиваем лишнее и выбираем нужное
-            if (sum(arr) == n && !s.contains("0") && check(arr)) {
-                list.add(i);
+    public static String[] inArray(String[] array1, String[] array2){
+        List<String> list = new ArrayList<>();
+
+        for (int i = 0; i < array1.length; i++) {
+            pattern = Pattern.compile(array1[i]);
+            for (int j = 0; j < array2.length; j++) {
+                matcher = pattern.matcher(array2[j]);
+                if (matcher.find()) {
+                    list.add(array1[i]);
+                    break;
+                }
             }
         }
 
-        int[] result = list.isEmpty() ? new int[]{} : new int[]{list.size(), list.get(0), list.get(list.size()-1)} ;
-        return result;
-    }
-    /**
-     * Метод подсчета суммы элементов массива.
-     */
-    private static int sum(int[] arr) {
-        return Arrays.stream(arr).sum();
-    }
-    /**
-     * Проверяем, идут ли цифры числа по возрастанию.
-     */
-    private static boolean check(int[] arr) {
-        boolean result = true;
-        for(int i = 0; i < arr.length - 1; i++) {
-            if(arr[i] > arr[i + 1]) {
-                result = false;
-                break;
-            }
-        }
-        return result;
+        return list.stream().sorted().toArray(String[]::new);
     }
 }
