@@ -1,22 +1,23 @@
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 public class JuniorlabTest {
-
     @Test
-    public void gcd_6() {
-        String[] example01 = {"tarp", "mice", "bull"};
-        String[] example02 = {"lively", "alive", "harp", "sharp", "armstrong"};
-
-        String[] example11 = {"xyz", "live", "strong"};
-        String[] example12 = {"lively", "alive", "harp", "sharp", "armstrong"};
-
-        String[] example21 = {"live", "strong", "arp"};
-        String[] example22 = {"lively", "alive", "harp", "sharp", "armstrong"};
-
-
-        Assert.assertArrayEquals(new String[]{}, Juniorlab.inArray(example01, example02));
-        Assert.assertArrayEquals(new String[]{"live", "strong"}, Juniorlab.inArray(example11, example12));
-        Assert.assertArrayEquals(new String[]{"arp", "live", "strong"}, Juniorlab.inArray(example21, example22));
+    public void testExample() {
+        int example01 = 12;
+        int example11 = 1000000000;
+        int example21 = 100000;
+        int example31 = 1000;
+        int example41 = 100;
+        int example51 = 30;
+        int example61 = 6;
+//        assertEquals(2, Juniorlab.zeros(example01));
+        assertEquals(24999, Juniorlab.zeros(example21));
+//        assertEquals(249, Juniorlab.zeros(example31));
+//        assertEquals(24, Juniorlab.zeros(example41));
+//        assertEquals(7, Juniorlab.zeros(example51));
+//        assertEquals(1, Juniorlab.zeros(example61));
     }
 }
