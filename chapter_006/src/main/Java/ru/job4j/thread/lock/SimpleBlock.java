@@ -11,18 +11,24 @@ public class SimpleBlock {
      * Method for block treads.
      * @throws InterruptedException if interrupt
      */
-    public synchronized void lock() throws InterruptedException {
-        while (block) {
-            wait();
+    public void lock() {
+        synchronized (this) {
+            try {
+                while (block) {
+                    wait();
+                }
+                block = true;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-        block = true;
     }
 
     /**
      * Method for unlock treads.
      */
-    public synchronized void unlock() {
-        if (block) {
+    public void unlock() {
+        synchronized (this) {
             block = false;
             notifyAll();
         }
