@@ -18,24 +18,13 @@ public class GameBoard {
                 this.gameBoard[i][j] = new ReentrantLock();
             }
         }
-        addMonsterInGame();
     }
 
-    private void addMonsterInGame() {
+    public void addMonsterInGame() {
         new Monster(this.es, this.gameBoard);
     }
 
     public void exitGame() {
         es.shutdown();
-    }
-
-    public static void main(String[] args) {
-        GameBoard gameBoard = new GameBoard(20);
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        gameBoard.exitGame();
     }
 }

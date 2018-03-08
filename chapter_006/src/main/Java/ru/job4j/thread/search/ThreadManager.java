@@ -1,6 +1,7 @@
 package ru.job4j.thread.search;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ThreadManager {
     /**
@@ -18,7 +19,7 @@ public class ThreadManager {
     /**
      * Results collection.
      */
-    private volatile List<String> results;
+    private CopyOnWriteArrayList<String> results;
     /**
      * Counter for finished thread.
      */
@@ -31,7 +32,7 @@ public class ThreadManager {
      * @param text - text.
      * @param results - result.
      */
-    public ThreadManager(String root, List<String> exts, String text, List<String> results) {
+    public ThreadManager(String root, List<String> exts, String text, CopyOnWriteArrayList<String> results) {
         this.root = root;
         this.results = results;
         this.exts = exts;

@@ -1,23 +1,50 @@
-import org.junit.Assert;
 import org.junit.Test;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import org.junit.runners.JUnit4;
+
+import java.util.Arrays;
 
 public class JuniorlabTest {
+
+
     @Test
-    public void testExample() {
-        int example01 = 12;
-        int example11 = 1000000000;
-        int example21 = 100000;
-        int example31 = 1000;
-        int example41 = 100;
-        int example51 = 30;
-        int example61 = 6;
-//        assertEquals(2, Juniorlab.zeros(example01));
-        assertEquals(24999, Juniorlab.zeros(example21));
-//        assertEquals(249, Juniorlab.zeros(example31));
-//        assertEquals(24, Juniorlab.zeros(example41));
-//        assertEquals(7, Juniorlab.zeros(example51));
-//        assertEquals(1, Juniorlab.zeros(example61));
+    public void gcd_6() {
+        int example01 = 163;
+        int example02 = 3;
+        int[] example03 = {50, 55, 56, 57, 58};
+        int example11 = 331;
+        int example12 = 2;
+        int[] example13 = {1000, 640, 1230, 2333, 1440, 500, 1320, 1230, 340, 890, 732, 1346};
+        int example21 = 100;
+        int example22 = 2;
+        int[] example23 = {100, 76, 56, 44, 89, 73, 68, 56, 64, 123, 2333, 144, 50, 132, 123, 34, 89};
+        int example31 = 700;
+        int example32 = 6;
+        int[] example33 = {91, 74, 73, 85, 73, 81, 87};
+        int example41 = 331;
+        int example42 = 4;
+        int[] example43 = {91, 74, 73, 85, 73, 81, 87};
+        int example51 = 331;
+        int example52 = 2;
+        int[] example53 = {91, 74, 73, 85, 73, 81, 87};
+        int example61 = 230;
+        int example62 = 3;
+        int[] example63 = {91, 74, 73, 85, 73, 81, 87};
+        int example71 = 163;
+        int example72 = 3;
+        int[] example73 = {50};
+
+        System.out.println(Juniorlab.chooseBestSum(example01, example02, example03));
+        System.out.println(Juniorlab.chooseBestSum(example11, example12, example13));
+        assertEquals(163, Juniorlab.chooseBestSum(example01, example02, example03));
+        assertEquals(null, Juniorlab.chooseBestSum(example11, example12, example13));
+//        assertEquals(100, Juniorlab.chooseBestSum(example21, example22, example23));
+//        assertEquals(491, Juniorlab.chooseBestSum(example31, example32, example33));
+//        assertEquals(331, Juniorlab.chooseBestSum(example41, example42, example43));
+//        assertEquals(178, Juniorlab.chooseBestSum(example51, example52, example53));
+//        assertEquals(228, Juniorlab.chooseBestSum(example61, example62, example63));
+//        assertEquals(null, Juniorlab.chooseBestSum(example71, example72, example73));
     }
 }

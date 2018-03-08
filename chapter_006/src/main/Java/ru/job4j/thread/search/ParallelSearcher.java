@@ -1,13 +1,13 @@
 package ru.job4j.thread.search;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ParallelSearcher {
     /**
      * Results storage.
      */
-    private volatile List<String> results = new LinkedList<>();
+    private CopyOnWriteArrayList<String> results = new CopyOnWriteArrayList<>();
 
     /**
      * @param root - search start path.
