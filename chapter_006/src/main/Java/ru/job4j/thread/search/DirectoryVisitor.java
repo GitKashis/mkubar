@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DirectoryVisitor extends SimpleFileVisitor<Path> {
     /**
@@ -24,7 +24,7 @@ public class DirectoryVisitor extends SimpleFileVisitor<Path> {
     /**
      * Results.
      */
-    private List<String> results;
+    private CopyOnWriteArrayList<String> results;
 
     /**
      * DirectoryVisitor constructor.
@@ -33,7 +33,7 @@ public class DirectoryVisitor extends SimpleFileVisitor<Path> {
      * @param text - text.
      * @param results - results.
      */
-    public DirectoryVisitor(String root, String ext, String text, List<String> results) {
+    public DirectoryVisitor(String root, String ext, String text, CopyOnWriteArrayList<String> results) {
         this.root = root;
         this.results = results;
         this.ext = ext;
