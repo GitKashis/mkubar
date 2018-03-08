@@ -1,72 +1,62 @@
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 public class Juniorlab {
 
-    public static String[] inArray(String[] array1, String[] array2){
-        String[] result = new String[array1.length];
-        int index = 0;
+    public static String chooseBestSum (int t, int k, int[] array) {
+        List<Integer> ls = new ArrayList<>();
+        for (int anArray : array) {
+            ls.add(anArray);
+        }
 
-        for (int i = 0; i < array1.length; i++) {
-            for (int j = 0; j < array2.length; j++) {
-                if (contains(array2[j], array1[i])) {
-                    result[index++] = array1[i];
+        if (t < 0 || k < 1 || k > ls.size()) {
+            return null;
+        }
+        List<List<Integer>> townsDistances = new ArrayList<>();
+        int[] counter = IntStream.range(0, k).toArray();
+        int[] lastDist = IntStream.range((ls.size() - k), ls.size()).toArray();
+
+        List<Integer> dist = IntStream.of(counter)
+                .map(ls::get).boxed()
+                .collect(Collectors.toList());
+        townsDistances.add(dist);
+
+        while (!Arrays.equals(counter, lastDist)) {
+            for (int i = 0; i < ls.size(); i++) {
+                int pos = (k - 1) - i;
+                if (counter[pos] < (ls.size() - 1) - i) {
+                    counter[pos]++;
+                    for (int j = pos + 1; j < counter.length; j++) {
+                        counter[j] = counter[j - 1] + 1;
+                    }
                     break;
                 }
             }
+            dist = IntStream.of(counter)
+                    .map(ls::get).boxed()
+                    .collect(Collectors.toList());
+            townsDistances.add(dist);
         }
 
-        String[] r = new String[index];
-
-        for (int i = 0; i < index; i++) {
-            r[i] = result[i];
+        int result;
+        try {
+            result = townsDistances.stream()
+                    .mapToInt(d
+                            -> d.stream().mapToInt(Integer::intValue).sum())
+                    .filter(distSum -> distSum <= t)
+                    .max().getAsInt();
+        } catch (NoSuchElementException e) {
+            return null;
         }
-        bubbleSort(r);
-        return r;
+
+        return String.valueOf(result);
     }
 
-    public static boolean contains(String origin, String sub) {
-        /**
-         * Для работы с отдельными символами строк
-         * преобразуем String в массив типа Char.
-         */
-        char[] originCh = origin.toCharArray();
-        char[] subCh = sub.toCharArray();
+//    public static Optional<String> chooseBestSum (int t, int k, int[] array) {
+//        Integer result = values(t,k,array);
+//
+//        return new Optional<String>(String.valueOf(result));
+//    }
 
-        //j - индекс подстроки.
-        int j = 0;
-
-        /*
-         * Посимвольно проходим по строке поиска,
-         * сравнивая соответствующие значения.
-         * Выход из цикла:
-         *  - при совпадении всех символов подстроки.
-         *  - если полного совпадения нет, то
-         *  выход по завершении строки поиска.
-         */
-        for (int i = 0; i < origin.length(); i++) {
-
-            if (originCh[i] == subCh[j]) {
-                j++;
-            } else {
-                j = 0;
-            }
-
-            if (j == sub.length()) {
-                break;
-            }
-        }
-        return j == sub.length();
-    }
-
-    public static void bubbleSort(String[] stringArray) {
-        int n = stringArray.length;
-        String temp;
-        for (int i = 0; i < n; i++) {
-            for (int j = 1; j < (n - i); j++) {
-                if (stringArray[j - 1].compareTo( stringArray[j] ) > 0) {
-                    temp = stringArray[j - 1];
-                    stringArray[j - 1] = stringArray[j];
-                    stringArray[j] = temp;
-                }
-            }
-        }
-    }
 }
