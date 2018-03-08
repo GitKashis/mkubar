@@ -23,10 +23,17 @@ public class LettersCount implements Runnable {
      */
     @Override
     public void run() {
+
+
+
         for (int i = 0; i < text.length(); i++) {
             if ((text.charAt(i) != 32)&&(!Thread.currentThread().isInterrupted())) {
                 letters++;
                 System.out.println(String.format("Count of letters - %s", letters));
+            }
+
+            if(Thread.currentThread().isInterrupted()) {
+                break;
             }
         }
 
