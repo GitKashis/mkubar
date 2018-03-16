@@ -1,53 +1,54 @@
-import java.awt.List;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static java.util.stream.Collectors.toList;
-
 public class Juniorlab {
 
-    static int[] codeFromKey(String key) {
-        // Key must not have double letters
-        char[] keyChar = key.toCharArray();
-        char[] array = key.toCharArray();
-        Arrays.sort(array);
-        String s = String.valueOf(array);
-        int[] result = new int[keyChar.length];
-        for(int i = 0; i < key.length(); i++) {
-            result[i] = s.indexOf(keyChar[i]);
+    public static Integer chooseBestSum (int t, int k, int[] array) {
+        List<Integer> ls = new ArrayList<>();
+        for (int anArray : array) {
+            ls.add(anArray);
         }
-        return result;
-    }
 
-    public static String deNico(String key, String message){
-        int[] keyInt = codeFromKey(key);
-        char[] s = message.trim().toCharArray();
+        if (t < 0 || k < 1 || k > ls.size()) {
+            return null;
+        }
+        List<List<Integer>> townsDistances = new ArrayList<>();
+        int[] counter = IntStream.range(0, k).toArray();
+        int[] lastDist = IntStream.range((ls.size() - k), ls.size()).toArray();
 
-        StringBuilder sb = new StringBuilder();
-        String[][] array = source(s, keyInt.length);
-        for (int i = 0; i < array.length; i++) {
-            for(int j = 0; j < keyInt.length; j++) {
-                sb.append(array[i][keyInt[j]]);
+        List<Integer> dist = IntStream.of(counter)
+                .map(ls::get).boxed()
+                .collect(Collectors.toList());
+        townsDistances.add(dist);
+
+        while (!Arrays.equals(counter, lastDist)) {
+            for (int i = 0; i < ls.size(); i++) {
+                int pos = (k - 1) - i;
+                if (counter[pos] < (ls.size() - 1) - i) {
+                    counter[pos]++;
+                    for (int j = pos + 1; j < counter.length; j++) {
+                        counter[j] = counter[j - 1] + 1;
+                    }
+                    break;
+                }
             }
+            dist = IntStream.of(counter)
+                    .map(ls::get).boxed()
+                    .collect(Collectors.toList());
+            townsDistances.add(dist);
         }
-        String str = sb.toString();
-        if (str.length() > 0 && str.charAt(str.length() - 1) == ' ') {
-             return str.substring(0, str.length() - 1);
-        }
-        return str;
-    }
 
-    public static String[][] source(char[] s, int len) {
-        String[][] result = new String[s.length / len + 1][len];
-        int index = 0;
-        for (int j = 0; j <= s.length / len; j++) {
-            for (int i = 0; i < len; i++) {
-                if(index < s.length) {
-                    result[j][i] = String.valueOf(s[index++]);
-                } else result[j][i] = "";
-            }
+        Integer result;
+        try {
+            result = townsDistances.stream()
+                    .mapToInt(d -> d.stream().mapToInt(Integer::intValue).sum())
+                    .filter(distSum -> distSum <= t)
+                    .max().getAsInt();
+        } catch (NoSuchElementException e) {
+            return null;
         }
+
         return result;
     }
 }
