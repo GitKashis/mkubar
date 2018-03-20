@@ -21,53 +21,46 @@ public class Monster implements Runnable {
         es.execute(this);
     }
 
-    private void moveMonster() {
+    private void move() {
         Random random = new Random();
-        ReentrantLock lock;
-        while (!this.es.isShutdown()) {
-            int nextX = this.positionX;
-            int nextY = this.positionY;
+        int nextX = this.positionX;
+        int nextY = this.positionY;
+        if (random.nextBoolean()) {
+
             if (random.nextBoolean()) {
-                if (random.nextBoolean()) {
-                    if (nextX - 1 > -1) {
-                        nextX--;
-                        lock = this.gameBoard[nextX][nextY];
-                        if (lock.tryLock()) {
-                            this.positionX = nextX;
-                            lock.unlock();
-                        }
-                    }
-                } else {
-                    if (nextX + 1 < this.gameBoard[0].length) {
-                        nextX++;
-                        lock = this.gameBoard[nextX][nextY];
-                        if (lock.tryLock()) {
-                            this.positionX = nextX;
-                            lock.unlock();
-                        }
-                    }
+                if (nextX - 1 > -1) {
+                    nextX--;
+                    this.positionX = nextX;
                 }
             } else {
-                if (random.nextBoolean()) {
-                    if (nextY - 1 > -1) {
-                        nextY--;
-                        lock = this.gameBoard[nextX][nextY];
-                        if (lock.tryLock()) {
-                            this.positionY = nextY;
-                            lock.unlock();
-                        }
-                    }
-                } else {
-                    if (nextY + 1 < this.gameBoard.length) {
-                        nextY++;
-                        lock = this.gameBoard[nextX][nextY];
-                        if (lock.tryLock()) {
-                            this.positionY = nextY;
-                            lock.unlock();
-                        }
-                    }
+                if (nextX + 1 < this.gameBoard[0].length) {
+                    nextX++;
+                    this.positionX = nextX;
                 }
             }
+        }
+        else {
+            if (random.nextBoolean()) {
+                if (nextY - 1 > -1) {
+                    nextY--;
+                    this.positionY = nextY;
+                }
+            } else {
+                if (nextY + 1 < this.gameBoard.length) {
+                    nextY++;
+                    this.positionY = nextY;
+
+                }
+            }
+        }
+    }
+
+    private void moveMonster() {
+        ReentrantLock lock = new ReentrantLock();
+        while (!this.es.isShutdown()) {
+            lock.tryLock();
+            this.move();
+            lock.unlock();
         }
     }
 
