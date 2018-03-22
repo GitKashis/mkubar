@@ -1,54 +1,29 @@
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Juniorlab {
+    public static String goodVsEvil(String good, String evil) {
+        int[] goodScore = new int[]{1, 2, 3, 3, 4, 10};
+        int[] evilScore = new int[]{1, 2, 2, 2, 3, 5, 10};
 
-    public static Integer chooseBestSum (int t, int k, int[] array) {
-        List<Integer> ls = new ArrayList<>();
-        for (int anArray : array) {
-            ls.add(anArray);
-        }
+        int[] goodInt = Arrays.stream(good.split(" ")).mapToInt(Integer::parseInt).toArray();
+        int[] evilInt = Arrays.stream(evil.split(" ")).mapToInt(Integer::parseInt).toArray();
 
-        if (t < 0 || k < 1 || k > ls.size()) {
-            return null;
-        }
-        List<List<Integer>> townsDistances = new ArrayList<>();
-        int[] counter = IntStream.range(0, k).toArray();
-        int[] lastDist = IntStream.range((ls.size() - k), ls.size()).toArray();
+        int sum = Arrays.stream(goodInt).map(() -> goodInt[i] * goodScore[i]).sum();
+        System.out.println(sum);
 
-        List<Integer> dist = IntStream.of(counter)
-                .map(ls::get).boxed()
-                .collect(Collectors.toList());
-        townsDistances.add(dist);
-
-        while (!Arrays.equals(counter, lastDist)) {
-            for (int i = 0; i < ls.size(); i++) {
-                int pos = (k - 1) - i;
-                if (counter[pos] < (ls.size() - 1) - i) {
-                    counter[pos]++;
-                    for (int j = pos + 1; j < counter.length; j++) {
-                        counter[j] = counter[j - 1] + 1;
-                    }
-                    break;
-                }
-            }
-            dist = IntStream.of(counter)
-                    .map(ls::get).boxed()
-                    .collect(Collectors.toList());
-            townsDistances.add(dist);
-        }
-
-        Integer result;
-        try {
-            result = townsDistances.stream()
-                    .mapToInt(d -> d.stream().mapToInt(Integer::intValue).sum())
-                    .filter(distSum -> distSum <= t)
-                    .max().getAsInt();
-        } catch (NoSuchElementException e) {
-            return null;
-        }
-
-        return result;
+//        int[] goodResult = new int[goodInt.length];
+//        for (int i = 0; i < goodInt.length; i++) {
+//            goodResult[i] = goodInt[i] * goodScore[i];
+//        }
+//
+//        int[] evilResult = new int[evilInt.length];
+//        for (int i = 0; i < evilInt.length; i++) {
+//            evilResult[i] = evilInt[i] * evilScore[i];
+//        }
+//
+//        int result = Arrays.stream(goodResult).sum() - Arrays.stream(evilResult).sum();
+//        if (result == 0) return "Battle Result: No victor on this battle field";
+//        else return result > 0 ? "Battle Result: Good triumphs over Evil" : "Battle Result: Evil eradicates all trace of Good";
+    return null;
     }
 }
