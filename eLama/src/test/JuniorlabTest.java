@@ -17,11 +17,11 @@ public class JuniorlabTest {
         String example42 = "41 826 818 746 393 705 95";
         String example51 = "0 1 0 0 0 0";
         String example52 = "0 0 0 1 0 0 0";
-//        assertEquals("Battle Result: No victor on this battle field", Juniorlab.goodVsEvil(example01, example02));
+        assertEquals("Battle Result: No victor on this battle field", Juniorlab.goodVsEvil(example01, example02));
         assertEquals("Battle Result: Good triumphs over Evil", Juniorlab.goodVsEvil(example11, example12));
-//        assertEquals("Battle Result: Good triumphs over Evil", Juniorlab.goodVsEvil(example21, example22));
-//        assertEquals("Battle Result: Evil eradicates all trace of Good", Juniorlab.goodVsEvil(example31, example32));
-//        assertEquals("Battle Result: Evil eradicates all trace of Good", Juniorlab.goodVsEvil(example41, example42));
-//        assertEquals("Battle Result: No victor on this battle field", Juniorlab.goodVsEvil(example51, example52));
+        assertEquals("Battle Result: Good triumphs over Evil", Juniorlab.goodVsEvil(example21, example22));
+        assertEquals("Battle Result: Evil eradicates all trace of Good", Juniorlab.goodVsEvil(example31, example32));
+        assertEquals("Battle Result: Evil eradicates all trace of Good", Juniorlab.goodVsEvil(example41, example42));
+        assertEquals("Battle Result: No victor on this battle field", Juniorlab.goodVsEvil(example51, example52));
     }
 }
