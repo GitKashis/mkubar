@@ -1,27 +1,33 @@
-import java.util.*;
+import java.lang.reflect.Array;
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.List;
+
 
 public class Juniorlab {
-    public static String goodVsEvil(String good, String evil) {
-        int[] goodPoint = new int[]{1, 2, 3, 3, 4, 10};
-        int[] evilPoint = new int[]{1, 2, 2, 2, 3, 5, 10};
 
-        int[] goodInt = Arrays.stream(good.split(" ")).mapToInt(Integer::parseInt).toArray();
-        int[] evilInt = Arrays.stream(evil.split(" ")).mapToInt(Integer::parseInt).toArray();
-
-        int result = score(goodInt, goodPoint) - score(evilInt, evilPoint);
-        if (result == 0) {
-            return "Battle Result: No victor on this battle field";
+    public static long upsidedown(String x, String y) {
+        long count = 0;
+        for(BigInteger value = new BigInteger(x);
+            !value.equals(new BigInteger(y)); value = value.add(BigInteger.ONE)) {
+            if (symmetry(value.toString())) {
+                count++;
+            }
         }
-        else {
-            return result > 0 ? "Battle Result: Good triumphs over Evil" : "Battle Result: Evil eradicates all trace of Good";
-        }
+        return count;
     }
 
-    private static int score(int[] source, int[] multiplier) {
-        int sum = 0;
-        for(int i = 0; i < source.length; i++) {
-            sum += source[i] * multiplier[i];
+    public static boolean symmetry(String str) {
+        final List<String> pair = Arrays.asList("00","11","88","96", "69");
+        boolean result = true;
+        String[] chars = str.split("(?!^)");
+        for (int i = 0; i <= str.length() / 2; i++) {
+            String value = chars[i] + chars[str.length() - 1 - i];
+            if(!pair.contains(value)) {
+                result = false;
+                break;
+            }
         }
-        return sum;
+        return result;
     }
 }
