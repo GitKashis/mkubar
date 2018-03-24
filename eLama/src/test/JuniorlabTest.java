@@ -1,5 +1,7 @@
 import org.junit.Test;
 
+import java.util.*;
+
 import static org.junit.Assert.assertEquals;
 
 public class JuniorlabTest {
@@ -40,9 +42,12 @@ public class JuniorlabTest {
 //        assertEquals(74745418l, Juniorlab.upsidedown(example71, example72));
 //        assertEquals(2978125000l, Juniorlab.upsidedown(example81, example82));
 //        assertEquals(209808349609373l, Juniorlab.upsidedown(example91, example92));
-        assertEquals(2775l, Juniorlab.upsidedown(example101, example102));
+//        assertEquals(2775l, Juniorlab.upsidedown(example101, example102));
 //        assertEquals(1789100l, Juniorlab.upsidedown(example111, example112));
     }
-
-
+@Test
+public void test2() {
+    //System.out.println(Juniorlab.last("800"));
+    System.out.println(Juniorlab.func(8, 0, 1, false));
+}
 }

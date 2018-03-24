@@ -1,9 +1,6 @@
 import java.lang.reflect.Array;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.Math.ceil;
 
@@ -37,25 +34,41 @@ public class Juniorlab {
         return Arrays.stream(arr).asLongStream().reduce((x, y) -> x * y).getAsLong();
     }
 
-    static long range(String y) {
+    /**
+     * Проверяем число последней разрядности
+     * @param y
+     * @return
+     */
+    static long last(String y) {
         int mid = (int) ceil(y.length() / 2.0);
         boolean isEven = y.length() % 2 == 0;
         int[] arr = new int[mid];
         String[] chars = y.split("(?!^)");
 
         for (int i = 0; i < mid; i++) {
-            arr[i] = func(Integer.parseInt(chars[i]), isEven);
+            arr[i] = func(Integer.parseInt(chars[i]), i, mid, isEven);
         }
-        return Arrays.stream(arr).asLongStream().reduce((x, y) -> x * y).getAsLong();
+        System.out.println(Arrays.toString(arr));
+        return Arrays.stream(arr).asLongStream().reduce((x, z) -> x * z).getAsLong();
     }
 
-    static int func(int digit, boolean isEven) {
-        int count = 0;
-        List<Integer> list = Arrays.asList(0, 1, 6, 8, 9);
-        while(value >= digit) {
-            int value = list.;
-            count++;
+    static int func(int digit, int pos, int mid, boolean isEven) {
+        Queue<Integer> queue = new LinkedList<>(Arrays.asList(0, 1, 6, 8, 9));
+        List<Integer> points = new LinkedList<>();
+        int value = 0;
+        // если получен первый элемент - удаляем 0
+        if (pos == 0) {
+            queue.remove();
         }
-        return count;
+        //если получен мид
+        if (pos == mid) {
+            //если нечетное, то только три элемента {0, 1, 8}
+            if (!isEven) {
+                queue.removeAll(Arrays.asList(6, 9));
+            }
+        }
+        while(queue.peek() <= digit) points.add(queue.poll());
+        points.forEach(System.out::print);
+        return points.size();
     }
 }
