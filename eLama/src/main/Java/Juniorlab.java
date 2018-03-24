@@ -1,41 +1,61 @@
 import java.lang.reflect.Array;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import static java.lang.Math.ceil;
 
 
 public class Juniorlab {
 
     public static long upsidedown(String x, String y) {
-        long count = 0;
-        Pattern r = Pattern.compile("[23457]");
-
-        for(BigInteger value = new BigInteger(x); !value.equals(new BigInteger(y)); value = value.add(BigInteger.ONE)) {
-            String str = value.toString();
-            Matcher m = r.matcher(str);
-            if (!m.find()) {
-                 count++;
-            }
+        long sum = 0;
+        for (int i = x.length(); i <= y.length(); i++) {
+            sum += check(i);
         }
-        return count;
+        return sum;
     }
 
-    public static boolean symmetry(String str) {
-        boolean result = true;
-        String[] chars = str.split("(?!^)");
-
-        for (int i = 0; i <= str.length() / 2; i++) {
-            String first = chars[i];
-            String last = chars[str.length() - 1 - i];
-
-  {
-                result = false;
-                break;
-            }
+    /**
+     * Метод получает количество разрядов числа (например для 999 количество разрядов = 3)
+     * В первом разряде может быть только 4 варианта {1, 6, 8, 9}
+     * Если четое, то в ближайшем слева от середины может быть 5 вариантов, если нечетоное, то 3 {0, 1, 8}
+     * В остальных разрядах по 5 вариантов {0, 1, 6, 8, 9}
+     * @param len - количество разрядов в строке
+     * @return максимальное количество чисел, которые можно получить в строке данной разрядности.
+     */
+    static long check(int len) {
+        int mid = (int) ceil(len / 2.0);
+        int[] arr = new int[mid];
+        Arrays.fill(arr, 5);
+        arr[0] = 4;
+        if(len % 2 != 0) {
+            arr[mid - 1] = 3;
         }
-        return result;
+        return Arrays.stream(arr).asLongStream().reduce((x, y) -> x * y).getAsLong();
+    }
+
+    static long range(String y) {
+        int mid = (int) ceil(y.length() / 2.0);
+        boolean isEven = y.length() % 2 == 0;
+        int[] arr = new int[mid];
+        String[] chars = y.split("(?!^)");
+
+        for (int i = 0; i < mid; i++) {
+            arr[i] = func(Integer.parseInt(chars[i]), isEven);
+        }
+        return Arrays.stream(arr).asLongStream().reduce((x, y) -> x * y).getAsLong();
+    }
+
+    static int func(int digit, boolean isEven) {
+        int count = 0;
+        List<Integer> list = Arrays.asList(0, 1, 6, 8, 9);
+        while(value >= digit) {
+            int value = list.;
+            count++;
+        }
+        return count;
     }
 }
