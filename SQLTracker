@@ -1,0 +1,50 @@
+-- create table users(
+-- 	user_id serial primary key,
+-- 	name varchar(20),
+-- 	email varchar(20),
+-- 	password varchar(20)
+-- );
+-- insert into users (name, email, password) values ('Kubar', 'm.kubar@mail.ru', 'root');
+-- insert into users (name, email, password) values ('Etva', 'etwa@mail.ru', 'qwerty');
+-- select * from users;
+
+create table item (
+	item_id serial primary key,
+	name varchar(20),
+	user_id integer references users (user_id),
+ 	comments_id integer references comments (comments_id),
+ 	attaches_id integer references attaches (attaches_id)
+);
+insert into item (name, user_id, comments_id, attaches_id) values ('first', 1, 1, 1);
+insert into item (name, user_id, comments_id, attaches_id) values ('second', 2, 2, 2);
+select * from item;
+
+-- create table comments (
+-- 	comments_id serial primary key,
+-- 	name varchar(20),
+-- 	texts text,
+-- 	times time
+-- );
+-- insert into comments (name, texts, times) values ('Ru', 'Comment from Russia!', now());
+-- insert into comments (name, texts, times) values ('Request', 'How to insert foreign key?', now());
+-- select * from comments;
+
+-- create table role (
+-- 	role_id serial primary key,
+-- 	name varchar(20),
+-- 	user_id integer references users(user_id)
+-- );
+-- insert into role (name,  user_id) values ('Администратор', 1);
+-- insert into role (name,  user_id) values ('Пользователь', 2);
+-- select * from role;
+-- select * from role;
+
+-- create table attaches (
+-- 	attaches_id serial primary key,
+-- 	name varchar(20),
+-- 	size_kb int
+-- );
+-- insert into attaches (name,  size_kb) values ('Screenshot.jpg', 64);
+-- insert into attaches (name,  size_kb) values ('File.dat', 1024);
+-- select * from attaches;
+
