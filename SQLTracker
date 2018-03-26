@@ -8,17 +8,6 @@
 -- insert into users (name, email, password) values ('Etva', 'etwa@mail.ru', 'qwerty');
 -- select * from users;
 
-create table item (
-	item_id serial primary key,
-	name varchar(20),
-	user_id integer references users (user_id),
- 	comments_id integer references comments (comments_id),
- 	attaches_id integer references attaches (attaches_id)
-);
-insert into item (name, user_id, comments_id, attaches_id) values ('first', 1, 1, 1);
-insert into item (name, user_id, comments_id, attaches_id) values ('second', 2, 2, 2);
-select * from item;
-
 -- create table comments (
 -- 	comments_id serial primary key,
 -- 	name varchar(20),
@@ -37,7 +26,6 @@ select * from item;
 -- insert into role (name,  user_id) values ('Администратор', 1);
 -- insert into role (name,  user_id) values ('Пользователь', 2);
 -- select * from role;
--- select * from role;
 
 -- create table attaches (
 -- 	attaches_id serial primary key,
@@ -48,3 +36,39 @@ select * from item;
 -- insert into attaches (name,  size_kb) values ('File.dat', 1024);
 -- select * from attaches;
 
+-- create table category (
+-- 	category_id serial primary key,
+-- 	name varchar(20),
+-- 	item_id integer references item (item_id)
+-- );
+-- insert into category (name, item_id) values ('Задание', 1);
+-- insert into category (name, item_id) values ('Тест', 2);
+-- select * from category;
+
+-- create table state (
+-- 	state_id serial primary key,
+-- 	state varchar(20),
+-- 	item_id integer references item (item_id)
+-- );
+-- insert into state (state, item_id) values ('Новое', 1);
+-- insert into state (state, item_id) values ('Завершенное', 2);
+-- select * from state;
+
+-- create table item (
+-- 	item_id serial primary key,
+-- 	name varchar(20),
+-- 	user_id integer references users (user_id),
+--  comments_id integer references comments (comments_id),
+--  attaches_id integer references attaches (attaches_id)
+-- );
+-- insert into item (name, user_id, comments_id, attaches_id) values ('first', 1, 1, 1);
+-- insert into item (name, user_id, comments_id, attaches_id) values ('second', 2, 2, 2);
+-- select * from item;
+
+create table rules (
+rules_id serial primary key,
+	name varchar(20),
+);
+insert into rules (name) values ('Администратор', 1);
+insert into rules (name) values ('Пользователь', 2);
+select * from rules;
