@@ -1,5 +1,6 @@
 import org.junit.Test;
 
+import java.math.BigInteger;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -45,9 +46,12 @@ public class JuniorlabTest {
 //        assertEquals(2775l, Juniorlab.upsidedown(example101, example102));
 //        assertEquals(1789100l, Juniorlab.upsidedown(example111, example112));
     }
-@Test
-public void test2() {
-    //System.out.println(Juniorlab.last("800"));
-    System.out.println(Juniorlab.func(8, 0, 1, false));
-}
+    @Test
+    public void test2() {
+        //System.out.println(Juniorlab.func(4, 2, 2, true));
+        System.out.println(Juniorlab.check(4));
+        BigInteger val1 = new BigInteger("6549874249846165");
+        BigInteger val2 = new BigInteger("65498749442846162345");
+        System.out.println(val2.compareTo(val1));
+    }
 }

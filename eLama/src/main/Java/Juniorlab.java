@@ -1,12 +1,20 @@
 import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.lang.Math.ceil;
 
 
 public class Juniorlab {
 
+    /**
+     * Количество вариантов до максимального разряда
+     * @param x - минимальный разряд
+     * @param y - максималный
+     * @return
+     */
     public static long upsidedown(String x, String y) {
         long sum = 0;
         for (int i = x.length(); i <= y.length(); i++) {
@@ -42,33 +50,53 @@ public class Juniorlab {
     static long last(String y) {
         int mid = (int) ceil(y.length() / 2.0);
         boolean isEven = y.length() % 2 == 0;
-        int[] arr = new int[mid];
         String[] chars = y.split("(?!^)");
 
+        // массив коэффициентов, которые будем перемножать
+        int[] arr = new int[mid];
+        int loss = 0;
         for (int i = 0; i < mid; i++) {
+            // [истинное, остаток, остаток |_,_,_]
             arr[i] = func(Integer.parseInt(chars[i]), i, mid, isEven);
+            if (i != 0) {
+                loss += arr[i];
+            }
         }
-        System.out.println(Arrays.toString(arr));
-        return Arrays.stream(arr).asLongStream().reduce((x, z) -> x * z).getAsLong();
+        System.out.println("loss = " + loss);
+        // [истинное, 5, 5 |_,_,_]
+        int[] truePoints = new int[mid];
+        Arrays.fill(truePoints, 5);
+        truePoints[0] = arr[0];
+        System.out.println("truePoints " + Arrays.toString(truePoints));
+        System.out.println("arr " + Arrays.toString(arr));
+        return Arrays.stream(truePoints).asLongStream().reduce((x, z) -> x * z).getAsLong() - loss;
     }
 
     static int func(int digit, int pos, int mid, boolean isEven) {
         Queue<Integer> queue = new LinkedList<>(Arrays.asList(0, 1, 6, 8, 9));
         List<Integer> points = new LinkedList<>();
-        int value = 0;
+
         // если получен первый элемент - удаляем 0
         if (pos == 0) {
             queue.remove();
-        }
+        }                   // {1, 6, 8, 9}
+
         //если получен мид
-        if (pos == mid) {
+        if ((pos == mid) && (!isEven)) {
             //если нечетное, то только три элемента {0, 1, 8}
-            if (!isEven) {
-                queue.removeAll(Arrays.asList(6, 9));
-            }
+            queue.removeAll(Arrays.asList(6, 9));
         }
-        while(queue.peek() <= digit) points.add(queue.poll());
-        points.forEach(System.out::print);
-        return points.size();
+
+        //запушить подходящие
+        while(queue.peek() <= digit) {
+            points.add(queue.poll());
+            if (queue.isEmpty()) break;
+        }
+
+       // points.forEach(System.out::print);
+        return pos == 0 ? points.size() : queue.size();
     }
+
 }
+
+
