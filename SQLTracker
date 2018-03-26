@@ -18,14 +18,25 @@
 -- insert into comments (name, texts, times) values ('Request', 'How to insert foreign key?', now());
 -- select * from comments;
 
--- create table role (
--- 	role_id serial primary key,
+-- create table attaches (
+-- 	attaches_id serial primary key,
 -- 	name varchar(20),
--- 	user_id integer references users(user_id)
+-- 	size_kb int
 -- );
--- insert into role (name,  user_id) values ('Администратор', 1);
--- insert into role (name,  user_id) values ('Пользователь', 2);
--- select * from role;
+-- insert into attaches (name,  size_kb) values ('Screenshot.jpg', 64);
+-- insert into attaches (name,  size_kb) values ('File.dat', 1024);
+-- select * from attaches;
+
+-- create table item (
+-- 	item_id serial primary key,
+-- 	name varchar(20),
+-- 	user_id integer references users (user_id),
+--  	comments_id integer references comments (comments_id),
+--  	attaches_id integer references attaches (attaches_id)
+-- );
+-- insert into item (name, user_id, comments_id, attaches_id) values ('first', 1, 1, 1);
+-- insert into item (name, user_id, comments_id, attaches_id) values ('second', 2, 2, 2);
+-- select * from item;
 
 -- create table attaches (
 -- 	attaches_id serial primary key,
@@ -36,39 +47,41 @@
 -- insert into attaches (name,  size_kb) values ('File.dat', 1024);
 -- select * from attaches;
 
--- create table category (
--- 	category_id serial primary key,
+-- create table role (
+-- 	role_id serial primary key,
 -- 	name varchar(20),
--- 	item_id integer references item (item_id)
+-- 	user_id integer references users(user_id)
 -- );
--- insert into category (name, item_id) values ('Задание', 1);
--- insert into category (name, item_id) values ('Тест', 2);
--- select * from category;
+-- insert into role (name,  user_id) values ('Ментор', 1);
+-- insert into role (name,  user_id) values ('Ученик', 2);
+-- select * from role;
 
--- create table state (
--- 	state_id serial primary key,
--- 	state varchar(20),
--- 	item_id integer references item (item_id)
+-- create table rules (
+-- 	rules_id serial primary key,
+-- 	name varchar(20)
 -- );
--- insert into state (state, item_id) values ('Новое', 1);
--- insert into state (state, item_id) values ('Завершенное', 2);
--- select * from state;
+-- insert into rules (name) values ('Администратор');
+-- insert into rules (name) values ('Пользователь');
+-- select * from rules;
 
--- create table item (
--- 	item_id serial primary key,
--- 	name varchar(20),
--- 	user_id integer references users (user_id),
---  comments_id integer references comments (comments_id),
---  attaches_id integer references attaches (attaches_id)
--- );
--- insert into item (name, user_id, comments_id, attaches_id) values ('first', 1, 1, 1);
--- insert into item (name, user_id, comments_id, attaches_id) values ('second', 2, 2, 2);
--- select * from item;
+-- 
+--     CREATE TABLE role_to_rules (
+--             role_to_rules_id SERIAL PRIMARY KEY,
+--             user_id INTEGER NOT NULL,
+--             site_id INTEGER NOT NULL
+--     );
+-- укажем уникальные ключи
+-- ALTER TABLE public.role ADD CONSTRAINT un_dep_id_constraint UNIQUE (role_id);
+-- ALTER TABLE public.rules ADD CONSTRAINT un_emp_id_constraint UNIQUE (rules_id);
+-- ALTER TABLE public.role_to_rules ADD CONSTRAINT un_empl_id_constraint UNIQUE (role_to_rules_id);
 
-create table rules (
-rules_id serial primary key,
-	name varchar(20),
-);
-insert into rules (name) values ('Администратор', 1);
-insert into rules (name) values ('Пользователь', 2);
-select * from rules;
+-- повесим каскадные связи
+-- 	ALTER TABLE role_to_rules 
+-- 	ADD CONSTRAINT rules_id_fk_constraint 
+-- 	FOREIGN KEY (rules_id) REFERENCES rules (rules_id)
+-- 	ON UPDATE CASCADE ON DELETE CASCADE;
+	
+-- 	ALTER TABLE role_to_rules 
+-- 	ADD CONSTRAINT role_id_fk_constraint 
+-- 	FOREIGN KEY (role_id) REFERENCES role (role_id)
+-- 	ON UPDATE CASCADE ON DELETE CASCADE;
