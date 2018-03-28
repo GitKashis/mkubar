@@ -1,0 +1,113 @@
+create table users(
+	user_id serial primary key,
+	name varchar(20),
+	email varchar(20),
+	password varchar(20),
+	role_id integer references role (role_id)
+);
+insert into users (name, email, password, role_id) values ('Kubar', 'm.kubar@mail.ru', 'root', 1);
+insert into users (name, email, password, role_id) values ('Etva', 'etwa@mail.ru', 'qwerty', 2);
+insert into users (name, email, password, role_id) values ('Qwert', 'qw@mail.ru', 'zxcv', 3);
+select * from users;
+--------------------------------------------------------------
+create table comments (
+	comments_id serial primary key,
+	name varchar(20),
+	texts text,
+	times time
+);
+insert into comments (name, texts, times) values ('Ru', 'Comment from Russia!', now());
+insert into comments (name, texts, times) values ('Request', 'How to insert foreign key?', now());
+select * from comments;
+--------------------------------------------------------------
+create table item (
+	item_id serial primary key,
+	name varchar(20),
+	user_id integer references users (user_id),
+comments_id integer references comments (comments_id),
+state_id integer references state (state_id),
+category_id integer references category (category_id)
+);
+insert into item (name, user_id, comments_id, state_id, category_id) values ('first', 1, 1, 1, 1);
+insert into item (name, user_id, comments_id, state_id, category_id) values ('second', 2, 2, 3, 1);
+insert into item (name, user_id, comments_id, state_id, category_id) values ('third', 3, 2, 3, 3);
+select * from item;
+--------------------------------------------------------------
+create table attaches (
+	attaches_id serial primary key,
+	name varchar(20),
+	size_kb int,
+item_id integer references item (item_id)
+);
+insert into attaches (name,  size_kb) values ('Screenshot.jpg', 64);
+insert into attaches (name,  size_kb) values ('File.dat', 1024);
+select * from attaches;
+--------------------------------------------------------------
+create table state (
+	state_id serial primary key,
+	name varchar(20),
+	changed time
+);
+insert into state (name,  changed) values ('Выполнено', now());
+insert into state (name,  changed) values ('Новое', now());
+insert into state (name,  changed) values ('В процессе', now());
+select * from state;
+--------------------------------------------------------------
+create table category (
+	category_id serial primary key,
+	name varchar(20)
+);
+insert into category (name) values ('Домашнее задание');
+insert into category (name) values ('Контрольная работа');
+insert into category (name) values ('Тестовая работа');
+select * from category;
+--------------------------------------------------------------
+create table role (
+	role_id serial primary key,
+	name varchar(20)
+);
+insert into role (name) values ('Ментор');
+insert into role (name) values ('Ученик');
+insert into role (name) values ('Проверяющий');
+select * from role;
+--------------------------------------------------------------
+create table rules (
+	rules_id serial primary key,
+	name varchar(20)
+);
+insert into rules (name) values ('Администратор');
+insert into rules (name) values ('Пользователь');
+insert into rules (name) values ('Главный по отделу');
+insert into rules (name) values ('Самый главный');
+select * from rules;
+
+-- третья таблица для связи "многие ко многим"
+    CREATE TABLE role_to_rules (
+            role_to_rules_id SERIAL PRIMARY KEY,
+            role_id INTEGER NOT NULL,
+            rules_id INTEGER NOT NULL
+    );
+insert into role_to_rules (rules_id,  role_id) values (1, 1);
+insert into role_to_rules (rules_id,  role_id) values (1, 2);
+insert into role_to_rules (rules_id,  role_id) values (2, 3);
+insert into role_to_rules (rules_id,  role_id) values (2, 4);
+insert into role_to_rules (rules_id,  role_id) values (3, 4);
+select * from role_to_rules;
+
+--укажем уникальные ключи
+ALTER TABLE public.role ADD CONSTRAINT un_dep_id_constraint UNIQUE (role_id);
+ALTER TABLE public.rules ADD CONSTRAINT un_emp_id_constraint UNIQUE (rules_id);
+ALTER TABLE public.role_to_rules ADD CONSTRAINT un_empl_id_constraint UNIQUE (role_to_rules_id);
+
+--повесим каскадные связи
+	ALTER TABLE role_to_rules 
+	ADD CONSTRAINT rules_id_fk_constraint 
+	FOREIGN KEY (rules_id) REFERENCES rules (rules_id)
+	ON UPDATE CASCADE ON DELETE CASCADE;
+	
+	ALTER TABLE role_to_rules 
+	ADD CONSTRAINT role_id_fk_constraint 
+	FOREIGN KEY (role_id) REFERENCES role (role_id)
+	ON UPDATE CASCADE ON DELETE CASCADE;
+
+SELECT * FROM (Role JOIN role_to_rules USING (role_id)) JOIN Rules USING (rules_id);
