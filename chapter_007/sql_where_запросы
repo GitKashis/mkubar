@@ -12,7 +12,7 @@
 
 --  select  pr.name, t.name from product as pr
 --  inner join type as t on pr.type_id = t.id
---  where pr.expired_date between getDate() AND getDate + 1;
+--  where pr.expired_date <= current_date + interval '1 mon';
 
 -- 4. Написать запрос, который вывод самый дорогой продукт.
 
@@ -29,7 +29,16 @@
 
 --  select  pr.name, t.name from product as pr
 --  inner join type as t on pr.type_id = t.id
---  where (t.name = 'СЫР' AND t.name = 'МОЛОКО');
+--  where t.name = 'СЫР' OR t.name = 'МОЛОКО';
 
- select * from product 
- where name = 'Маасдам' and name = 'Свинина';
+-- 7. Написать запрос, который выводит тип продуктов, которых осталось меньше 4 штук. 
+
+-- 	select t.name, count(*) from product as pr
+--  	inner join type as t on pr.type_id = t.id 
+-- 	group by t.name
+-- 	HAVING COUNT(*) < 4;
+
+-- 8. Вывести все продукты и их тип.
+
+--  select  pr.name, t.name from product as pr
+--  inner join type as t on pr.type_id = t.id;
