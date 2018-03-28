@@ -1,0 +1,27 @@
+-- create table product( 
+-- 	id serial PRIMARY KEY,
+-- 	name varchar(100),
+-- 	type_id int references type(id),
+-- 	expired_date date,
+-- 	price float
+-- );
+
+-- create table type(
+-- 	id serial primary key,
+-- 	name varchar(100)
+-- );
+
+-- insert into type (name) values ('СЫР');
+-- insert into type (name) values ('МОЛОКО');
+-- insert into type (name) values ('МЯСО');
+-- insert into type (name) values ('КРУПА');
+-- select * from type;
+
+-- insert into product(name, type_id, expired_date, price) values ('Cырный продукт Российский', 1, '16/04/2019', 37.90);
+--  insert into product(name, type_id, expired_date, price) values ('Маасдам', 1, '11/10/2018', 49.00);
+-- insert into product(name, type_id, expired_date, price) values ('Веселый молочник', 2, '01/04/19', 51.90);
+-- insert into product(name, type_id, expired_date, price) values ('Простоквашино', 2, '01/09/18', 59.90);
+-- insert into product(name, type_id, expired_date, price) values ('Говядина охлажденная', 3, '01/04/19', 237.90);
+-- insert into product(name, type_id, expired_date, price) values ('Свинина', 3, '01/12/18', 337.00);
+-- insert into product(name, type_id, expired_date, price) values ('Греча', 4, '01/04/20', 57.50);
+-- insert into product(name, type_id, expired_date, price) values ('Горох', 4, '01/04/20', 27.90);
