@@ -19,6 +19,7 @@
         <module>chapter_003</module>
         <module>chapter_005</module>
         <module>chapter_006</module>
+        <module>chapter_007</module>
         <module>eLama</module>
     </modules>
 	
@@ -41,6 +42,14 @@
             <artifactId>jcip-annotations</artifactId>
             <version>1.0</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/postgresql/postgresql -->
+        <dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.1-901-1.jdbc4</version>
+        </dependency>
+
 
     </dependencies>
 	
