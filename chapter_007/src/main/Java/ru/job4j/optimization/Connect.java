@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 
 public class Connect {
     /**
-     * Count of numbers wich need add to database.
+     * Count of numbers witch need add to database.
      */
     private int field;
     private String url;
