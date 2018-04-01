@@ -46,7 +46,7 @@ public class Connect {
         try {
             st.execute("DELETE FROM test");
             cn.setAutoCommit(false);
-            System.out.println("start adding to DB");
+            System.out.println(String.format("Start adding %s entryes to DB...", field));
             long s = System.currentTimeMillis();
 
             for (int i = 1; i <= this.field; i++) {
@@ -54,11 +54,11 @@ public class Connect {
                 pst.setInt(1, i);
                 pst.executeUpdate();
                 if (i > 500 && i % 500 == 0) {
-                    st.executeBatch();
+                    pst.executeBatch();
                 }
             }
             long res = System.currentTimeMillis() - s;
-            System.out.println("finish adding to DB " + res + " ms");
+            System.out.println(String.format("Finish adding to DB %s ms", res));
         } catch (SQLException e) {
             e.printStackTrace();
         }

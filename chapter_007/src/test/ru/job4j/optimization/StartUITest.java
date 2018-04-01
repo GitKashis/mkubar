@@ -10,6 +10,10 @@ public class StartUITest {
     @Test
     public void test() throws TransformerException, ParserConfigurationException {
         StartUI ui = new StartUI();
-        ui.startProgram(100);
+        long startTime = System.currentTimeMillis();
+            ui.startProgram(100);
+        long finishTime = System.currentTimeMillis() - startTime;
+
+        System.out.println(String.format("Time: %s ms", finishTime));
     }
 }

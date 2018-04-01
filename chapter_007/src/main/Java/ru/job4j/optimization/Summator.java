@@ -14,7 +14,6 @@ public class Summator {
         try {
             SAXParser saxParser = parserFactory.newSAXParser();
             Handler handler = new Handler();
-
             saxParser.parse("src\\main\\java\\ru\\job4j\\optimization\\resources\\2.xml", handler);
             summ = handler.getSum();
         } catch (Exception e) {

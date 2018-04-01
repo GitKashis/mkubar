@@ -24,8 +24,7 @@ public class StartUI {
 
         parser.startParsing();
         converter.convertXML();
-        System.out.println(Arrays.toString(numbers));
-        System.out.println(summator.getSumm());
+        System.out.println("Sum: " + summator.getSumm());
         connector.closeConnections();
     }
 }
