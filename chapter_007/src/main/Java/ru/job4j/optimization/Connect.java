@@ -33,6 +33,7 @@ public class Connect {
      */
     public void initTable() {
         try {
+            Class.forName("org.sqlite.JDBC");
             st.execute("CREATE TABLE IF NOT EXISTS test(field INTEGER)");
         } catch (Exception e) {
             e.printStackTrace();

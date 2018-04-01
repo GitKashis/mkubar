@@ -10,7 +10,7 @@ public class StartUI {
     public void startProgram(int countOfNumbers)  {
         Connect connector = new Connect();
 
-        connector.setURL("jdbc:postgresql://localhost:5432/test?user=postgres&password=root");
+        connector.setURL("jdbc:sqlite:src\\\\main\\\\java\\\\\\\\ru\\\\job4j\\\\optimization\\\\resources\\\\test.db");
         connector.openConnections();
         connector.initTable();
         connector.setN(countOfNumbers);
