@@ -1,6 +1,7 @@
 package ru.job4j.tracker;
 
 import java.util.Date;
+import java.util.Random;
 
 /**
  * Класс описывает сущность "Заявка", является элементом массива items[].
@@ -30,6 +31,12 @@ public class Item {
      * Поле ID.
      */
     private String id;
+    private static final Random rn = new Random();
+
+    public Item() {
+        this.id = String.valueOf(rn.nextInt(100));
+    }
+
     /**
      * Set name.
      * @param name name
@@ -104,5 +111,10 @@ public class Item {
      */
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" + "name='" + name + '\'' + ", description='" + description + '\'' + ", date=" + date + ", commit='" + commit + '\'' + ", id='" + id + '\'' + '}';
     }
 }

@@ -68,10 +68,10 @@ public class TrackerDB {
         this.url = "jdbc:postgresql://localhost:5432/db_tracker";
         this.userName = "postgres";
         this.userPassword = "root";
- //       this.connectParam();
-        if (!dbExist) {
+//        this.connectParam();
+//        if (!dbExist) {
 //            this.createTablesInDB();
-        }
+//        }
     }
 
     /**
@@ -81,11 +81,13 @@ public class TrackerDB {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
+            System.out.println("driver");
             logger.error(e.getMessage(), e);
         }
-        try (InputStream io = classLoader.getResourceAsStream("src\\main\\java\\ru\\job4j\\tracker\\resources\\connect-db.properties")) {
+        try (InputStream io = classLoader.getResourceAsStream("connect-db.properties")) {
             this.properties.load(io);
         } catch (IOException e) {
+            System.out.println("io");
             logger.error(e.getMessage(), e);
         }
         this.url = String.format("jdbc:postgresql://%s/%s", this.properties.getProperty("db.host"), this.properties.getProperty("db.name"));
@@ -139,12 +141,7 @@ public class TrackerDB {
         int result = -1;
         try (Connection conn = DriverManager.getConnection(this.url, this.userName, this.userPassword)) {
             PreparedStatement ps;
-            if (Integer.parseInt(item.getId()) != Integer.MIN_VALUE && Integer.parseInt(item.getId()) < 0) {
-                ps = conn.prepareStatement("INSERT INTO tracker(rid_items, fname, fdesc, iid) VALUES (?, ?, ?, ?)");
-                ps.setInt(4, Integer.parseInt(item.getId()));
-            } else {
-                ps = conn.prepareStatement("INSERT INTO tracker(rid_items, fname, fdesc) VALUES (?, ?, ?)");
-            }
+            ps = conn.prepareStatement("INSERT INTO tracker(rid_items, fname, fdesc, item_id) VALUES (?, ?, ?, ?)");
             if (item.getClass() == Bug.class) {
                 ps.setInt(1, 1);
             }
@@ -153,6 +150,7 @@ public class TrackerDB {
             }
             ps.setString(2, item.getName());
             ps.setString(3, item.getDesc());
+            ps.setInt(4, Integer.parseInt(item.getId()));
             result = ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
@@ -170,7 +168,7 @@ public class TrackerDB {
         Map<Integer, Item> map = null;
         try (Connection conn = DriverManager.getConnection(this.url, this.userName, this.userPassword)) {
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT tr.iid, it.fname AS type_item, tr.fname AS name_item, tr.fdesc, tr.fcommit, tr.fdate FROM tracker AS tr LEFT JOIN items AS it ON tr.rid_items = it.iid");
+            ResultSet rs = st.executeQuery("SELECT tr.item_id, it.fname AS type_item, tr.fname AS name_item, tr.fdesc, tr.fcommit, tr.fdate FROM tracker AS tr LEFT JOIN items AS it ON tr.rid_items = it.iid");
             map = this.getMapItem(rs);
             rs.close();
             st.close();
@@ -190,7 +188,7 @@ public class TrackerDB {
         Item item = null;
         Map<Integer, Item> map = null;
         try (Connection conn = DriverManager.getConnection(this.url, this.userName, this.userPassword)) {
-            PreparedStatement ps = conn.prepareStatement("SELECT tr.iid, it.fname AS type_item, tr.fname AS name_item, tr.fdesc, tr.fcommit, tr.fdate FROM tracker AS tr LEFT JOIN items AS it ON tr.rid_items = it.iid WHERE tr.fname = ?");
+            PreparedStatement ps = conn.prepareStatement("SELECT tr.item_id, it.fname AS type_item, tr.fname AS name_item, tr.fdesc, tr.fcommit, tr.fdate FROM tracker AS tr LEFT JOIN items AS it ON tr.rid_items = it.iid WHERE tr.fname = ?");
             ps.setString(1, nameItem);
             ResultSet rs = ps.executeQuery();
             map = this.getMapItem(rs);
@@ -212,7 +210,7 @@ public class TrackerDB {
     private Map<Integer, Item> getMapItem(ResultSet rs) throws SQLException {
         Map<Integer, Item> map = new LinkedHashMap<>();
         while (rs.next()) {
-            int idItem = rs.getInt("iid");
+            int idItem = rs.getInt("item_id");
             String itemType = rs.getString("type_item");
             Item item = null;
             if (itemType.equals("Bug")) {
@@ -245,7 +243,10 @@ public class TrackerDB {
     public Item findById(int id) {
         Item item = null;
         try (Connection conn = DriverManager.getConnection(this.url, this.userName, this.userPassword)) {
-            PreparedStatement ps = conn.prepareStatement("SELECT tr.iid, it.fname AS type_item, tr.fname AS name_item, tr.fdesc, tr.fcommit, tr.fdate FROM tracker AS tr LEFT JOIN items AS it ON tr.rid_items = it.iid WHERE tr.iid = ?");
+            PreparedStatement ps = conn.prepareStatement("SELECT tr.item_id, it.fname AS type_item, tr.fname " +
+                    "AS name_item, tr.fdesc, tr.fcommit, tr.fdate FROM tracker AS tr " +
+                    "LEFT JOIN items AS it ON tr.rid_items = it.iid " +
+                    "WHERE tr.item_id = ?");
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             Map<Integer, Item> map = getMapItem(rs);
@@ -267,7 +268,7 @@ public class TrackerDB {
      */
     public void deleteItemById(int id) {
         try (Connection conn = DriverManager.getConnection(this.url, this.userName, this.userPassword)) {
-            PreparedStatement pr = conn.prepareStatement("DELETE FROM tracker WHERE iid = ?");
+            PreparedStatement pr = conn.prepareStatement("DELETE FROM tracker WHERE item_id = ?");
             pr.setInt(1, id);
             pr.executeUpdate();
             pr.close();
