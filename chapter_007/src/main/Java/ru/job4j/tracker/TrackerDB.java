@@ -59,9 +59,18 @@ public class TrackerDB {
      * Constructor.
      */
     public TrackerDB() {
-        this.connectParam();
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            System.out.println("PostgreSQL JDBC Driver not found!!!");
+            e.printStackTrace();
+        }
+        this.url = "jdbc:postgresql://localhost:5432/db_tracker";
+        this.userName = "postgres";
+        this.userPassword = "root";
+ //       this.connectParam();
         if (!dbExist) {
-            this.createTablesInDB();
+//            this.createTablesInDB();
         }
     }
 
@@ -74,7 +83,7 @@ public class TrackerDB {
         } catch (ClassNotFoundException e) {
             logger.error(e.getMessage(), e);
         }
-        try (InputStream io = classLoader.getResourceAsStream("resources/connect-db.properties")) {
+        try (InputStream io = classLoader.getResourceAsStream("src\\main\\java\\ru\\job4j\\tracker\\resources\\connect-db.properties")) {
             this.properties.load(io);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
@@ -90,7 +99,7 @@ public class TrackerDB {
      */
     private void createTablesInDB() {
         String[] query = null;
-        try (InputStream fo = classLoader.getResourceAsStream("resources/up_000_001.sql")) {
+        try (InputStream fo = classLoader.getResourceAsStream("src\\main\\java\\ru\\job4j\\tracker\\resources\\up_000_001.sql")) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(fo));
             StringBuilder sqlQuery = new StringBuilder();
             boolean next = true;

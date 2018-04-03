@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
+import java.util.Random;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -39,6 +40,8 @@ public class TrackerDBTest {
      */
     private TrackerDB trackerDB;
 
+    private static final Random rn = new Random();
+
     /**
      * Initialize fro test.
      */
@@ -62,6 +65,7 @@ public class TrackerDBTest {
     @Test
     public void whenAddItemInDbThenAddInDb() {
         Item item = new Bug("testJUnit", "testJUnit");
+        item.setId(String.valueOf(rn.nextInt(100)));
         int execute = trackerDB.addItem(item);
         try {
             this.conn = DriverManager.getConnection(this.url, this.userName, this.userPassword);
