@@ -1,5 +1,7 @@
 package ru.job4j.tracker;
 
+import java.util.Date;
+
 public class Bug extends Item {
     /**
      * Constract.
@@ -9,6 +11,6 @@ public class Bug extends Item {
     public Bug(String name, String description) {
         setName(name);
         setDescription(description);
-        setData();
+        setDate(new Date(System.currentTimeMillis()));
     }
 }

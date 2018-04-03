@@ -1,5 +1,7 @@
 package ru.job4j.tracker;
 
+import java.util.Date;
+
 public class Task extends Item {
     /**
      * Constaract.
@@ -9,6 +11,6 @@ public class Task extends Item {
     public Task(String name, String description) {
         setName(name);
         setDescription(description);
-        setData();
+        setDate(new Date(System.currentTimeMillis()));
     }
 }

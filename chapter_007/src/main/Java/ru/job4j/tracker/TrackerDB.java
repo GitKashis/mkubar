@@ -1,11 +1,9 @@
 package ru.job4j.tracker;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -76,7 +74,7 @@ public class TrackerDB {
         } catch (ClassNotFoundException e) {
             logger.error(e.getMessage(), e);
         }
-        try (InputStream io = classLoader.getResourceAsStream("connect-db.properties")) {
+        try (InputStream io = classLoader.getResourceAsStream("resources/connect-db.properties")) {
             this.properties.load(io);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
@@ -92,28 +90,28 @@ public class TrackerDB {
      */
     private void createTablesInDB() {
         String[] query = null;
-        try (InputStream fo = classLoader.getResourceAsStream("sql/migration/up_000_001.sql")) {
+        try (InputStream fo = classLoader.getResourceAsStream("resources/up_000_001.sql")) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(fo));
-            String sqlQuery = "";
+            StringBuilder sqlQuery = new StringBuilder();
             boolean next = true;
             do {
                 String readFio = reader.readLine();
                 if (readFio != null) {
-                    sqlQuery = sqlQuery + readFio;
+                    sqlQuery.append(readFio);
                 } else {
                     next = false;
                 }
             } while (next);
-            query = sqlQuery.split(";");
-        } catch (FileNotFoundException e) {
-            logger.error(e.getMessage(), e);
+            query = sqlQuery.toString().split(";");
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
         try (Connection conn = DriverManager.getConnection(this.url, this.userName, this.userPassword)) {
             Statement st = conn.createStatement();
-            for (int i = 0; i < query.length; i++) {
-                st.execute(query[i]);
+            if (query != null) {
+                for (String aQuery : query) {
+                    st.execute(aQuery);
+                }
             }
             st.close();
         } catch (SQLException e) {
@@ -131,8 +129,8 @@ public class TrackerDB {
     public int addItem(Item item) {
         int result = -1;
         try (Connection conn = DriverManager.getConnection(this.url, this.userName, this.userPassword)) {
-            PreparedStatement ps = null;
-            if (item.getId() != Integer.MIN_VALUE && item.getId() < 0) {
+            PreparedStatement ps;
+            if (Integer.parseInt(item.getId()) != Integer.MIN_VALUE && Integer.parseInt(item.getId()) < 0) {
                 ps = conn.prepareStatement("INSERT INTO tracker(rid_items, fname, fdesc, iid) VALUES (?, ?, ?, ?)");
                 ps.setInt(4, Integer.parseInt(item.getId()));
             } else {
@@ -213,9 +211,15 @@ public class TrackerDB {
             } else if (itemType.equals("Task")) {
                 item = new Task(rs.getString("name_item"), rs.getString("fdesc"));
             }
-            item.setId(String.valueOf(idItem));
-            item.setCommit(rs.getString("fcommit"));
-            item.setDate(rs.getDate("fdate"));
+            if (item != null) {
+                item.setId(String.valueOf(idItem));
+            }
+            if (item != null) {
+                item.setCommit(rs.getString("fcommit"));
+            }
+            if (item != null) {
+                item.setDate(rs.getDate("fdate"));
+            }
             if (item != null) {
                 map.put(idItem, item);
             }

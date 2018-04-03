@@ -11,10 +11,6 @@ import java.util.Date;
  */
 public class Item {
     /**
-     * Поле для объекта дата.
-     */
-    private Date dateNow = new Date();
-    /**
      * Поле имя.
      */
     private String name;
@@ -25,7 +21,7 @@ public class Item {
     /**
      * Поле дата.
      */
-    private String date;
+    private Date date;
     /**
      * Поле комминтарий.
      */
@@ -50,9 +46,10 @@ public class Item {
     }
     /**
      * Set data.
+     * @param fdate - date of creating item
      */
-    public void setDate() {
-        this.date = String.format("%s.%s.%s", dateNow.getDay(), dateNow.getMonth(), dateNow.getYear());
+    public void setDate(Date fdate) {
+        this.date = new Date();
     }
     /**
      * Set commit.
@@ -81,7 +78,7 @@ public class Item {
      * Метод получения даты.
      * @return get Data
      */
-    public String getDate() {
+    public Date getDate() {
         return this.date;
     }
 
