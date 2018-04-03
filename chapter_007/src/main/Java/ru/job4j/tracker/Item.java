@@ -9,79 +9,103 @@ import java.util.Date;
  * @version 1.0
  * @since 04.09.17
  */
-class Item {
-    // уникальный id, служит для идентивикации записи в массиве.
-    private String id;
-    // имя заявки.
+public class Item {
+    /**
+     * Поле для объекта дата.
+     */
+    private Date dateNow = new Date();
+    /**
+     * Поле имя.
+     */
     private String name;
-    // описание.
+    /**
+     * Поле описание.
+     */
     private String description;
-    // время создания.
-    private Date create;
-    // коментарий.
-    private String comment;
-
     /**
-     * конструктор с параметрами.
-     *
-     * @param name        name
-     * @param description desc
-     * @param comment comment
-     * @value create is Date
+     * Поле дата.
      */
-
-    Item(String name, String description, String comment) {
-        this.name = name;
-        this.description = description;
-        this.comment = comment;
-    }
-
+    private String date;
     /**
-     * Override toString.
-     * @return String
+     * Поле комминтарий.
      */
-    public String toString() {
-        return ("Id: " + this.getId() + "; Name: " + this.getName() + "; Description: " + this.getDesc()
-                + "; Create: " + this.getDate() + "; Comment: " + this.getCommit());
-    }
-
-    void setName(String name) {
+    private String commit;
+    /**
+     * Поле ID.
+     */
+    private String id;
+    /**
+     * Set name.
+     * @param name name
+     */
+    public void setName(String name) {
         this.name = name;
     }
-
-    void setDesc(String description) {
-        this.description = description;
+    /**
+     * Set description.
+     * @param desc description
+     */
+    public void setDescription(String desc) {
+        this.description = desc;
     }
-
-    String getName() {
+    /**
+     * Set data.
+     */
+    public void setDate() {
+        this.date = String.format("%s.%s.%s", dateNow.getDay(), dateNow.getMonth(), dateNow.getYear());
+    }
+    /**
+     * Set commit.
+     * @param commit commit
+     */
+    public void setCommit(String commit) {
+        this.commit = commit;
+    }
+    /**
+     * Метод получения имяни.
+     * @return get name
+     */
+    public String getName() {
         return this.name;
     }
 
-    String getDesc() {
+    /**
+     * Метод получения описания.
+     * @return get description
+     */
+    public String getDesc() {
         return this.description;
     }
 
-    Date getDate() {
-        return this.create;
+    /**
+     * Метод получения даты.
+     * @return get Data
+     */
+    public String getDate() {
+        return this.date;
     }
 
-    String getId() {
+    /**
+     * Получение поля.
+     * @return get commit
+     */
+    public String getCommit() {
+        return this.commit;
+    }
+
+    /**
+     * Method get Id.
+     * @return ID
+     */
+    public String getId() {
         return this.id;
     }
 
-    void setId(String id) {
+    /**
+     * Установка ID.
+     * @param id уникальный
+     */
+    public void setId(String id) {
         this.id = id;
-    }
-
-    void setCommit(String comment) {
-        this.comment = comment;
-    }
-
-    String getCommit() {
-        return this.comment;
-    }
-
-    void setDate(Date create) {
-        this.create = create;
     }
 }

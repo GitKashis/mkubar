@@ -131,8 +131,8 @@ public class TrackerDB {
     public int addItem(Item item) {
         int result = -1;
         try (Connection conn = DriverManager.getConnection(this.url, this.userName, this.userPassword)) {
-            PreparedStatement ps;
-            if (Integer.parseInt(item.getId()) != Integer.MIN_VALUE && Integer.parseInt(item.getId()) < 0) {
+            PreparedStatement ps = null;
+            if (item.getId() != Integer.MIN_VALUE && item.getId() < 0) {
                 ps = conn.prepareStatement("INSERT INTO tracker(rid_items, fname, fdesc, iid) VALUES (?, ?, ?, ?)");
                 ps.setInt(4, Integer.parseInt(item.getId()));
             } else {
@@ -216,7 +216,9 @@ public class TrackerDB {
             item.setId(String.valueOf(idItem));
             item.setCommit(rs.getString("fcommit"));
             item.setDate(rs.getDate("fdate"));
-            map.put(idItem, item);
+            if (item != null) {
+                map.put(idItem, item);
+            }
         }
         return map;
     }
