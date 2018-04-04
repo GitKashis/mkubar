@@ -20,6 +20,7 @@ import java.util.Properties;
 
 public class TrackerDB {
 
+    private final DataSource dataSource;
     /**
      * Url DB.
      */
@@ -58,78 +59,49 @@ public class TrackerDB {
     /**
      * Constructor.
      */
-    public TrackerDB() {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            System.out.println("PostgreSQL JDBC Driver not found!!!");
-            e.printStackTrace();
-        }
-        this.url = "jdbc:postgresql://localhost:5432/db_tracker";
-        this.userName = "postgres";
-        this.userPassword = "root";
-//        this.connectParam();
+    public TrackerDB() throws IOException, ClassNotFoundException {
+
+        this.dataSource = new DataSource();
 //        if (!dbExist) {
 //            this.createTablesInDB();
 //        }
     }
 
-    /**
-     * Initialize connect param.
-     */
-    private void connectParam() {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            System.out.println("driver");
-            logger.error(e.getMessage(), e);
-        }
-        try (InputStream io = classLoader.getResourceAsStream("connect-db.properties")) {
-            this.properties.load(io);
-        } catch (IOException e) {
-            System.out.println("io");
-            logger.error(e.getMessage(), e);
-        }
-        this.url = String.format("jdbc:postgresql://%s/%s", this.properties.getProperty("db.host"), this.properties.getProperty("db.name"));
-        this.userName = this.properties.getProperty("db.userName");
-        this.userPassword = this.properties.getProperty("db.userPassword");
-        this.dbExist = Boolean.valueOf(this.properties.getProperty("db.exist"));
-    }
 
     /**
      * Check table in date base and create table if not exist.
      */
-    private void createTablesInDB() {
-        String[] query = null;
-        try (InputStream fo = classLoader.getResourceAsStream("src\\main\\java\\ru\\job4j\\tracker\\resources\\up_000_001.sql")) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(fo));
-            StringBuilder sqlQuery = new StringBuilder();
-            boolean next = true;
-            do {
-                String readFio = reader.readLine();
-                if (readFio != null) {
-                    sqlQuery.append(readFio);
-                } else {
-                    next = false;
-                }
-            } while (next);
-            query = sqlQuery.toString().split(";");
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-        }
-        try (Connection conn = DriverManager.getConnection(this.url, this.userName, this.userPassword)) {
-            Statement st = conn.createStatement();
-            if (query != null) {
-                for (String aQuery : query) {
-                    st.execute(aQuery);
-                }
-            }
-            st.close();
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-        }
-        this.properties.setProperty("db.exist", "true");
-    }
+//    private void createTablesInDB() {
+//        String[] query = null;
+//        try (InputStream fo = classLoader.getResourceAsStream("src\\main\\java\\ru\\job4j\\tracker\\resources\\up_000_001.sql")) {
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(fo));
+//            StringBuilder sqlQuery = new StringBuilder();
+//            boolean next = true;
+//            do {
+//                String readFio = reader.readLine();
+//                if (readFio != null) {
+//                    sqlQuery.append(readFio);
+//                } else {
+//                    next = false;
+//                }
+//            } while (next);
+//            query = sqlQuery.toString().split(";");
+//        } catch (IOException e) {
+//            logger.error(e.getMessage(), e);
+//        }
+//        try (Connection conn = DriverManager.getConnection(this.url, this.userName, this.userPassword)) {
+//            Statement st = conn.createStatement();
+//            if (query != null) {
+//                for (String aQuery : query) {
+//                    st.execute(aQuery);
+//                }
+//            }
+//            st.close();
+//        } catch (SQLException e) {
+//            logger.error(e.getMessage(), e);
+//        }
+//        this.properties.setProperty("db.exist", "true");
+//    }
 
     /**
      * Add new Items in DB.
@@ -137,9 +109,9 @@ public class TrackerDB {
      * @param item need add
      * @return count rows changed
      */
-    public int addItem(Item item) {
+    public int addItem(Item item) throws SQLException, ClassNotFoundException, IOException {
         int result = -1;
-        try (Connection conn = DriverManager.getConnection(this.url, this.userName, this.userPassword)) {
+        Connection conn = dataSource.getConnection();
             PreparedStatement ps;
             ps = conn.prepareStatement("INSERT INTO tracker(rid_items, fname, fdesc, item_id) VALUES (?, ?, ?, ?)");
             if (item.getClass() == Bug.class) {
@@ -153,9 +125,6 @@ public class TrackerDB {
             ps.setInt(4, Integer.parseInt(item.getId()));
             result = ps.executeUpdate();
             ps.close();
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-        }
         return result;
     }
 
