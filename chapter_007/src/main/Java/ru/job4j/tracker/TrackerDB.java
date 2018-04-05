@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -59,7 +58,7 @@ public class TrackerDB {
     /**
      * Constructor.
      */
-    public TrackerDB() throws IOException, ClassNotFoundException {
+    public TrackerDB() {
 
         this.dataSource = new DataSource();
 //        if (!dbExist) {
@@ -71,37 +70,37 @@ public class TrackerDB {
     /**
      * Check table in date base and create table if not exist.
      */
-//    private void createTablesInDB() {
-//        String[] query = null;
-//        try (InputStream fo = classLoader.getResourceAsStream("src\\main\\java\\ru\\job4j\\tracker\\resources\\up_000_001.sql")) {
-//            BufferedReader reader = new BufferedReader(new InputStreamReader(fo));
-//            StringBuilder sqlQuery = new StringBuilder();
-//            boolean next = true;
-//            do {
-//                String readFio = reader.readLine();
-//                if (readFio != null) {
-//                    sqlQuery.append(readFio);
-//                } else {
-//                    next = false;
-//                }
-//            } while (next);
-//            query = sqlQuery.toString().split(";");
-//        } catch (IOException e) {
-//            logger.error(e.getMessage(), e);
-//        }
-//        try (Connection conn = DriverManager.getConnection(this.url, this.userName, this.userPassword)) {
-//            Statement st = conn.createStatement();
-//            if (query != null) {
-//                for (String aQuery : query) {
-//                    st.execute(aQuery);
-//                }
-//            }
-//            st.close();
-//        } catch (SQLException e) {
-//            logger.error(e.getMessage(), e);
-//        }
-//        this.properties.setProperty("db.exist", "true");
-//    }
+    private void createTablesInDB() throws IOException, ClassNotFoundException {
+        String[] query = null;
+        try (InputStream fo = classLoader.getResourceAsStream("src\\main\\java\\ru\\job4j\\tracker\\resources\\up_000_001.sql")) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fo));
+            StringBuilder sqlQuery = new StringBuilder();
+            boolean next = true;
+            do {
+                String readFio = reader.readLine();
+                if (readFio != null) {
+                    sqlQuery.append(readFio);
+                } else {
+                    next = false;
+                }
+            } while (next);
+            query = sqlQuery.toString().split(";");
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+        try (Connection conn = dataSource.getConnection()) {
+            Statement st = conn.createStatement();
+            if (query != null) {
+                for (String aQuery : query) {
+                    st.execute(aQuery);
+                }
+            }
+            st.close();
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+        }
+        this.properties.setProperty("db.exist", "true");
+    }
 
     /**
      * Add new Items in DB.
@@ -111,7 +110,7 @@ public class TrackerDB {
      */
     public int addItem(Item item) throws SQLException, ClassNotFoundException, IOException {
         int result = -1;
-        Connection conn = dataSource.getConnection();
+        try (Connection conn = dataSource.getConnection()) {
             PreparedStatement ps;
             ps = conn.prepareStatement("INSERT INTO tracker(rid_items, fname, fdesc, item_id) VALUES (?, ?, ?, ?)");
             if (item.getClass() == Bug.class) {
@@ -125,6 +124,10 @@ public class TrackerDB {
             ps.setInt(4, Integer.parseInt(item.getId()));
             result = ps.executeUpdate();
             ps.close();
+    } catch (SQLException e) {
+        logger.error(e.getMessage(), e);
+
+    }
         return result;
     }
 
@@ -133,9 +136,9 @@ public class TrackerDB {
      *
      * @return Map items.
      */
-    public Map<Integer, Item> findAll() {
+    public Map<Integer, Item> findAll() throws IOException, ClassNotFoundException {
         Map<Integer, Item> map = null;
-        try (Connection conn = DriverManager.getConnection(this.url, this.userName, this.userPassword)) {
+        try (Connection conn = dataSource.getConnection()) {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery("SELECT tr.item_id, it.fname AS type_item, tr.fname AS name_item, tr.fdesc, tr.fcommit, tr.fdate FROM tracker AS tr LEFT JOIN items AS it ON tr.rid_items = it.iid");
             map = this.getMapItem(rs);
@@ -153,10 +156,10 @@ public class TrackerDB {
      * @param nameItem name item
      * @return Map items
      */
-    public Map<Integer, Item> findByName(String nameItem) {
+    public Map<Integer, Item> findByName(String nameItem) throws IOException, ClassNotFoundException {
         Item item = null;
         Map<Integer, Item> map = null;
-        try (Connection conn = DriverManager.getConnection(this.url, this.userName, this.userPassword)) {
+        try (Connection conn = dataSource.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT tr.item_id, it.fname AS type_item, tr.fname AS name_item, tr.fdesc, tr.fcommit, tr.fdate FROM tracker AS tr LEFT JOIN items AS it ON tr.rid_items = it.iid WHERE tr.fname = ?");
             ps.setString(1, nameItem);
             ResultSet rs = ps.executeQuery();
@@ -209,9 +212,9 @@ public class TrackerDB {
      * @param id item
      * @return Item object
      */
-    public Item findById(int id) {
+    public Item findById(int id) throws IOException, ClassNotFoundException {
         Item item = null;
-        try (Connection conn = DriverManager.getConnection(this.url, this.userName, this.userPassword)) {
+        try (Connection conn = dataSource.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT tr.item_id, it.fname AS type_item, tr.fname " +
                     "AS name_item, tr.fdesc, tr.fcommit, tr.fdate FROM tracker AS tr " +
                     "LEFT JOIN items AS it ON tr.rid_items = it.iid " +
@@ -235,8 +238,8 @@ public class TrackerDB {
      *
      * @param id item.
      */
-    public void deleteItemById(int id) {
-        try (Connection conn = DriverManager.getConnection(this.url, this.userName, this.userPassword)) {
+    public void deleteItemById(int id) throws IOException, ClassNotFoundException {
+        try (Connection conn = dataSource.getConnection()) {
             PreparedStatement pr = conn.prepareStatement("DELETE FROM tracker WHERE item_id = ?");
             pr.setInt(1, id);
             pr.executeUpdate();
@@ -251,8 +254,8 @@ public class TrackerDB {
      *
      * @param item need update.
      */
-    public void updateItem(Item item) {
-        try (Connection conn = DriverManager.getConnection(this.url, this.userName, this.userPassword)) {
+    public void updateItem(Item item) throws IOException, ClassNotFoundException {
+        try (Connection conn = dataSource.getConnection()) {
             PreparedStatement pr = conn.prepareStatement("UPDATE tracker SET fname = ?, rid_items = ?, fdesc = ?, fcommit = ?, fdate = ? WHERE iid = ?");
             pr.setString(1, item.getName());
             if (item.getClass() == Bug.class) {
