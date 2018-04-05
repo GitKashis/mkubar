@@ -3,10 +3,7 @@ package ru.job4j.tracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,40 +12,13 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Properties;
+import ru.job4j.tracker.item.Bug;
+import ru.job4j.tracker.item.Item;
+import ru.job4j.tracker.item.Task;
 
 public class TrackerDB {
 
     private final DataSource dataSource;
-    /**
-     * Url DB.
-     */
-    private String url;
-
-    /**
-     * User name for DB.
-     */
-    private String userName;
-
-    /**
-     * User password for DB.
-     */
-    private String userPassword;
-
-    /**
-     * Shgfj.
-     */
-    private boolean dbExist = false;
-
-    /**
-     * Properties.
-     */
-    private Properties properties = new Properties();
-
-    /**
-     * Field Class Loader.
-     */
-    private ClassLoader classLoader = TrackerDB.class.getClassLoader();
 
     /**
      * Logger.
@@ -58,52 +28,11 @@ public class TrackerDB {
     /**
      * Constructor.
      */
-    public TrackerDB() {
-
+    public TrackerDB() throws IOException, SQLException {
         this.dataSource = new DataSource();
-        if (!dbExist) {
-            try {
-                this.createTablesInDB();
-            } catch (IOException | ClassNotFoundException e) {
-                logger.error(e.getMessage(), e);
-            }
+        if (!dataSource.isDbExist()) {
+            dataSource.createTablesInDB();
         }
-    }
-
-
-    /**
-     * Check table in date base and create table if not exist.
-     */
-    private void createTablesInDB() throws IOException, ClassNotFoundException {
-        String[] query = null;
-        try (InputStream fo = classLoader.getResourceAsStream("src/main/java/ru/job4j/tracker/resources/up_000_001.sql")) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(fo));
-            StringBuilder sqlQuery = new StringBuilder();
-            boolean next = true;
-            do {
-                String readFio = reader.readLine();
-                if (readFio != null) {
-                    sqlQuery.append(readFio);
-                } else {
-                    next = false;
-                }
-            } while (next);
-            query = sqlQuery.toString().split(";");
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-        }
-        try (Connection conn = dataSource.getConnection()) {
-            Statement st = conn.createStatement();
-            if (query != null) {
-                for (String aQuery : query) {
-                    st.execute(aQuery);
-                }
-            }
-            st.close();
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-        }
-        this.properties.setProperty("db.exist", "true");
     }
 
     /**
@@ -128,10 +57,9 @@ public class TrackerDB {
             ps.setInt(4, Integer.parseInt(item.getId()));
             result = ps.executeUpdate();
             ps.close();
-    } catch (SQLException e) {
-        logger.error(e.getMessage(), e);
-
-    }
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+        }
         return result;
     }
 
@@ -161,7 +89,6 @@ public class TrackerDB {
      * @return Map items
      */
     public Map<Integer, Item> findByName(String nameItem) throws IOException, ClassNotFoundException {
-        Item item = null;
         Map<Integer, Item> map = null;
         try (Connection conn = dataSource.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT tr.item_id, it.fname AS type_item, tr.fname AS name_item, tr.fdesc, tr.fcommit, tr.fdate FROM tracker AS tr LEFT JOIN items AS it ON tr.rid_items = it.iid WHERE tr.fname = ?");

@@ -3,7 +3,8 @@ CREATE TABLE IF NOT EXISTS items (
   fname text UNIQUE
 );
 CREATE TABLE IF NOT EXISTS tracker (
-  iid serial primary key,
+  id serial primary key,
+  item_id int NOT NULL,
   rid_items INT REFERENCES items(iid),
   fname text NOT NULL,
   fdesc text NOT NULL,

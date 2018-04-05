@@ -2,38 +2,17 @@ package ru.job4j.tracker;
 
 import org.junit.Before;
 import org.junit.Test;
+import ru.job4j.tracker.item.Bug;
+import ru.job4j.tracker.item.Item;
+import ru.job4j.tracker.item.Task;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Map;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class TrackerDBTest {
-
-    /**
-     * Field Connection object in DB.
-     */
-    private Connection conn = null;
-
-    /**
-     * Url DB.
-     */
-    private String url;
-
-    /**
-     * User name for DB.
-     */
-    private String userName;
-
-    /**
-     * User password for DB.
-     */
-    private String userPassword;
-
     /**
      * Object for need check.
      */
@@ -43,7 +22,7 @@ public class TrackerDBTest {
      * Initialize fro test.
      */
     @Before
-    public void initialize() throws IOException, ClassNotFoundException {
+    public void initialize() throws IOException, ClassNotFoundException, SQLException {
         this.trackerDB = new TrackerDB();
     }
 
