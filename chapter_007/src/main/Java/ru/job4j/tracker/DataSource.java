@@ -17,11 +17,11 @@ public class DataSource {
     public Connection getConnection() throws SQLException, ClassNotFoundException, IOException {
         prop = new Properties();
         prop.load(new FileInputStream("src\\main\\java\\ru\\job4j\\tracker\\resources\\connect-db.properties"));
-        String driver = prop.getProperty("jdbc.driver");
-        this.url = String.format("jdbc:postgresql://%s/%s", prop.getProperty("jdbc.host"), prop.getProperty("jdbc.name"));
-        this.userName = prop.getProperty("jdbc.userName");
-        this.userPassword = prop.getProperty("jdbc.userPassword");
-        this.dbExist = Boolean.valueOf(prop.getProperty("jdbc.exist"));
+        String driver = prop.getProperty("db.driver");
+        this.url = String.format("jdbc:postgresql://%s/%s", prop.getProperty("db.host"), prop.getProperty("db.name"));
+        this.userName = prop.getProperty("db.userName");
+        this.userPassword = prop.getProperty("db.userPassword");
+        this.dbExist = Boolean.valueOf(prop.getProperty("db.exist"));
         Class.forName(driver);
         return DriverManager.getConnection(url, userName, userPassword);
     }

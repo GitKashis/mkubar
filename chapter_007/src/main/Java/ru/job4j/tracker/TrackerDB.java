@@ -61,9 +61,13 @@ public class TrackerDB {
     public TrackerDB() {
 
         this.dataSource = new DataSource();
-//        if (!dbExist) {
-//            this.createTablesInDB();
-//        }
+        if (!dbExist) {
+            try {
+                this.createTablesInDB();
+            } catch (IOException | ClassNotFoundException e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
     }
 
 
@@ -72,7 +76,7 @@ public class TrackerDB {
      */
     private void createTablesInDB() throws IOException, ClassNotFoundException {
         String[] query = null;
-        try (InputStream fo = classLoader.getResourceAsStream("src\\main\\java\\ru\\job4j\\tracker\\resources\\up_000_001.sql")) {
+        try (InputStream fo = classLoader.getResourceAsStream("src/main/java/ru/job4j/tracker/resources/up_000_001.sql")) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(fo));
             StringBuilder sqlQuery = new StringBuilder();
             boolean next = true;

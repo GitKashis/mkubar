@@ -54,23 +54,7 @@ public class TrackerDBTest {
     public void whenAddItemInDbThenAddInDb() throws SQLException, ClassNotFoundException, IOException {
         Item item = new Task("testJUnit", "testJUnit");
         int execute = trackerDB.addItem(item);
-//        try {
-//            this.conn = DriverManager.getConnection(this.url, this.userName, this.userPassword);
-//            Statement ps = this.conn.createStatement();
-//            ps.executeUpdate("DELETE FROM tracker as tr where tr.fname = 'testJUnit'");
-//            ps.close();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (this.conn != null) {
-//                try {
-//                    this.conn.close();
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//        assertThat(execute, is(1));
+        assertThat(execute, is(1));
     }
 
     /**
