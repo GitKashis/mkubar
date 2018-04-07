@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 public class DBconnectTest {
 
     @Test
-    public void getConnection() throws IOException, SQLException {
+    public void getConnection() throws SQLException {
         DBconnect dBconnect = new DBconnect();
     }
 }

@@ -4,6 +4,7 @@ import com.ibatis.common.jdbc.ScriptRunner;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.job4j.parser.parse.Node;
 
 import java.io.*;
 import java.sql.*;
@@ -115,8 +116,20 @@ public class DBconnect {
      * Save data in db.
      *
      */
-    public void addNodeInDB(List<?> list) {
-
+    public void addNodeInDB(List<Node> list) {
+        try (Connection connection = this.pool.getConnection()) {
+            for (Node next : list) {
+                try (PreparedStatement ps = connection.prepareCall("INSERT INTO sql_ru_parse (name_topic, url_topic, body_topic, time_topic) VALUES (?, ?, ?, ?)")) {
+                    ps.setString(1, next.getNameTopic());
+                    ps.setString(2, next.getUrl());
+                    ps.setString(3, next.getBody());
+                    ps.setTimestamp(4, new Timestamp(next.getDate().getTime()));
+                    ps.execute();
+                }
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
 
