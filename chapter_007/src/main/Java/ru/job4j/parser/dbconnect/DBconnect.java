@@ -89,7 +89,7 @@ public class DBconnect {
      * Save data in prop.
      */
     private void saveProp() {
-        try (FileOutputStream os = new FileOutputStream(ClassLoader.getSystemResource("C:\\Projects\\mkubar\\chapter_007\\src\\main\\Java\\ru\\job4j\\parser\\resources\\db-param.properties").getPath())) {
+        try (FileOutputStream os = new FileOutputStream(("C:\\Projects\\mkubar\\chapter_007\\src\\main\\Java\\ru\\job4j\\parser\\resources\\db-param.properties"))) {
             this.properties.store(os, "No commit");
         } catch (IOException e) {
             this.logger.error(e.getMessage(), e);
