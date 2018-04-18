@@ -210,4 +210,18 @@ public class User {
     public int hashCode() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("User{");
+        sb.append("id=").append(id);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", login='").append(login).append('\'');
+        sb.append(", email='").append(email).append('\'');
+        sb.append(", createDate=").append(createDate.getTime());
+        sb.append(", roles=").append(roles);
+        sb.append(", password='").append(password).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

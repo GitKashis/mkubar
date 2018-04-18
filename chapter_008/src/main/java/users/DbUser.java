@@ -23,7 +23,7 @@ public class DbUser {
     /**
      * Instance these class.
      */
-//    private DbUser INSTANSE = new DbUser();
+    private static DbUser INSTANSE;
 
     /**
      * Pool object for connect DB.
@@ -47,7 +47,7 @@ public class DbUser {
     /**
      * Constructor.
      */
-    public DbUser() throws SQLException {
+    private DbUser() throws SQLException {
         initializeDbUser();
     }
 
@@ -61,7 +61,7 @@ public class DbUser {
             logger.error(e.getMessage(), e);
         }
         try {
-            properties.load(new FileInputStream("C:\\Projects\\mkubar\\chapter_008\\src\\main\\resources\\db-param.properties"));
+            properties.load(new FileInputStream("C:\\projects\\mkubar\\chapter_008\\src\\main\\resources\\db-param.properties"));
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -90,7 +90,7 @@ public class DbUser {
      * Save data in prop.
      */
     private void saveProp() {
-        try (FileOutputStream os = new FileOutputStream(("C:\\Projects\\mkubar\\chapter_008\\src\\main\\resources\\db-param.properties"))) {
+        try (FileOutputStream os = new FileOutputStream(("C:\\projects\\mkubar\\chapter_008\\src\\main\\resources\\db-param.properties"))) {
             this.properties.store(os, "No commit");
         } catch (IOException e) {
             this.logger.error(e.getMessage(), e);
@@ -101,7 +101,7 @@ public class DbUser {
      * Create table in DB if not exist.
      */
     public void createTableInDB() throws SQLException {
-        String scriptFilePath = "C:\\Projects\\mkubar\\chapter_008\\src\\main\\java\\resources\\newTable.sql";
+        String scriptFilePath = "C:\\projects\\mkubar\\chapter_008\\src\\main\\resources\\newTable.sql";
         Connection conn = pool.getConnection();
         ScriptRunner scriptExecutor = new ScriptRunner(conn, false, false);
         try (Reader reader = new BufferedReader(new FileReader(scriptFilePath))) {
@@ -202,158 +202,134 @@ public class DbUser {
             }
             connection.commit();
         } catch (SQLException e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
         return result;
     }
-//
-//    /**
-//     * Update User in DB.
-//     * @param user object
-//     */
-//    public void updateUserInDB(User user) {
-//        try (Connection connection = this.pool.getConnection()) {
-//            connection.setAutoCommit(false);
-//            try (PreparedStatement ps = connection.prepareCall("UPDATE user_store SET name = ?, login = ?, email = ? WHERE iid = ?")) {
-//                ps.setString(1, user.getName());
-//                ps.setString(2, user.getLogin());
-//                ps.setString(3, user.getEmail());
-//                ps.setInt(4, user.getId());
-//                ps.executeUpdate();
-//            }
-//            if (user.getRoles() != null && user.getRoles().size() > 0) {
-//                try (PreparedStatement statement = connection.prepareStatement("DELETE FROM user_role WHERE iid_user=?")) {
-//                    statement.setInt(1, user.getId());
-//                    statement.executeUpdate();
-//                }
-//                List<String> roles = user.getRoles();
-//                try (PreparedStatement ps = connection.prepareStatement("INSERT INTO user_role (iid_user, iid_roles) VALUES (?, ?)")) {
-//                    for (String next : roles) {
-//                        ps.setInt(1, user.getId());
-//                        ps.setInt(2, this.rolesMap.get(next));
-//                        ps.executeUpdate();
-//                    }
-//                }
-//            }
-//            connection.commit();
-//        } catch (SQLException e) {
-//            LOGGER.error(e.getMessage(), e);
-//        }
-//    }
-//
-//    /**
-//     * Get all User in db.
-//     * @return list user
-//     */
-//    public List<User> getAllUserInDB() {
-//        List<User> listUsers = new ArrayList<>(1000);
-//        Map<Integer, User> usersMap = new HashMap<>(100);
-//        try (Connection connection = this.pool.getConnection()) {
-//            try (Statement ps = connection.createStatement()) {
-//                try (ResultSet rs = ps.executeQuery("SELECT iid, name, login, email, create_date, name_role, user_password FROM users_view")) {
-//                    while (rs.next()) {
-//                        int id = rs.getInt("iid");
-//                        Calendar calendar = Calendar.getInstance();
-//                        calendar.setTimeInMillis(rs.getTimestamp("create_date").getTime());
-//                        if (usersMap.containsKey(id)) {
-//                            User user = usersMap.get(id);
-//                            user.getRoles().add(rs.getString("name_role"));
-//                        } else {
-//                            usersMap.put(id,
-//                                    new User(id,
-//                                            rs.getString("name"),
-//                                            rs.getString("login"),
-//                                            rs.getString("email"),
-//                                            calendar,
-//                                            rs.getString("name_role"),
-//                                            rs.getString("user_password")));
-//                        }
-//                    }
-//                }
-//            }
-//        } catch (SQLException e) {
-//            LOGGER.error(e.getMessage(), e);
-//        }
-//        for (Map.Entry<Integer, User> next : usersMap.entrySet()) {
-//            listUsers.add(next.getValue());
-//        }
-//        return listUsers;
-//    }
-//
-//    /**
-//     * Get User object in database by id.
-//     * @param id user
-//     * @return user
-//     */
-//    public User getUser(int id) {
-//        return this.getUser(id, null);
-//    }
-//
-//    /**
-//     * Get User object in database by login.
-//     * @param login user
-//     * @return user
-//     */
-//    public User getUser(String login) {
-//        return this.getUser(null, login);
-//    }
-//
-//    /**
-//     * Get User object in database.
-//     * @param id User
-//     * @param login Login
-//     * @return User object
-//     */
-//    private User getUser(Integer id, String login) {
-//        User user = null;
-//        String query;
-//        boolean flag;
-//        if (login == null) {
-//            query = "SELECT * FROM users_view WHERE iid=?";
-//            flag = true;
-//        } else {
-//            query = "SELECT * FROM users_view WHERE login=?";
-//            flag = false;
-//        }
-//        try (Connection connection = this.pool.getConnection()) {
-//            try (PreparedStatement ps = connection.prepareStatement(query)) {
-//                if (flag) {
-//                    ps.setInt(1, id);
-//                } else {
-//                    ps.setString(1, login);
-//                }
-//                try (ResultSet rs = ps.executeQuery()) {
-//                    int index = 0;
-//                    while (rs.next()) {
-//                        Calendar calendar = Calendar.getInstance();
-//                        calendar.setTimeInMillis(rs.getTimestamp("create_date").getTime());
-//                        if (index == 0) {
-//                            user = new User(rs.getInt("iid"),
-//                                    rs.getString("name"),
-//                                    rs.getString("login"),
-//                                    rs.getString("email"),
-//                                    calendar,
-//                                    rs.getString("name_role"),
-//                                    rs.getString("user_password"));
-//                            index++;
-//                        } else {
-//                            user.addRole(rs.getString("name_role"));
-//                        }
-//                    }
-//                }
-//            }
-//        } catch (SQLException e) {
-//            LOGGER.error(e.getMessage(), e);
-//        }
-//        return user;
-//    }
-//
-//    /**
-//     * Getter for instance field.
-//     *
-//     * @return instance
-//     */
-//    public static DbUser getInstanse() {
-//        return INSTANSE;
-//    }
+
+    /**
+     * Update User in DB.
+     * @param user object
+     */
+    public void updateUserInDB(User user) {
+        try (Connection connection = this.pool.getConnection()) {
+            connection.setAutoCommit(false);
+            try (PreparedStatement ps = connection.prepareCall("UPDATE user_store SET name = ?, login = ?, email = ? WHERE iid = ?")) {
+                ps.setString(1, user.getName());
+                ps.setString(2, user.getLogin());
+                ps.setString(3, user.getEmail());
+                ps.setInt(4, user.getId());
+                ps.executeUpdate();
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Get all User in db.
+     * @return list user
+     */
+    public List<User> getAllUserInDB() {
+        List<User> listUsers = new ArrayList<>(1000);
+        Map<Integer, User> usersMap = new HashMap<>(100);
+        try (Connection connection = this.pool.getConnection()) {
+            try (Statement ps = connection.createStatement()) {
+                try (ResultSet rs = ps.executeQuery("SELECT iid, name, login, email, create_date, name_role, user_password FROM users_view")) {
+                    while (rs.next()) {
+                        int id = rs.getInt("iid");
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis(rs.getTimestamp("create_date").getTime());
+                        if (usersMap.containsKey(id)) {
+                            User user = usersMap.get(id);
+                            user.getRoles().add(rs.getString("name_role"));
+                        } else {
+                            usersMap.put(id,
+                                    new User(id,
+                                            rs.getString("name"),
+                                            rs.getString("login"),
+                                            rs.getString("email"),
+                                            calendar,
+                                            rs.getString("name_role"),
+                                            rs.getString("user_password")));
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+        }
+        for (Map.Entry<Integer, User> next : usersMap.entrySet()) {
+            listUsers.add(next.getValue());
+        }
+        return listUsers;
+    }
+
+
+    /**
+     * Get User object in database.
+     * @param id User
+     * @param login Login
+     * @return User object
+     */
+    private User getUser(Integer id, String login) {
+        User user = null;
+        String query;
+        boolean flag;
+        if (login == null) {
+            query = "SELECT * FROM users_view WHERE iid=?";
+            flag = true;
+        } else {
+            query = "SELECT * FROM users_view WHERE login=?";
+            flag = false;
+        }
+        try (Connection connection = this.pool.getConnection()) {
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                if (flag) {
+                    ps.setInt(1, id);
+                } else {
+                    ps.setString(1, login);
+                }
+                try (ResultSet rs = ps.executeQuery()) {
+                    int index = 0;
+                    while (rs.next()) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis(rs.getTimestamp("create_date").getTime());
+                        if (index == 0) {
+                            user = new User(rs.getInt("iid"),
+                                    rs.getString("name"),
+                                    rs.getString("login"),
+                                    rs.getString("email"),
+                                    calendar,
+                                    rs.getString("name_role"),
+                                    rs.getString("user_password"));
+                            index++;
+                        } else {
+                            user.addRole(rs.getString("name_role"));
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+        }
+        return user;
+    }
+
+    /**
+     * Getter for instance field.
+     *
+     * @return instance
+     */
+    public static DbUser getInstanse() {
+        if (INSTANSE == null) {
+            try {
+                INSTANSE = new DbUser();
+            } catch (SQLException e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
+        return INSTANSE;
+    }
 }
