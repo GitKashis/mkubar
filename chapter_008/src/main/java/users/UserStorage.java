@@ -18,12 +18,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-public class DbUser {
+public class UserStorage {
 
     /**
      * Instance these class.
      */
-    private static DbUser INSTANSE;
+    private static UserStorage INSTANSE;
 
     /**
      * Pool object for connect DB.
@@ -38,7 +38,7 @@ public class DbUser {
     /**
      * Logger object.
      */
-    private static final Logger logger = LoggerFactory.getLogger(DbUser.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserStorage.class);
 
     private String urlDB;
     private String userNameDB;
@@ -47,7 +47,7 @@ public class DbUser {
     /**
      * Constructor.
      */
-    private DbUser() throws SQLException {
+    private UserStorage() throws SQLException {
         initializeDbUser();
     }
 
@@ -166,7 +166,7 @@ public class DbUser {
      * @param id    User
      * @return yes or not
      */
-    private boolean delUserInDB(String email, Integer id) {
+    public boolean delUserInDB(String email, Integer id) {
         boolean flag;
         String query = "";
         String queryDelRole = "";
@@ -322,10 +322,10 @@ public class DbUser {
      *
      * @return instance
      */
-    public static DbUser getInstanse() {
+    public static UserStorage getInstanse() {
         if (INSTANSE == null) {
             try {
-                INSTANSE = new DbUser();
+                INSTANSE = new UserStorage();
             } catch (SQLException e) {
                 logger.error(e.getMessage(), e);
             }

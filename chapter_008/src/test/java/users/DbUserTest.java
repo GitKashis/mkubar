@@ -3,15 +3,12 @@ package users;
 import org.junit.Test;
 
 import java.sql.SQLException;
-import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class DbUserTest {
 
     @Test
     public void test() throws SQLException {
-        DbUser db = DbUser.getInstanse();
+        UserStorage db = UserStorage.getInstanse();
         User user1 = new User("mkubar", "kubar", "kubar@mail.ru", "root");
         db.addUserInDB(user1);
         User user2 = new User("QWERTY", "kubar", "kubar@mail.ru", "root");
