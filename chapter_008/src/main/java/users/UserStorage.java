@@ -47,23 +47,21 @@ public class UserStorage {
     /**
      * Constructor.
      */
-    private UserStorage() throws SQLException {
+    private UserStorage() throws SQLException, IOException {
         initializeDbUser();
     }
 
     /**
      * Initialize prop for connect in db.
      */
-    private void initializeDbUser() throws SQLException {
+    private void initializeDbUser() throws SQLException, IOException {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
             logger.error(e.getMessage(), e);
         }
-        //InputStream inputStream = getClass().getResourceAsStream("db-param.properties");
-        System.out.println(getClass().getResource("/users/resource/db-param.properties"));
-        //properties.load(inputStream);
-        //inputStream.close();
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("db-param.properties");
+        properties.load(inputStream);
         this.urlDB = String.format("jdbc:postgresql://%s", this.properties.getProperty("urlAddress"));
         this.userNameDB = this.properties.getProperty("userName");
         this.passwordDB = this.properties.getProperty("userPassword");
@@ -100,10 +98,10 @@ public class UserStorage {
      * Create table in DB if not exist.
      */
     public void createTableInDB() throws SQLException {
-        String scriptFilePath = String.valueOf(getClass().getResource("newTable.sql"));
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("newTable.sql");
         Connection conn = pool.getConnection();
         ScriptRunner scriptExecutor = new ScriptRunner(conn, false, false);
-        try (Reader reader = new BufferedReader(new FileReader(scriptFilePath))) {
+        try (Reader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             scriptExecutor.runScript(reader);
             this.properties.setProperty("dbTableExist", "true");
             saveProp();
@@ -168,27 +166,16 @@ public class UserStorage {
     public boolean delUserInDB(String email, Integer id) {
         boolean flag;
         String query = "";
-        String queryDelRole = "";
         if (email == null && id != null) {
             query = "DELETE FROM user_store AS us WHERE us.iid = ?";
-            queryDelRole = "DELETE FROM user_role WHERE iid_user=?";
             flag = false;
         } else {
             query = "DELETE FROM user_store AS us WHERE us.email=?";
-            queryDelRole = "DELETE FROM user_role WHERE iid_user=(SELECT iid FROM user_store WHERE email=?)";
             flag = true;
         }
         boolean result = false;
         try (Connection connection = this.pool.getConnection()) {
             connection.setAutoCommit(false);
-            try (PreparedStatement ps = connection.prepareStatement(queryDelRole)) {
-                if (flag) {
-                    ps.setString(1, email);
-                } else {
-                    ps.setInt(1, id);
-                }
-                ps.executeUpdate();
-            }
             try (PreparedStatement ps = connection.prepareCall(query)) {
                 if (flag) {
                     ps.setString(1, email);
@@ -235,24 +222,18 @@ public class UserStorage {
         Map<Integer, User> usersMap = new HashMap<>(100);
         try (Connection connection = this.pool.getConnection()) {
             try (Statement ps = connection.createStatement()) {
-                try (ResultSet rs = ps.executeQuery("SELECT iid, name, login, email, create_date, name_role, user_password FROM users_view")) {
+                try (ResultSet rs = ps.executeQuery("SELECT iid, name, login, email, create_date, user_password FROM users_view")) {
                     while (rs.next()) {
                         int id = rs.getInt("iid");
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTimeInMillis(rs.getTimestamp("create_date").getTime());
-                        if (usersMap.containsKey(id)) {
-                            User user = usersMap.get(id);
-                            user.getRoles().add(rs.getString("name_role"));
-                        } else {
-                            usersMap.put(id,
-                                    new User(id,
-                                            rs.getString("name"),
-                                            rs.getString("login"),
-                                            rs.getString("email"),
-                                            calendar,
-                                            rs.getString("name_role"),
-                                            rs.getString("user_password")));
-                        }
+                        usersMap.put(id, new User(id,
+                                rs.getString("name"),
+                                rs.getString("login"),
+                                rs.getString("email"),
+                                calendar,
+                                rs.getString("user_password"))
+                        );
                     }
                 }
             }
@@ -301,11 +282,8 @@ public class UserStorage {
                                     rs.getString("login"),
                                     rs.getString("email"),
                                     calendar,
-                                    rs.getString("name_role"),
                                     rs.getString("user_password"));
                             index++;
-                        } else {
-                            user.addRole(rs.getString("name_role"));
                         }
                     }
                 }
@@ -322,7 +300,7 @@ public class UserStorage {
      * @return instance
      */
 
-    public static UserStorage getInstance() throws SQLException {
+    public static UserStorage getInstance() throws SQLException, IOException {
         if (INSTANCE == null) {
             synchronized (UserStorage.class) {
                 if (INSTANCE == null) {

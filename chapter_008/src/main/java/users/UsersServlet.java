@@ -1,6 +1,5 @@
 package users;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +18,7 @@ public class UsersServlet extends HttpServlet {
     {
         try {
             userStorage = UserStorage.getInstance();
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -43,13 +42,6 @@ public class UsersServlet extends HttpServlet {
         printWriter.flush();
     }
 
-    /**
-     * Update
-     * @param req
-     * @param resp
-     * @throws ServletException
-     * @throws IOException
-     */
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
         int iid = Integer.parseInt(req.getParameter("iid"));
@@ -74,11 +66,14 @@ public class UsersServlet extends HttpServlet {
         StringBuilder builder = new StringBuilder();
         List<User> list = userStorage.getAllUserInDB();
         for (User next : list) {
-            builder.append(next.getId());
-            builder.append(next.getLogin());
-            builder.append(next.getName());
-            builder.append(next.getEmail());
-            builder.append(next.getCreateDate().getTime());
+            String fs = String.format("%-5s %-20s %-20s %-20s %-20s",
+                    next.getId(),
+                    next.getLogin(),
+                    next.getName(),
+                    next.getEmail(),
+                    next.getCreateDate().getTime());
+            builder.append(fs);
+            builder.append(System.lineSeparator());
         }
         return builder.toString();
     }

@@ -32,11 +32,6 @@ public class User {
     private Calendar createDate;
 
     /**
-     * List roles user.
-     */
-    private List<String> roles = new ArrayList<>();
-
-    /**
      * Password user.
      */
     private String password;
@@ -78,32 +73,14 @@ public class User {
      * @param email User
      * @param createDate User
      * @param password User
-     * @param role User
      */
-    public User(int id, String name, String login, String email, Calendar createDate, String role, String password) {
+    public User(int id, String name, String login, String email, Calendar createDate, String password) {
         this.id = id;
         this.name = name;
         this.login = login;
         this.email = email;
         this.createDate = createDate;
-        this.roles.add(role);
         this.password = password;
-    }
-
-    /**
-     *
-     * @param id user
-     * @param name user
-     * @param login user
-     * @param email user
-     * @param roles list
-     */
-    public User(int id, String name, String login, String email, List<String> roles) {
-        this.id = id;
-        this.name = name;
-        this.login = login;
-        this.email = email;
-        this.roles = roles;
     }
 
     /**
@@ -155,30 +132,6 @@ public class User {
     }
 
     /**
-     * Getter field roles user.
-     * @return user
-     */
-    public List<String> getRoles() {
-        return roles;
-    }
-
-    /**
-     * Setter for list field.
-     * @param roles user
-     */
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
-    }
-
-    /**
-     * Add role user in list.
-     * @param role user
-     */
-    public void addRole(String role) {
-        this.roles.add(role);
-    }
-
-    /**
      * Getter for password.
      * @return user
      */
@@ -219,7 +172,6 @@ public class User {
         sb.append(", login='").append(login).append('\'');
         sb.append(", email='").append(email).append('\'');
         sb.append(", createDate=").append(createDate.getTime());
-        sb.append(", roles=").append(roles);
         sb.append(", password='").append(password).append('\'');
         sb.append('}');
         return sb.toString();
