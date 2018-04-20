@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -70,7 +71,8 @@ public class ParseSQLru {
             logger.error(e.getMessage(), e);
         }
         try {
-            properties.load(new FileInputStream("C:\\Projects\\mkubar\\chapter_007\\src\\main\\Java\\ru\\job4j\\parser\\resources\\parse.properties"));
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("db-param.properties");
+            properties.load(inputStream);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -81,7 +83,7 @@ public class ParseSQLru {
      * Save new data in properties file.
      */
     private void saveProp() {
-        try (FileOutputStream os = new FileOutputStream("C:\\Projects\\mkubar\\chapter_007\\src\\main\\Java\\ru\\job4j\\parser\\resources\\parse.properties")) {
+        try (FileOutputStream os = new FileOutputStream("db-param.properties")) {
             this.properties.store(os, "No commit");
         } catch (IOException e) {
             this.logger.error(e.getMessage(), e);

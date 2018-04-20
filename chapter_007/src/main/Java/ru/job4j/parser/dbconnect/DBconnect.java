@@ -60,7 +60,8 @@ public class DBconnect {
             logger.error(e.getMessage(), e);
         }
         try {
-            properties.load(new FileInputStream("C:\\Projects\\mkubar\\chapter_007\\src\\main\\Java\\ru\\job4j\\parser\\resources\\db-param.properties"));
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("db-param.properties");
+            properties.load(inputStream);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -89,7 +90,7 @@ public class DBconnect {
      * Save data in prop.
      */
     private void saveProp() {
-        try (FileOutputStream os = new FileOutputStream(("C:\\Projects\\mkubar\\chapter_007\\src\\main\\Java\\ru\\job4j\\parser\\resources\\db-param.properties"))) {
+        try (FileOutputStream os = new FileOutputStream("db-param.properties")) {
             this.properties.store(os, "No commit");
         } catch (IOException e) {
             this.logger.error(e.getMessage(), e);
@@ -100,10 +101,10 @@ public class DBconnect {
      * Create table in DB if not exist.
      */
     public void createTableInDB() throws SQLException {
-        String scriptFilePath = "C:\\Projects\\mkubar\\chapter_007\\src\\main\\Java\\ru\\job4j\\parser\\resources\\newTable.sql";
+        InputStream scriptFilePath = getClass().getClassLoader().getResourceAsStream("newTable.sql");
         Connection conn = pool.getConnection();
         ScriptRunner scriptExecutor = new ScriptRunner(conn, false, false);
-        try (Reader reader = new BufferedReader(new FileReader(scriptFilePath))) {
+        try (Reader reader = new BufferedReader(new InputStreamReader(scriptFilePath))) {
             scriptExecutor.runScript(reader);
             this.properties.setProperty("dbTableExist", "true");
             saveProp();
