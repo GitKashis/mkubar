@@ -31,14 +31,14 @@ public class StartUI {
     /**
      * Launch frequency in Day.
      */
-    private final long LaunchFrequency;
+    private final long launchFrequency;
 
     /**
      * Constructor.
      * @param launchFrequency
      */
     public StartUI(int launchFrequency) throws SQLException {
-        LaunchFrequency = milsCount(launchFrequency);
+        this.launchFrequency = milsCount(launchFrequency);
     }
 
     /**
@@ -71,7 +71,7 @@ public class StartUI {
                 }
                 calendar = Calendar.getInstance();
             }
-            nextParseTime = calendar.getTimeInMillis() + this.LaunchFrequency;
+            nextParseTime = calendar.getTimeInMillis() + this.launchFrequency;
             this.logger.info("Start parse!");
             this.dBconnect.addNodeInDB(this.parseSQLru.execute());
         }
