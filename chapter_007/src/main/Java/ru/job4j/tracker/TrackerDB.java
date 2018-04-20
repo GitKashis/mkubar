@@ -71,11 +71,15 @@ public class TrackerDB {
     public Map<Integer, Item> findAll() throws IOException, ClassNotFoundException {
         Map<Integer, Item> map = null;
         try (Connection conn = dataSource.getConnection()) {
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT tr.item_id, it.fname AS type_item, tr.fname AS name_item, tr.fdesc, tr.fcommit, tr.fdate FROM tracker AS tr LEFT JOIN items AS it ON tr.rid_items = it.iid");
-            map = this.getMapItem(rs);
-            rs.close();
-            st.close();
+            try (Statement st = conn.createStatement()) {
+                try (ResultSet rs = st.executeQuery(
+                        "SELECT tr.item_id, it.fname AS type_item, tr.fname AS name_item, tr.fdesc, tr.fcommit, tr.fdate " +
+                                "FROM tracker AS tr LEFT JOIN items AS it ON tr.rid_items = it.iid")) {
+                    map = this.getMapItem(rs);
+                    rs.close();
+                    st.close();
+                }
+            }
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
         }
@@ -91,12 +95,14 @@ public class TrackerDB {
     public Map<Integer, Item> findByName(String nameItem) throws IOException, ClassNotFoundException {
         Map<Integer, Item> map = null;
         try (Connection conn = dataSource.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT tr.item_id, it.fname AS type_item, tr.fname AS name_item, tr.fdesc, tr.fcommit, tr.fdate FROM tracker AS tr LEFT JOIN items AS it ON tr.rid_items = it.iid WHERE tr.fname = ?");
-            ps.setString(1, nameItem);
-            ResultSet rs = ps.executeQuery();
-            map = this.getMapItem(rs);
-            rs.close();
-            ps.close();
+            try (PreparedStatement ps = conn.prepareStatement("SELECT tr.item_id, it.fname AS type_item, tr.fname AS name_item, tr.fdesc, tr.fcommit, tr.fdate FROM tracker AS tr LEFT JOIN items AS it ON tr.rid_items = it.iid WHERE tr.fname = ?")) {
+                ps.setString(1, nameItem);
+                try (ResultSet rs = ps.executeQuery()) {
+                    map = this.getMapItem(rs);
+                    rs.close();
+                    ps.close();
+                }
+            }
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
         }
@@ -151,13 +157,14 @@ public class TrackerDB {
                     "LEFT JOIN items AS it ON tr.rid_items = it.iid " +
                     "WHERE tr.item_id = ?");
             ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            Map<Integer, Item> map = getMapItem(rs);
-            if (map.size() > 0) {
-                item = map.get(id);
+            try (ResultSet rs = ps.executeQuery()) {
+                Map<Integer, Item> map = getMapItem(rs);
+                if (map.size() > 0) {
+                    item = map.get(id);
+                }
+                rs.close();
+                ps.close();
             }
-            rs.close();
-            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

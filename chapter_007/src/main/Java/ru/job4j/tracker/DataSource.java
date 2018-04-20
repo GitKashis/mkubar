@@ -15,12 +15,12 @@ public class DataSource {
     private String userName;
     private String userPassword;
     private boolean dbExist;
-    private Properties prop;
+    private Properties prop = new Properties();
     private final Logger logger = LoggerFactory.getLogger(DataSource.class);
 
     public Connection getConnection() throws SQLException, ClassNotFoundException, IOException {
-        prop = new Properties();
-        prop.load(new FileInputStream("src\\main\\java\\ru\\job4j\\tracker\\resources\\connect-db.properties"));
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("connect-db.properties");
+        prop.load(inputStream);
         String driver = prop.getProperty("db.driver");
         this.url = String.format("jdbc:postgresql://%s/%s", prop.getProperty("db.host"), prop.getProperty("db.name"));
         this.userName = prop.getProperty("db.userName");
@@ -34,16 +34,16 @@ public class DataSource {
      */
     public void createTablesInDB() throws IOException, SQLException {
         // initialize script path
-        String scriptFilePath = "src/main/java/ru/job4j/tracker/resources/newTable_query.sql";
-        Reader reader = null;
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("newTable_query.sql");
         Connection conn = null;
+        Reader reader = null;
         try {
             // create connection
             conn = getConnection();
             // create ScripRunner object
             ScriptRunner scriptExecutor = new ScriptRunner(conn, false, false);
             // initialize file reader
-            reader = new BufferedReader(new FileReader(scriptFilePath));
+            reader = new BufferedReader(new InputStreamReader(inputStream));
             // execute script with file reader as input
             scriptExecutor.runScript(reader);
         } catch (Exception e) {
