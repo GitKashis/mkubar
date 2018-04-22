@@ -6,3 +6,13 @@ CREATE TABLE IF NOT EXISTS user_store (
   create_date  TIMESTAMP NOT NULL DEFAULT current_timestamp,
   user_password TEXT      NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS roles (
+  iid       SERIAL PRIMARY KEY,
+  name_role TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS user_role (
+  iid       SERIAL PRIMARY KEY,
+  iid_user  INTEGER REFERENCES user_store (iid) NOT NULL,
+);

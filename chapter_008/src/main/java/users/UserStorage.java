@@ -27,7 +27,7 @@ public class UserStorage {
     /**
      * Instance these class.
      */
-    private volatile static UserStorage INSTANCE;
+    private volatile static UserStorage instance;
 
     /**
      * Pool object for connect DB.
@@ -42,26 +42,31 @@ public class UserStorage {
     /**
      * Logger object.
      */
-    private static final Logger logger = LoggerFactory.getLogger(UserStorage.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserStorage.class);
 
     /**
      * Constructor.
      */
-    private UserStorage() throws SQLException, IOException {
+    private UserStorage() throws SQLException {
         initializeDbUser();
     }
 
     /**
      * Initialize prop for connect in db.
      */
-    private void initializeDbUser() throws SQLException, IOException {
+    private void initializeDbUser() throws SQLException {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("db-param.properties");
-        properties.load(inputStream);
+
+        try {
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("db-param.properties");
+            properties.load(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.urlDB = String.format("jdbc:postgresql://%s", this.properties.getProperty("urlAddress"));
         this.userNameDB = this.properties.getProperty("userName");
         this.passwordDB = this.properties.getProperty("userPassword");
@@ -87,10 +92,10 @@ public class UserStorage {
      * Save data in prop.
      */
     private void saveProp() {
-        try (FileOutputStream os = new FileOutputStream("db-param.properties")) {
+        try (FileOutputStream os = new FileOutputStream(("db-param.properties"))) {
             this.properties.store(os, "No commit");
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
@@ -106,7 +111,7 @@ public class UserStorage {
             this.properties.setProperty("dbTableExist", "true");
             saveProp();
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
@@ -131,7 +136,7 @@ public class UserStorage {
             }
             connection.commit();
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
         return result;
     }
@@ -166,16 +171,27 @@ public class UserStorage {
     public boolean delUserInDB(String email, Integer id) {
         boolean flag;
         String query = "";
+        String queryDelRole = "";
         if (email == null && id != null) {
             query = "DELETE FROM user_store AS us WHERE us.iid = ?";
+            queryDelRole = "DELETE FROM user_role WHERE iid_user=?";
             flag = false;
         } else {
             query = "DELETE FROM user_store AS us WHERE us.email=?";
+            queryDelRole = "DELETE FROM user_role WHERE iid_user=(SELECT iid FROM user_store WHERE email=?)";
             flag = true;
         }
         boolean result = false;
         try (Connection connection = this.pool.getConnection()) {
             connection.setAutoCommit(false);
+            try (PreparedStatement ps = connection.prepareStatement(queryDelRole)) {
+                if (flag) {
+                    ps.setString(1, email);
+                } else {
+                    ps.setInt(1, id);
+                }
+                ps.executeUpdate();
+            }
             try (PreparedStatement ps = connection.prepareCall(query)) {
                 if (flag) {
                     ps.setString(1, email);
@@ -188,7 +204,7 @@ public class UserStorage {
             }
             connection.commit();
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
         return result;
     }
@@ -209,7 +225,7 @@ public class UserStorage {
             }
             connection.commit();
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
@@ -222,23 +238,29 @@ public class UserStorage {
         Map<Integer, User> usersMap = new HashMap<>(100);
         try (Connection connection = this.pool.getConnection()) {
             try (Statement ps = connection.createStatement()) {
-                try (ResultSet rs = ps.executeQuery("SELECT iid, name, login, email, create_date, user_password FROM users_view")) {
+                try (ResultSet rs = ps.executeQuery("SELECT iid, name, login, email, create_date, name_role, user_password FROM users_view")) {
                     while (rs.next()) {
                         int id = rs.getInt("iid");
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTimeInMillis(rs.getTimestamp("create_date").getTime());
-                        usersMap.put(id, new User(id,
-                                rs.getString("name"),
-                                rs.getString("login"),
-                                rs.getString("email"),
-                                calendar,
-                                rs.getString("user_password"))
-                        );
+                        if (usersMap.containsKey(id)) {
+                            User user = usersMap.get(id);
+                            user.getRoles().add(rs.getString("name_role"));
+                        } else {
+                            usersMap.put(id,
+                                    new User(id,
+                                            rs.getString("name"),
+                                            rs.getString("login"),
+                                            rs.getString("email"),
+                                            calendar,
+                                            rs.getString("name_role"),
+                                            rs.getString("user_password")));
+                        }
                     }
                 }
             }
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
         for (Map.Entry<Integer, User> next : usersMap.entrySet()) {
             listUsers.add(next.getValue());
@@ -282,14 +304,17 @@ public class UserStorage {
                                     rs.getString("login"),
                                     rs.getString("email"),
                                     calendar,
+                                    rs.getString("name_role"),
                                     rs.getString("user_password"));
                             index++;
+                        } else {
+                            user.addRole(rs.getString("name_role"));
                         }
                     }
                 }
             }
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
         return user;
     }
@@ -300,14 +325,14 @@ public class UserStorage {
      * @return instance
      */
 
-    public static UserStorage getInstance() throws SQLException, IOException {
-        if (INSTANCE == null) {
+    public static UserStorage getInstance() throws SQLException {
+        if (instance == null) {
             synchronized (UserStorage.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new UserStorage();
+                if (instance == null) {
+                    instance = new UserStorage();
                 }
             }
         }
-        return INSTANCE;
+        return instance;
     }
 }
