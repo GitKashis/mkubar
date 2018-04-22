@@ -23,8 +23,9 @@ public class DeleteUserServlet extends HttpServlet {
     }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.setContentType("text/html");
         int id = Integer.valueOf(req.getParameter("id"));
         this.userStorage.delUserByID(id);
-        resp.sendRedirect("/items/userstore");
+        resp.sendRedirect(String.format("%s/index.jsp", req.getContextPath()));
     }
 }

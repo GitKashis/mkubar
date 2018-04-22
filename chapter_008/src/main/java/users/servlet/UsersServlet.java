@@ -3,6 +3,7 @@ package users.servlet;
 import users.User;
 import users.UserStorage;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,6 +48,13 @@ public class UsersServlet extends HttpServlet {
                 + "</body>"
                 + "</html>");
         printWriter.flush();
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html");
+        userStorage.addUserInDB(new User("name", req.getParameter("login"), req.getParameter("email"), "0000"));
+        resp.sendRedirect(String.format("%s/index.jsp", req.getContextPath()));
     }
 
     /**

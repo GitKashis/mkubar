@@ -24,11 +24,12 @@ public class EditUserServlet extends HttpServlet {
     }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.setContentType("text/html");
         int id = Integer.valueOf(req.getParameter("id"));
         String login = req.getParameter("login");
         String name = req.getParameter("name");
         String email = req.getParameter("email");
         userStorage.updateUserInDB(new User(id, name, login, email));
-        resp.sendRedirect("/items/userstore");
+        resp.sendRedirect(String.format("%s/index.jsp", req.getContextPath()));
     }
 }

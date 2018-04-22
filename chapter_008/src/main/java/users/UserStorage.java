@@ -243,21 +243,15 @@ public class UserStorage {
                         int id = rs.getInt("iid");
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTimeInMillis(rs.getTimestamp("create_date").getTime());
-                        if (usersMap.containsKey(id)) {
-                            User user = usersMap.get(id);
-                            user.getRoles().add(rs.getString("name_role"));
-                        } else {
                             usersMap.put(id,
                                     new User(id,
                                             rs.getString("name"),
                                             rs.getString("login"),
                                             rs.getString("email"),
                                             calendar,
-                                            rs.getString("name_role"),
                                             rs.getString("user_password")));
                         }
                     }
-                }
             }
         } catch (SQLException e) {
             LOGGER.error(e.getMessage(), e);
@@ -304,11 +298,8 @@ public class UserStorage {
                                     rs.getString("login"),
                                     rs.getString("email"),
                                     calendar,
-                                    rs.getString("name_role"),
                                     rs.getString("user_password"));
                             index++;
-                        } else {
-                            user.addRole(rs.getString("name_role"));
                         }
                     }
                 }

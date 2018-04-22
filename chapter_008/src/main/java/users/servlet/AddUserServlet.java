@@ -25,10 +25,11 @@ public class AddUserServlet extends HttpServlet {
     }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.setContentType("text/html");
         String name = req.getParameter("name");
         String login = req.getParameter("login");
         String email = req.getParameter("email");
         this.userStorage.addUserInDB(new User(name, login, email, "0000"));
-        resp.sendRedirect("/items/userstore");
+        resp.sendRedirect(String.format("%s/index.jsp", req.getContextPath()));
     }
 }
