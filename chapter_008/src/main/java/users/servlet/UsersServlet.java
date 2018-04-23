@@ -17,7 +17,6 @@ public class UsersServlet extends HttpServlet {
      * UserStorage object.
      */
     private UserStorage userStorage;
-
     {
         try {
             userStorage = UserStorage.getInstance();

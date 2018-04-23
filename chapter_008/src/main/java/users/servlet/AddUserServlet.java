@@ -29,6 +29,6 @@ public class AddUserServlet extends HttpServlet {
         String login = req.getParameter("login");
         String email = req.getParameter("email");
         this.userStorage.addUserInDB(new User(name, login, email, "0000"));
-        resp.sendRedirect("/items/userstore");
+        resp.sendRedirect(String.format("%s/userstore", req.getContextPath()));
     }
 }

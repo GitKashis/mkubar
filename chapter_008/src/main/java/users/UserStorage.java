@@ -20,10 +20,6 @@ import java.util.Properties;
 
 public class UserStorage {
 
-    private String urlDB;
-    private String userNameDB;
-    private String passwordDB;
-
     /**
      * Instance these class.
      */
@@ -67,26 +63,18 @@ public class UserStorage {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.urlDB = String.format("jdbc:postgresql://%s", this.properties.getProperty("urlAddress"));
-        this.userNameDB = this.properties.getProperty("userName");
-        this.passwordDB = this.properties.getProperty("userPassword");
+        String urlDB = String.format("jdbc:postgresql://%s", this.properties.getProperty("urlAddress"));
+        String userNameDB = this.properties.getProperty("userName");
+        String passwordDB = this.properties.getProperty("userPassword");
         boolean dbExist = Boolean.valueOf(this.properties.getProperty("dbTableExist"));
-        this.getConnection();
+        this.pool.setDriverClassName("org.postgresql.Driver");
+        this.pool.setUrl(urlDB);
+        this.pool.setUsername(userNameDB);
+        this.pool.setPassword(passwordDB);
+        this.pool.getConnection();
         if (!dbExist) {
             createTableInDB();
         }
-    }
-    /**
-     * Get Connection from pool
-     * @return connection
-     */
-    public Connection getConnection() throws SQLException {
-        this.pool = new BasicDataSource();
-        this.pool.setDriverClassName("org.postgresql.Driver");
-        this.pool.setUrl(this.urlDB);
-        this.pool.setUsername(this.userNameDB);
-        this.pool.setPassword(this.passwordDB);
-        return this.pool.getConnection();
     }
     /**
      * Save data in prop.
@@ -170,28 +158,17 @@ public class UserStorage {
      */
     public boolean delUserInDB(String email, Integer id) {
         boolean flag;
-        String query = "";
-        String queryDelRole = "";
+        String query;
         if (email == null && id != null) {
             query = "DELETE FROM user_store AS us WHERE us.iid = ?";
-            queryDelRole = "DELETE FROM user_role WHERE iid_user=?";
             flag = false;
         } else {
             query = "DELETE FROM user_store AS us WHERE us.email=?";
-            queryDelRole = "DELETE FROM user_role WHERE iid_user=(SELECT iid FROM user_store WHERE email=?)";
             flag = true;
         }
         boolean result = false;
         try (Connection connection = this.pool.getConnection()) {
             connection.setAutoCommit(false);
-            try (PreparedStatement ps = connection.prepareStatement(queryDelRole)) {
-                if (flag) {
-                    ps.setString(1, email);
-                } else {
-                    ps.setInt(1, id);
-                }
-                ps.executeUpdate();
-            }
             try (PreparedStatement ps = connection.prepareCall(query)) {
                 if (flag) {
                     ps.setString(1, email);
@@ -238,24 +215,18 @@ public class UserStorage {
         Map<Integer, User> usersMap = new HashMap<>(100);
         try (Connection connection = this.pool.getConnection()) {
             try (Statement ps = connection.createStatement()) {
-                try (ResultSet rs = ps.executeQuery("SELECT iid, name, login, email, create_date, name_role, user_password FROM users_view")) {
+                try (ResultSet rs = ps.executeQuery("SELECT iid, name, login, email, create_date, user_password FROM user_store")) {
                     while (rs.next()) {
                         int id = rs.getInt("iid");
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTimeInMillis(rs.getTimestamp("create_date").getTime());
-                        if (usersMap.containsKey(id)) {
-                            User user = usersMap.get(id);
-                            user.getRoles().add(rs.getString("name_role"));
-                        } else {
-                            usersMap.put(id,
-                                    new User(id,
-                                            rs.getString("name"),
-                                            rs.getString("login"),
-                                            rs.getString("email"),
-                                            calendar,
-                                            rs.getString("name_role"),
-                                            rs.getString("user_password")));
-                        }
+                        usersMap.put(id,
+                                new User(id,
+                                        rs.getString("name"),
+                                        rs.getString("login"),
+                                        rs.getString("email"),
+                                        calendar,
+                                        rs.getString("user_password")));
                     }
                 }
             }
@@ -304,11 +275,8 @@ public class UserStorage {
                                     rs.getString("login"),
                                     rs.getString("email"),
                                     calendar,
-                                    rs.getString("name_role"),
                                     rs.getString("user_password"));
                             index++;
-                        } else {
-                            user.addRole(rs.getString("name_role"));
                         }
                     }
                 }

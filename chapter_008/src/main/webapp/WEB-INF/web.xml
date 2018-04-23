@@ -2,7 +2,6 @@
     <servlet>
         <servlet-name>UsersServlet</servlet-name>
         <servlet-class>users.servlet.UsersServlet</servlet-class>
-        <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>UsersServlet</servlet-name>
@@ -12,7 +11,6 @@
     <servlet>
         <servlet-name>AddUserServlet</servlet-name>
         <servlet-class>users.servlet.AddUserServlet</servlet-class>
-        <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>AddUserServlet</servlet-name>
@@ -23,7 +21,6 @@
     <servlet>
         <servlet-name>DeleteUserServlet</servlet-name>
         <servlet-class>users.servlet.DeleteUserServlet</servlet-class>
-        <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>DeleteUserServlet</servlet-name>
@@ -33,7 +30,6 @@
     <servlet>
         <servlet-name>EditFormServlet</servlet-name>
         <servlet-class>users.servlet.EditFormServlet</servlet-class>
-        <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>EditFormServlet</servlet-name>
@@ -43,7 +39,6 @@
     <servlet>
         <servlet-name>EditUserServlet</servlet-name>
         <servlet-class>users.servlet.EditUserServlet</servlet-class>
-        <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>EditUserServlet</servlet-name>
