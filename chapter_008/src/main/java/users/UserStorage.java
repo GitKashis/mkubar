@@ -76,6 +76,7 @@ public class UserStorage {
             createTableInDB();
         }
     }
+
     /**
      * Save data in prop.
      */
@@ -188,6 +189,7 @@ public class UserStorage {
 
     /**
      * Update User in DB.
+     *
      * @param user object
      */
     public void updateUserInDB(User user) {
@@ -208,6 +210,7 @@ public class UserStorage {
 
     /**
      * Get all User in db.
+     *
      * @return list user
      */
     public List<User> getAllUserInDB() {
@@ -242,7 +245,8 @@ public class UserStorage {
 
     /**
      * Get User object in database.
-     * @param id User
+     *
+     * @param id    User
      * @param login Login
      * @return User object
      */
@@ -302,5 +306,33 @@ public class UserStorage {
             }
         }
         return instance;
+    }
+
+    /**
+     * Check login\password in DB
+     * @param login
+     * @param password
+     * @return
+     */
+    public boolean isCredentional(String login, String password) {
+        boolean exists = false;
+        String query = "SELECT count(*) FROM user_store WHERE name = ? AND login = ?";
+        try (Connection connection = this.pool.getConnection()) {
+            try (PreparedStatement ps = connection.prepareCall(query)) {
+                ps.setString(1, login);
+                ps.setString(2, password);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        if (rs.getInt("count") > 0) {
+                            exists = true;
+                        }
+                    }
+                }
+            }
+        }
+        catch (SQLException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return exists;
     }
 }

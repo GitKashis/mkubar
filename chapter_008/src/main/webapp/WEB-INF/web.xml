@@ -1,18 +1,27 @@
 <web-app>
     <servlet>
+        <servlet-name>SigninServlet</servlet-name>
+        <servlet-class>users.servlet.SigninServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SigninServlet</servlet-name>
+        <url-pattern>/signin</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>UsersController</servlet-name>
         <servlet-class>users.servlet.UsersController</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>UsersController</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/userstorage</url-pattern>
     </servlet-mapping>
 
     <servlet>
         <servlet-name>AddUserServlet</servlet-name>
         <servlet-class>users.servlet.AddUserServlet</servlet-class>
-        <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>AddUserServlet</servlet-name>
@@ -23,7 +32,6 @@
     <servlet>
         <servlet-name>DeleteUserServlet</servlet-name>
         <servlet-class>users.servlet.DeleteUserServlet</servlet-class>
-        <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>DeleteUserServlet</servlet-name>
@@ -33,10 +41,11 @@
     <servlet>
         <servlet-name>EditUserServlet</servlet-name>
         <servlet-class>users.servlet.EditUserServlet</servlet-class>
-        <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>EditUserServlet</servlet-name>
         <url-pattern>/edituser</url-pattern>
     </servlet-mapping>
+
+
 </web-app>

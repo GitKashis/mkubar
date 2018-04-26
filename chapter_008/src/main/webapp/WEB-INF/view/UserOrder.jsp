@@ -38,7 +38,7 @@
                     <th>Edit user</th>
                 </tr>
 
-                <c:forEach items="${alluser}" var="user">
+                <c:forEach items="${users}" var="user">
                         <tr>
                             <td><c:out value="${user.id}"></c:out></td>
                             <td><c:out value="${user.name}"></c:out></td>
