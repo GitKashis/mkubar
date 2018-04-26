@@ -30,6 +30,6 @@ public class EditUserServlet extends HttpServlet {
         String name = req.getParameter("name");
         String email = req.getParameter("email");
         userStorage.updateUserInDB(new User(id, name, login, email));
-        resp.sendRedirect(String.format("%s/index.jsp", req.getContextPath()));
+        resp.sendRedirect(req.getContextPath());
     }
 }

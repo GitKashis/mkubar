@@ -1,14 +1,17 @@
 package users.servlet;
 
+import users.User;
 import users.UserStorage;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class DeleteUserServlet extends HttpServlet {
+public class UsersController extends HttpServlet {
+
     /**
      * UserStorage object.
      */
@@ -21,11 +24,19 @@ public class DeleteUserServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        request.setAttribute("users", userStorage.getAllUserInDB());
+        request.getRequestDispatcher("/WEB-INF/view/UserOrder.jsp").forward(request, response);
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/html");
-        int id = Integer.valueOf(req.getParameter("id"));
-        this.userStorage.delUserByID(id);
+        userStorage.addUserInDB(new User(req.getParameter("name"), req.getParameter("login"), req.getParameter("email"), "0000"));
         resp.sendRedirect(req.getContextPath());
     }
 }
+
+

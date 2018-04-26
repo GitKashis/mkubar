@@ -30,6 +30,6 @@ public class AddUserServlet extends HttpServlet {
         String login = req.getParameter("login");
         String email = req.getParameter("email");
         this.userStorage.addUserInDB(new User(name, login, email, "0000"));
-        resp.sendRedirect(String.format("%s/index.jsp", req.getContextPath()));
+        resp.sendRedirect(req.getContextPath());
     }
 }

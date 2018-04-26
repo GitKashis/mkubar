@@ -1,12 +1,12 @@
 <web-app>
     <servlet>
-        <servlet-name>UsersServlet</servlet-name>
-        <servlet-class>users.servlet.UsersServlet</servlet-class>
+        <servlet-name>UsersController</servlet-name>
+        <servlet-class>users.servlet.UsersController</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>UsersServlet</servlet-name>
-        <url-pattern>/userstore</url-pattern>
+        <servlet-name>UsersController</servlet-name>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -28,16 +28,6 @@
     <servlet-mapping>
         <servlet-name>DeleteUserServlet</servlet-name>
         <url-pattern>/deluser</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>EditFormServlet</servlet-name>
-        <servlet-class>users.servlet.EditFormServlet</servlet-class>
-        <load-on-startup>0</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>EditFormServlet</servlet-name>
-        <url-pattern>/edituserform</url-pattern>
     </servlet-mapping>
 
     <servlet>
