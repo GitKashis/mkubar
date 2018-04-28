@@ -2,7 +2,6 @@
     <servlet>
         <servlet-name>SigninServlet</servlet-name>
         <servlet-class>users.servlet.SigninServlet</servlet-class>
-        <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>SigninServlet</servlet-name>

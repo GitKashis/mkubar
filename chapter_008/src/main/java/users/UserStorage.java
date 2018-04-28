@@ -250,7 +250,7 @@ public class UserStorage {
      * @param login Login
      * @return User object
      */
-    private User getUser(Integer id, String login) {
+    public User getUser(Integer id, String login) {
         User user = null;
         String query;
         boolean flag;

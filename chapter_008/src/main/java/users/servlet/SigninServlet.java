@@ -31,7 +31,6 @@ public class SigninServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String login = req.getParameter("login");
-        System.out.println(login);
         String password = req.getParameter("password");
         if (userStorage.isCredentional(login, password)) {
             HttpSession session = req.getSession();

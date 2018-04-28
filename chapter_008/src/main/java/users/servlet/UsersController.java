@@ -28,9 +28,9 @@ public class UsersController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession();
         synchronized (session) {
-            if (session == null || session.getAttribute("login") == null) {
+            if (session.getAttribute("login") == null) {
                 response.sendRedirect(String.format("%s/signin", request.getContextPath()));
             } else {
                 request.setAttribute("users", userStorage.getAllUserInDB());
