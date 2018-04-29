@@ -34,7 +34,7 @@ public class SigninServlet extends HttpServlet {
         String password = req.getParameter("password");
         if (userStorage.isCredentional(login, password)) {
             HttpSession session = req.getSession();
-                session.setAttribute("login", login);
+            session.setAttribute("login", login);
             resp.sendRedirect(String.format("%s/", req.getContextPath()));
         } else {
             req.setAttribute("error", "Credentional invalid");

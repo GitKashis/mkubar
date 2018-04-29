@@ -4,9 +4,9 @@
   Date: 22.04.2018
   Time: 22:32
   To change this template use File | Settings | File Templates.
---%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+--%><%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <html>
 <head>
     <title>User Store in Database</title>
@@ -16,7 +16,7 @@
     <div style="width: 800px; position: relative;">
         <div style="position: absolute; left: 2px; width: 400px">
                 <p>Add new User</p>
-                <form action="${pageContext.servletContext.contextPatch}/" method="post">
+                <form action="${pageContext.servletContext.contextPath}/" method="post">
                     <p style="margin: 0">Name:</p> <input type="text" name="name"> <br>
                     <p style="margin: 0">Login:</p> <input type="text" name="login"> <br>
                     <p style="margin: 0">Email:</p> <input type="email" name="email"> <br>

@@ -6,7 +6,11 @@
 </head>
 <body>
 <h2>Please enter for in:</h2>
-<c:if test="${error == 'User not found!'}"><h4>User not found!</h4></c:if>
+<c:if test="${error != ''}">
+    <div style="background-color: #da2d13">
+        <c:out value="${error}"/>
+    </div>
+</c:if>
 <form method="post"
       action="${pageContext.servletContext.contextPath}/signin">
     <span>Login:</span><input type="text" name="login"> <br> <br>

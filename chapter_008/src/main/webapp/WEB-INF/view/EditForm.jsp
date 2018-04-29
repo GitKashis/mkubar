@@ -12,7 +12,7 @@
 </head>
 <body>
 <h1>Edit user</h1>
-<form action="${pageContext.servletContext.contextPatch}/" method="post">
+<form action="${pageContext.servletContext.contextPath}/" method="post">
     <input type="hidden" name="id" value="${user.id}">
     Name: <input type="text" name="name" value="${user.name}"><br/>
     Login: <input type="text" name="login" value="${user.login}"><br/>
